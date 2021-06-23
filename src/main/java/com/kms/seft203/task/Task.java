@@ -1,9 +1,15 @@
 package com.kms.seft203.task;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
-public class Task {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Task implements Serializable {
     private String id;
     private String task;
     private Boolean isCompleted;

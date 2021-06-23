@@ -24,3 +24,11 @@ Change "11.0.10.j9-adpt" to your java version if you use sdk
 > sdk use java 11.0.10.j9-adpt
 
 > ./gradlew build
+
+For skipping tests
+
+> ./gradlew build -x test
+
+## Running tests
+
+> ./gradlew test
