@@ -1,5 +1,7 @@
 package com.kms.seft203.auth;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +18,14 @@ public class AuthApi {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest request) {
-        return new LoginResponse();
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        if ("admin".equals(request.getUsername()) && "Admin@123".equals(request.getPassword())) {
+            LoginResponse loginResponse = new LoginResponse("<token>", "<refresh_token>");
+
+            return ResponseEntity.ok(loginResponse);
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PostMapping("/logout")
