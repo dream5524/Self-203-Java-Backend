@@ -7,11 +7,15 @@
 
 ## How to run
 
-> docker-compose up
+> docker-compose up --build
 
 Then, go to documentation url
 
 > http://localhost:8080/swagger-ui.html
+
+## Login API
+
+User/pass: admin/Admin@123
 
 ## Notes
 
@@ -25,7 +29,7 @@ Change "11.0.10.j9-adpt" to your java version if you use sdk
 
 > ./gradlew build
 
-For skipping tests
+For skipping tests (one test intentionally to fail)
 
 > ./gradlew build -x test
 

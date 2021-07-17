@@ -11,22 +11,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthApi {
 
+    private static final Map<String, User> DATA = new HashMap<>();
+
     @PostMapping("/register")
     public User register(@RequestBody RegisterRequest request) {
+        User user = new User("user1",
+                request.getUsername(),
+                request.getPassword(),
+                request.getFullName());
+
+        DATA.put(user.getUsername(), user);
+
         // TODO: remove user's password
-        return new User();
+        return user;
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         if ("admin".equals(request.getUsername()) && "Admin@123".equals(request.getPassword())) {
-            LoginResponse loginResponse = new LoginResponse(createJwtToken("admin", "Admin User"), "<refresh_token>");
+            LoginResponse loginResponse = new LoginResponse(
+                    createJwtToken("admin", "Admin User"), "<refresh_token>");
+            return ResponseEntity.ok(loginResponse);
+        }
 
+        User user = DATA.get(request.getUsername());
+        if (user != null && user.getPassword().equals(request.getPassword())) {
+            LoginResponse loginResponse = new LoginResponse(
+                    createJwtToken(request.getUsername(), user.getFullName()), "<refresh_token>");
             return ResponseEntity.ok(loginResponse);
         }
 
