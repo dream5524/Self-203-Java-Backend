@@ -1,5 +1,7 @@
 package com.kms.seft203;
 
+import com.kms.seft203.entity.AppVersion;
+import com.kms.seft203.repository.AppVersionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.kms.seft203.contact;
+package com.kms.seft203.entity;
 
 import lombok.Data;
 

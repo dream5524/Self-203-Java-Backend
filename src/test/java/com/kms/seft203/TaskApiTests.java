@@ -2,8 +2,9 @@ package com.kms.seft203;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kms.seft203.task.Task;
-import com.kms.seft203.task.TaskApi;
+import com.kms.seft203.entity.Task;
+import com.kms.seft203.controller.TaskApi;
+import com.kms.seft203.repository.AppVersionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

@@ -1,5 +1,7 @@
 package com.kms.seft203;
 
+import com.kms.seft203.controller.AppApi;
+import com.kms.seft203.repository.AppVersionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

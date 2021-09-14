@@ -1,5 +1,7 @@
-package com.kms.seft203.contact;
+package com.kms.seft203.controller;
 
+import com.kms.seft203.entity.Contact;
+import com.kms.seft203.dto.SaveContactRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

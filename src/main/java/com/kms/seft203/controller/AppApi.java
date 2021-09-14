@@ -1,5 +1,7 @@
-package com.kms.seft203;
+package com.kms.seft203.controller;
 
+import com.kms.seft203.entity.AppVersion;
+import com.kms.seft203.repository.AppVersionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

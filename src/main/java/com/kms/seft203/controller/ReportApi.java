@@ -1,4 +1,4 @@
-package com.kms.seft203.report;
+package com.kms.seft203.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

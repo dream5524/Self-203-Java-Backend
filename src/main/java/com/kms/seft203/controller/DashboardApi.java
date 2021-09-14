@@ -1,5 +1,7 @@
-package com.kms.seft203.dashboard;
+package com.kms.seft203.controller;
 
+import com.kms.seft203.entity.Dashboard;
+import com.kms.seft203.dto.SaveDashboardRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

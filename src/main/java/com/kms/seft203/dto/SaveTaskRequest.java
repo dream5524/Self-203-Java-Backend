@@ -1,5 +1,6 @@
-package com.kms.seft203.task;
+package com.kms.seft203.dto;
 
+import com.kms.seft203.entity.Task;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

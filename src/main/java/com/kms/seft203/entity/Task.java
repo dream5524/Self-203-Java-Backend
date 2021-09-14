@@ -1,4 +1,4 @@
-package com.kms.seft203.task;
+package com.kms.seft203.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
