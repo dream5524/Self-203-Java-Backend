@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
-public class UserSecurityServiceImpl implements UserSecurityService, UserDetailsService {
+public class SecurityServiceImpl implements SecurityService, UserDetailsService {
     @Autowired
     private UserSecurityRepo userSecurityRepo;
     @Autowired
@@ -47,7 +47,6 @@ public class UserSecurityServiceImpl implements UserSecurityService, UserDetails
                 userdetails.User(userSecurity.getUsername(), userSecurity.getPassword(), authorities);
     }
 
-
     @Override
     public UserSecurity saveUser(UserSecurity userSecurity) {
         log.info("Saving new user {} to the database...", userSecurity.getUsername());
@@ -73,6 +72,12 @@ public class UserSecurityServiceImpl implements UserSecurityService, UserDetails
     public UserSecurity getUser(String username) {
         log.info("Fetching user {}...", username);
         return userSecurityRepo.findByUsername(username);
+    }
+
+    @Override
+    public RoleSecurity getRole(String roleName) {
+        log.info("Fetching role {}...", roleName);
+        return roleSecurityRepo.findByName(roleName);
     }
 
     @Override

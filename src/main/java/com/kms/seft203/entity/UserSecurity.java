@@ -21,5 +21,9 @@ public class UserSecurity {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "user_security_role_security",
+        joinColumns = @JoinColumn(name = "user_security_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_security_id"))
     private Collection<RoleSecurity> roleSecurities = new ArrayList<>();
 }
