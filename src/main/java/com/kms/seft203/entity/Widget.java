@@ -8,6 +8,7 @@ import java.util.Map;
 public class Widget {
     private String title;
     private String widgetType;
+    private Integer dashboardId;
     private Integer minWidth;
     private Integer minHeight;
     private Map<String, Object> configs;

@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task implements Serializable {
     private String id;
-    private String task;
+    private String description;
     private Boolean isCompleted;
-    private String userId;
+    private String contactId;
+    private LocalDate dateCreated;
 }

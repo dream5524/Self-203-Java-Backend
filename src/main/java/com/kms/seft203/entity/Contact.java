@@ -2,14 +2,16 @@ package com.kms.seft203.entity;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class Contact {
     private String id;
     private String firstName;
     private String lastName;
     private String title;
-    private String department;
+    private Integer userId;
     private String project;
-    private String avatar;
-    private Integer employeeId;
+    private LocalDate dateCreated;
+
 }
