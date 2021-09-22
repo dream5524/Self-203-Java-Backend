@@ -8,6 +8,13 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * This entity + RoleSecurity is used particularly for Spring Boot security customization
+ * Example: only ADMIN system can call the api get /users.
+ *          {"username": "KMS", roles: ["ADMIN", "USER"]} --> login successful
+ *          {"username": "TMA", roles: ["MANAGER"]} --> login failed
+ */
+
 @Entity
 @Data
 @NoArgsConstructor

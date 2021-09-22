@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+/**
+ * This class is implemented to initialize the data to customize the Spring Security,
+ * including the UserSecurity & RoleSecurity
+ */
 @Component
 @RequiredArgsConstructor @Slf4j
 public class SecurityDataConfig {
@@ -34,9 +38,9 @@ public class SecurityDataConfig {
          */
         try {
             UserSecurity userLoc = securityService.getUser("loc");
-            RoleSecurity roleAdmin = securityService.getRole("ROLE_ADMIN");
+            RoleSecurity roleAdmin = securityService.getRole(SecurityConfig.ROLE_ADMIN);
             UserSecurity userMo = securityService.getUser("mo");
-            RoleSecurity roleUser = securityService.getRole("ROLE_USER");
+            RoleSecurity roleUser = securityService.getRole(SecurityConfig.ROLE_USER);
 
             if (userLoc == null) {
                 securityService.saveUser(new UserSecurity(null, "loc", "loc", "1", new ArrayList<>()));
@@ -45,12 +49,12 @@ public class SecurityDataConfig {
                 securityService.saveUser(new UserSecurity(null, "mo", "mo", "1", new ArrayList<>()));
             }
             if (roleAdmin == null) {
-                securityService.saveRole(new RoleSecurity(null, "ROLE_ADMIN"));
-                securityService.addRoleToUser("loc", "ROLE_ADMIN");
+                securityService.saveRole(new RoleSecurity(null, SecurityConfig.ROLE_ADMIN));
+                securityService.addRoleToUser("loc", SecurityConfig.ROLE_ADMIN);
             }
             if (roleUser == null) {
-                securityService.saveRole(new RoleSecurity(null, "ROLE_USER"));
-                securityService.addRoleToUser("mo", "ROLE_USER");
+                securityService.saveRole(new RoleSecurity(null, SecurityConfig.ROLE_USER));
+                securityService.addRoleToUser("mo", SecurityConfig.ROLE_USER);
             }
         }
         catch (Exception e) {

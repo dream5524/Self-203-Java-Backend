@@ -26,7 +26,6 @@ public class Seft203Application {
         return args -> {
             repo.save(new AppVersion(1L, "SEFT Program", "1.0.0"));
             securityDataConfig.initSecurityData();
-
         };
     }
 
