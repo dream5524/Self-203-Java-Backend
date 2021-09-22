@@ -1,5 +1,4 @@
 package com.kms.seft203;
-
 import com.kms.seft203.entity.AppVersion;
 import com.kms.seft203.repository.AppVersionRepository;
 import com.kms.seft203.security.SecurityDataConfig;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class Seft203Application {
-
     public static void main(String[] args) {
         SpringApplication.run(Seft203Application.class, args);
     }
