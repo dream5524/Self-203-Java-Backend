@@ -1,4 +1,3 @@
-
 ALTER DATABASE employee OWNER TO postgres;
 --
 -- Data for Name: User; Type: TABLE DATA; Schema: public; Owner: postgres

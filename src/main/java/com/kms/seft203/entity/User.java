@@ -12,7 +12,6 @@ public class User {
     private String password;
     @Column(name = "fullname", nullable = true)
     private String fullName;
-
     public User(String id, String username, String password, String fullName) {
         this.id = id;
         this.username = username;
@@ -20,7 +19,6 @@ public class User {
         this.fullName = fullName;
     }
     public User() {
-
     }
     public String getId() {
         return id;
