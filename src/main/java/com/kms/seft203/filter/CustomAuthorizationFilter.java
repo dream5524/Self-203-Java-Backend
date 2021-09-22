@@ -31,7 +31,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 /**
  * The default of SECURITY_API is /security/login, which is used for Front end system to call
  * for authorization. If the bearer token does not exist in request, it will then be moved to
- * the authentication filter
+ * the authentication filter (CustomAuthenticationFilter)
  */
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {

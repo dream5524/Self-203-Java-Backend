@@ -3,7 +3,9 @@ package com.kms.seft203.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,26 +26,44 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
+/**
+ * This filter is implemented to authenticate the username and password received from the request.
+ * If the authentication success, server will return an access_token. This is convenient to add
+ * that Bearer access_token in the next request, rather than using username and password.
+ *
+ * In general, the first filter is CustomAuthorizationFilter. If the token does not exist, the request
+ * will then move to this CustomAuthenticationFilter.
+ *
+ */
+@RequiredArgsConstructor @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * This method is implemented to:
+     *      1. get username and password from request
+     *      2. try to authenticate the user
+     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         log.info("Username is {}", username);
-        log.info("Password is {}", password);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(authenticationToken);
     }
 
+    /**
+     * This method is called if the authentication progress success
+     * Create an access_token with a secret key and attach it in the response body.
+     * The access_token will expire in 10 minutes
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         User user = (User) authResult.getPrincipal();
