@@ -23,7 +23,7 @@ COPY public."User" (id, email, password, full_name) FROM stdin;
 -- Data for Name: Contact; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."Contact" (id, first_name, last_name, title, account_id, project, date_created) FROM stdin;
+COPY public."Contact" (id, first_name, last_name, title, user_id, project, date_created) FROM stdin;
 32	Nguyễn Hoàng Anh	Quân	Engineering Manager	1	Implenment API to build dashboard	2021-09-18 15:57:54.880419
 33	Cao Thái	Sơn	Developer	2	Implement API to build dashboard	2021-09-18 15:57:54.880419
 34	Lương Gia	Huy	Tester	5	Implement API to build dashboard	2021-09-18 15:57:54.880419
@@ -60,16 +60,16 @@ COPY public."Dashboard" (id, title, contact_id, layout_type, list_widgets) FROM 
 --
 
 COPY public."Task" (id, description, contact_id, date_created, is_completed) FROM stdin;
-9	Create Database	33	2021-09-18 16:12:32.147452	t
-10	Add logger	37	2021-09-18 16:12:32.147452	t
-11	Management Quality Project	34	2021-09-18 16:12:32.147452	f
-12	Apply fot Spring Security	40	2021-09-18 16:12:32.147452	t
-13	Write Integration Test	36	2021-09-18 16:12:32.147452	f
-14	Create BPMN	35	2021-09-18 16:12:32.147452	f
-15	Planning	39	2021-09-18 16:12:32.147452	t
-16	Manage meeting	32	2021-09-18 16:12:32.147452	t
-17	Assurance testing models	38	2021-09-18 16:12:32.147452	t
-18	Handle errors	41	2021-09-18 16:12:32.147452	t
+9	Create Database	33	2021-09-18 16:12:32.147452	1
+10	Add logger	37	2021-09-18 16:12:32.147452	0
+11	Management Quality Project	34	2021-09-18 16:12:32.147452	1
+12	Apply fot Spring Security	40	2021-09-18 16:12:32.147452	0
+13	Write Integration Test	36	2021-09-18 16:12:32.147452	1
+14	Create BPMN	35	2021-09-18 16:12:32.147452	1
+15	Planning	39	2021-09-18 16:12:32.147452	1
+16	Manage meeting	32	2021-09-18 16:12:32.147452	0
+17	Assurance testing models	38	2021-09-18 16:12:32.147452	0
+18	Handle errors	41	2021-09-18 16:12:32.147452	1
 \.
 
 

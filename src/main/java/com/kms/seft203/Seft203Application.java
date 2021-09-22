@@ -1,5 +1,4 @@
 package com.kms.seft203;
-
 import com.kms.seft203.entity.AppVersion;
 import com.kms.seft203.repository.AppVersionRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -8,10 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 @SpringBootApplication
 public class Seft203Application {
-
     public static void main(String[] args) {
         SpringApplication.run(Seft203Application.class, args);
     }
@@ -32,4 +29,5 @@ public class Seft203Application {
             }
         };
     }
+
 }

@@ -1,2 +1,0 @@
-pg_dumpall: error: too many command-line arguments (first is "database/employee-schemas.sql")
-Try "pg_dumpall --help" for more information.
