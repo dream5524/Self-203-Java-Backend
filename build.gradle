@@ -34,10 +34,6 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:2.3.0'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-	implementation group: 'com.github.dozermapper', name: 'dozer-core', version: '6.5.0'
-	implementation group: 'com.github.dozermapper', name: 'dozer-spring-boot-starter', version: '6.5.0'
-
-
 }
 test {
 	useJUnitPlatform()
