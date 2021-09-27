@@ -19,7 +19,7 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "UserSecurity")
+@Table(name = "user_security")
 public class UserSecurity {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

@@ -1,43 +1,35 @@
 package com.kms.seft203.controller;
 
 import com.kms.seft203.entity.Contact;
-import com.kms.seft203.dto.SaveContactRequest;
+import com.kms.seft203.dto.ContactRequestDTO;
+import com.kms.seft203.service.ContactService;
+import com.kms.seft203.service.ContactServiceImp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/contacts")
+@RequestMapping("/api/")
 public class ContactApi {
-    private static final Map<String, Contact> DATA = new HashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(ContactServiceImp.class);
+    @Autowired
+    private ContactService contactService;
 
-    @GetMapping
-    public List<Contact> getAll() {
-        return new ArrayList<>(DATA.values());
+    @GetMapping("/contacts")
+    public List<Contact> getAllContact() {
+        return contactService.getAllContact();
     }
 
-    @GetMapping("/{id}")
-    public Contact getOne(@PathVariable String id) {
-        return DATA.get(id);
+    @PostMapping("contacts")
+    public ResponseEntity<ContactRequestDTO> addContact(@RequestBody ContactRequestDTO contactDtoReq) {
+        logger.debug("createOrUpdateEmployee method started {}", contactDtoReq);
+        ContactRequestDTO contactDTOResponse = contactService.addContact(contactDtoReq);
+        return new ResponseEntity<>(contactDTOResponse, HttpStatus.CREATED);
     }
 
-    @PostMapping
-    public Contact create(@RequestBody SaveContactRequest request) {
-        DATA.put(request.getId(), request);
-        return request;
-    }
 
-    @PutMapping("/{id}")
-    public Contact update(@PathVariable String id, @RequestBody SaveContactRequest request) {
-        DATA.put(id, request);
-        return request;
-    }
-
-    @DeleteMapping("/{id}")
-    public Contact delete(@PathVariable String id) {
-        return DATA.remove(id);
-    }
 }
