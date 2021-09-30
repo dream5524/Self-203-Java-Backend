@@ -24,11 +24,7 @@ public class ContactServiceImp implements ContactService {
 
     @Override
     public ContactRequestDTO addContact(ContactRequestDTO newContact) throws EmailNotFoundException {
-        Optional<User> userOptional = userRepository.findByEmail(newContact.getEmail());
-        if (userOptional.isEmpty()) {
-            throw new EmailNotFoundException("Email" + newContact.getEmail() + " does not exist");
-        }
-        User user = userOptional.get();
+        User user = findUserByEmail(newContact).get();
         //Convert DTO to entity
         Contact contact = modelMapper.map(newContact, Contact.class);
         contact.setDateCreated(LocalDateTime.now());
@@ -38,4 +34,13 @@ public class ContactServiceImp implements ContactService {
         //convert entity to DTO
         return modelMapper.map(createContact, ContactRequestDTO.class);
     }
+
+    public Optional<User> findUserByEmail(ContactRequestDTO contactRequestDTO) throws EmailNotFoundException {
+        Optional<User> userOptional = userRepository.findUserByEmail(contactRequestDTO.getEmail());
+        if (userOptional.isEmpty()) {
+            throw new EmailNotFoundException("Email" + contactRequestDTO.getEmail() + " does not exist");
+        }
+        return userOptional;
+    }
+
 }

@@ -1,9 +1,7 @@
 package com.kms.seft203.service;
 
 import com.kms.seft203.dto.ContactRequestDTO;
-import com.kms.seft203.entity.Contact;
 import com.kms.seft203.repository.ContactRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -12,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -21,15 +20,13 @@ public class ContactServiceTest {
     private ContactService contactService;
     @MockBean
     private ContactRepository contactRepository;
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     public void createContactServiceTest() {
-        Contact contact = new Contact("Huyen", "Mo", "demo", "demo");
         ContactRequestDTO contactRequestDTO = new ContactRequestDTO("huyenmo","Huyen", "Mo", "demo", "demo");
-        Mockito.when(contactRepository.save(Mockito.any())).thenReturn(contact);
-        Assert.assertEquals(contact.getFirstName(), contactRequestDTO.getFirstName());
-        Assert.assertEquals(contact.getLastName(), contactRequestDTO.getLastName());
-        Assert.assertEquals(contact.getTitle(), contactRequestDTO.getTitle());
-        Assert.assertEquals(contact.getProject(), contactRequestDTO.getProject());
+        Mockito.when(contactRepository.save(Mockito.any())).thenReturn(contactRequestDTO);
+
     }
 }

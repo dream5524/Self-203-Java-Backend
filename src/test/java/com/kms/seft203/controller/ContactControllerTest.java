@@ -1,7 +1,7 @@
 package com.kms.seft203.controller;
 
-import com.kms.seft203.converter.ConvertJsonToString;
-import com.kms.seft203.entity.Contact;
+import com.kms.seft203.converter.ConvertObjectToJsonString;
+import com.kms.seft203.dto.ContactRequestDTO;
 import com.kms.seft203.service.ContactServiceImp;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +21,7 @@ This class is defined for testing create new contact method
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
 @WebMvcTest(ContactApi.class)
-public class ContactControllerTest extends ConvertJsonToString {
+public class ContactControllerTest extends ConvertObjectToJsonString {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -29,10 +29,10 @@ public class ContactControllerTest extends ConvertJsonToString {
 
     @Test
     public void createContactTest() throws Exception {
-        Contact contact = new Contact("Huyen", "Mo", "title demo", "project demo");
+        ContactRequestDTO ContactRequestDTO = new ContactRequestDTO("huyenmo@gmail.com","Huyen", "Mo", "title demo", "project demo");
         // Execute the POST request
         mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
-                        .content(convertJsonToString(contact))
+                        .content(convertObjectToJsonString(ContactRequestDTO))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
