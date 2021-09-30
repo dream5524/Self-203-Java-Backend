@@ -18,14 +18,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 public class ContactServiceTest {
     @Autowired
-    ContactService contactService;
+    private ContactService contactService;
     @MockBean
-    ContactRepository contactRepository;
+    private ContactRepository contactRepository;
 
     @Test
     public void createContactServiceTest() {
         Contact contact = new Contact("Huyen", "Mo", "demo", "demo");
-        ContactRequestDTO contactRequestDTO = new ContactRequestDTO("Huyen", "Mo", "demo", "demo");
+        ContactRequestDTO contactRequestDTO = new ContactRequestDTO("huyenmo","Huyen", "Mo", "demo", "demo");
         Mockito.when(contactRepository.save(Mockito.any())).thenReturn(contact);
         Assert.assertEquals(contact.getFirstName(), contactRequestDTO.getFirstName());
         Assert.assertEquals(contact.getLastName(), contactRequestDTO.getLastName());
