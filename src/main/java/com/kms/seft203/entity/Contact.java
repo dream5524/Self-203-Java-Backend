@@ -37,7 +37,6 @@ public class Contact {
     @Column(name = "project")
     private String project;
 
-    @NotNull
     @Column(name = "date_created")
     private LocalDateTime dateCreated;
 
