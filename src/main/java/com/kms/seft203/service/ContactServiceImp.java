@@ -6,7 +6,9 @@ import com.kms.seft203.repository.ContactRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import java.time.LocalDateTime;
+
 @Service
 public class ContactServiceImp implements ContactService {
     @Autowired
@@ -15,17 +17,14 @@ public class ContactServiceImp implements ContactService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<Contact> getAllContact() {
-        List<Contact> listContacts = contactRepository.findAll();
-        return listContacts;
-    }
-    @Override
     public ContactRequestDTO addContact(ContactRequestDTO newContact) {
         //Convert DTO to entity
         Contact contact = modelMapper.map(newContact, Contact.class);
+        contact.setDateCreated(LocalDateTime.now());
+        contact.setUser(newContact.getUser());
         Contact createContact = contactRepository.save(contact);
         //convert entity to DTO
-        ContactRequestDTO contactRequestDTO = modelMapper.map(createContact, ContactRequestDTO.class);
-        return contactRequestDTO;
+        return modelMapper.map(createContact, ContactRequestDTO.class);
+
     }
 }

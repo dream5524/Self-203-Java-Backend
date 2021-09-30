@@ -1,10 +1,11 @@
 package com.kms.seft203.dto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
-
-
+import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+
+@NoArgsConstructor
 @Data
 public class ContactRequestDTO {
     @NotNull
@@ -17,12 +18,15 @@ public class ContactRequestDTO {
     private String title;
 
     @NotNull
-//    private User user;
-
-    @NotNull
     private String project;
 
-    @JsonIgnore
-    private final LocalDateTime dateCreated = LocalDateTime.now();
+    @NotNull
+    private LocalDateTime dateCreated;
 
+    public ContactRequestDTO(String firstName, String lastName, String title, String project) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.title = title;
+        this.project = project;
+    }
 }

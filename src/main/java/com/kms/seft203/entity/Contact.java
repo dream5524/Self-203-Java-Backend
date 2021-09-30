@@ -1,13 +1,15 @@
 package com.kms.seft203.entity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "contact")
@@ -15,7 +17,7 @@ public class Contact {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idContact;
+    private Integer id;
 
     @NotNull
     @Column(name = "first_name")
@@ -28,11 +30,6 @@ public class Contact {
     @NotNull
     @Column(name = "title")
     private String title;
-//
-//    @NotNull
-//    @OneToOne
-//    @JoinColumn(name="idUser")
-//    private User user;
 
     @NotNull
     @Column(name = "project")
@@ -42,4 +39,10 @@ public class Contact {
     @Column(name = "date_created")
     private LocalDateTime dateCreated;
 
+    public Contact(String firstName, String lastName, String title, String project) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.title = title;
+        this.project = project;
+    }
 }
