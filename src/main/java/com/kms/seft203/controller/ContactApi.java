@@ -2,7 +2,6 @@ package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.ContactRequestDTO;
 import com.kms.seft203.service.ContactService;
-import com.kms.seft203.service.ContactServiceImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/contacts")
 public class ContactApi {
-    private static final Logger logger = LoggerFactory.getLogger(ContactServiceImp.class);
+    private static final Logger logger = LoggerFactory.getLogger(ContactService.class);
     @Autowired
     private ContactService contactService;
 
