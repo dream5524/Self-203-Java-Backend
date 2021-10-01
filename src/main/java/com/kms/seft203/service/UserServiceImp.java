@@ -29,7 +29,10 @@ public class UserServiceImp implements UserService {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * This method is implemented to
+     * This method is implemented to save a RegisterRequest received from Controller
+     * to database. If the User is saved successfully, it will return a register request
+     * DTO with the same fields as the received DTO. If the process failed, an exception
+     * will be thrown and caught by CustomExceptionHandler
      *
      * @param: The DTO type of User (RegisterRequest)
      * @return RegisterRequest (a userDTO object) for controller. The front end will
@@ -50,7 +53,6 @@ public class UserServiceImp implements UserService {
         }
         User user = modelMapper.map(userFromReq, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User savedUser = userRepository.save(user);
-        return modelMapper.map(savedUser, RegisterRequest.class);
+        return modelMapper.map(userRepository.save(user), RegisterRequest.class);
     }
 }

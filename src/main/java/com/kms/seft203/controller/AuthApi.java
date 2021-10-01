@@ -32,6 +32,26 @@ public class AuthApi {
     @Autowired
     private UserService userService;
 
+    /**
+     * @param: a request
+     * @return: a DTO of user if the process succeeds
+     * @throws DuplicatedEmailException
+     *
+     * Request format:
+     * {
+     *     "email": "email@gmail.com",
+     *     "password": "my password",
+     *     "fullName": "Your Name"
+     * }
+     * Successful response format:
+     * {
+     *     "email": "email@gmail.com",
+     *     "password": null,
+     *     "fullName": "Your Name"
+     * }
+     *
+     * This method is used to receive and handle the user register request.
+     */
     @PostMapping("/register")
     public RegisterRequest register(@RequestBody RegisterRequest request) throws DuplicatedEmailException {
         RegisterRequest responseUser = userService.save(request);
