@@ -6,18 +6,17 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-
 /**
  * This entity + RoleSecurity is used particularly for Spring Boot security customization
  * Example: only ADMIN system can call the api get /users.
- *          {"username": "KMS", roles: ["ADMIN", "USER"]} --> login successful
- *          {"username": "TMA", roles: ["MANAGER"]} --> login failed
+ * {"username": "KMS", roles: ["ADMIN", "USER"]} --> login successful
+ * {"username": "TMA", roles: ["MANAGER"]} --> login failed
  */
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "RoleSecurity")
+@Table(name = "role_security", schema = "public")
 public class RoleSecurity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,6 +1,5 @@
 package com.kms.seft203.config;
 
-import com.kms.seft203.config.SecurityConfig;
 import com.kms.seft203.entity.RoleSecurity;
 import com.kms.seft203.entity.UserSecurity;
 import com.kms.seft203.service.SecurityService;
