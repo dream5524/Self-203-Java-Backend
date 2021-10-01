@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+/*
+ * ContactServiceImp class is defined for mapping, saving contact, and handing methods
+ * */
 
 @Service
 public class ContactServiceImp implements ContactService {
@@ -22,9 +25,17 @@ public class ContactServiceImp implements ContactService {
     @Autowired
     private ModelMapper modelMapper;
 
+    /*
+     * addContact() is defined for creating new contact
+     * Input: Email and check if email does not exist, throw new EmailNotFoundException.
+     * Output: Otherwise, create new contact and save this contact.
+     * */
     @Override
     public ContactRequestDTO addContact(ContactRequestDTO newContact) throws EmailNotFoundException {
-        User user = findUserByEmail(newContact).get();
+        User user = findUserByEmail(newContact);
+        if (user == null) {
+            throw new EmailNotFoundException("Email " + user.getEmail() + " does not exist");
+        }
         //Convert DTO to entity
         Contact contact = modelMapper.map(newContact, Contact.class);
         contact.setDateCreated(LocalDateTime.now());
@@ -35,12 +46,12 @@ public class ContactServiceImp implements ContactService {
         return modelMapper.map(createContact, ContactRequestDTO.class);
     }
 
-    public Optional<User> findUserByEmail(ContactRequestDTO contactRequestDTO) throws EmailNotFoundException {
-        Optional<User> userOptional = userRepository.findUserByEmail(contactRequestDTO.getEmail());
+    //This method is defined for finding user by email and returning user.
+    public User findUserByEmail(ContactRequestDTO contactRequestDTO) {
+        Optional<User> userOptional = userRepository.findByEmail(contactRequestDTO.getEmail());
         if (userOptional.isEmpty()) {
-            throw new EmailNotFoundException("Email" + contactRequestDTO.getEmail() + " does not exist");
+            return null;
         }
-        return userOptional;
+        return userOptional.get();
     }
-
 }

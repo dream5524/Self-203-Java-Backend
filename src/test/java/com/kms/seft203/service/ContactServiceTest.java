@@ -1,7 +1,12 @@
 package com.kms.seft203.service;
 
 import com.kms.seft203.dto.ContactRequestDTO;
+import com.kms.seft203.entity.Contact;
+import com.kms.seft203.entity.User;
+import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
+import com.kms.seft203.repository.UserRepository;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -22,11 +27,21 @@ public class ContactServiceTest {
     private ContactRepository contactRepository;
     @Autowired
     private MockMvc mockMvc;
+    @MockBean
+    private UserRepository userRepository;
 
     @Test
-    public void createContactServiceTest() {
-        ContactRequestDTO contactRequestDTO = new ContactRequestDTO("huyenmo","Huyen", "Mo", "demo", "demo");
-        Mockito.when(contactRepository.save(Mockito.any())).thenReturn(contactRequestDTO);
+    public void createContactServiceTest() throws EmailNotFoundException {
+        User user=new User(1,"huyenmo@gmail.com","2","Huyen Mo");
+        Contact contact=new Contact("Huyen","Mo","demo","demo");
+        Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(java.util.Optional.of(user));
 
+        Mockito.when(contactRepository.save(Mockito.any(Contact.class))).thenReturn(contact);
+        ContactRequestDTO contactRequestDTO = new ContactRequestDTO("huyenmo@gmail.com","Huyen", "Mo", "demo", "demo");
+        ContactRequestDTO contactSaveRequestDTO=contactService.addContact(contactRequestDTO);
+        Assert.assertEquals(contactRequestDTO.getFirstName(),contactSaveRequestDTO.getFirstName());
+        Assert.assertEquals(contactRequestDTO.getLastName(),contactSaveRequestDTO.getLastName());
+        Assert.assertEquals(contactRequestDTO.getProject(),contactSaveRequestDTO.getProject());
+        Assert.assertEquals(contactRequestDTO.getTitle(),contactSaveRequestDTO.getTitle());
     }
 }

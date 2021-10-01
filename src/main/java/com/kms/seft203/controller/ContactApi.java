@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/contacts")
 public class ContactApi {
-    private static final Logger logger = LoggerFactory.getLogger(ContactService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ContactApi.class);
     @Autowired
     private ContactService contactService;
 
