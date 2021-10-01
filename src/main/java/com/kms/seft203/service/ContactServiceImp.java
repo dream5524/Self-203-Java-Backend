@@ -36,7 +36,7 @@ public class ContactServiceImp implements ContactService {
     }
 
     public Optional<User> findUserByEmail(ContactRequestDTO contactRequestDTO) throws EmailNotFoundException {
-        Optional<User> userOptional = userRepository.findUserByEmail(contactRequestDTO.getEmail());
+        Optional<User> userOptional = userRepository.findByEmail(contactRequestDTO.getEmail());
         if (userOptional.isEmpty()) {
             throw new EmailNotFoundException("Email" + contactRequestDTO.getEmail() + " does not exist");
         }

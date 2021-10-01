@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Component
 public class CustomConfig {
-    //@Bean
+//    @Bean
 //    CommandLineRunner runner(AppVersionRepository repo, SecurityDataConfig securityDataConfig) {
 //
 //        return args -> {
