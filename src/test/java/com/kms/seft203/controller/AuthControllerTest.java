@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @WebMvcTest(AuthApi.class)
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
-public class AuthControllerTest extends ControllerTest {
+class AuthControllerTest extends ControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -37,7 +37,7 @@ public class AuthControllerTest extends ControllerTest {
     private UserService userService;
 
     @Test
-    public void registerTest() throws Exception {
+    void registerTest() throws Exception {
         RegisterRequest mockUserDto =
                 new RegisterRequest("nvdloc@apcs.vn", "1", "Loc Nguyen");
 

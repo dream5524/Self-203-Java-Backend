@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserServiceTest {
+class UserServiceTest {
     @Autowired
     private UserService userService;
 
@@ -26,7 +26,7 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Test
-    public void saveUserTest() throws DuplicatedEmailException {
+    void saveUserTest() throws DuplicatedEmailException {
         User user = new User(1, "nvdloc@apcs.vn", "1", "Loc Nguyen");
         RegisterRequest userDto = new RegisterRequest();
         userDto.setEmail(user.getEmail());

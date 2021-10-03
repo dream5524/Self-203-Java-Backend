@@ -22,15 +22,15 @@ This class is defined for testing create new contact method
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
 @WebMvcTest(ContactApi.class)
-public class ContactControllerTest extends ControllerTest {
+class ContactControllerTest extends ControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private ContactServiceImp contactService;
 
     @Test
-    public void createContactTest() throws Exception {
-        ContactRequestDTO ContactRequestDTO = new ContactRequestDTO("huyen5", "Huyen", "Mo", "title demo", "project demo");
+    void createContactTest() throws Exception {
+        ContactRequestDTO ContactRequestDTO = new ContactRequestDTO("huyenmo@gmail.com", "Huyen", "Mo", "title demo", "project demo");
         Mockito.when(contactService.addContact(Mockito.any())).thenReturn(ContactRequestDTO);
         // Execute the POST request
         mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
