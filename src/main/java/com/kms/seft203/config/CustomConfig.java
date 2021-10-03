@@ -1,6 +1,9 @@
 package com.kms.seft203.config;
 
+import com.kms.seft203.entity.AppVersion;
+import com.kms.seft203.repository.AppVersionRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,14 +13,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Component
 public class CustomConfig {
-//    @Bean
-//    CommandLineRunner runner(AppVersionRepository repo, SecurityDataConfig securityDataConfig) {
-//
-//        return args -> {
-//            repo.save(new AppVersion(1L, "SEFT Program", "1.0.0"));
-//            securityDataConfig.initSecurityData();
-//        };
-//    }
+    @Bean
+    CommandLineRunner runner(AppVersionRepository repo, SecurityDataConfig securityDataConfig) {
+
+        return args -> {
+            repo.save(new AppVersion(1L, "SEFT Program", "1.0.0"));
+            securityDataConfig.initSecurityData();
+        };
+    }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {

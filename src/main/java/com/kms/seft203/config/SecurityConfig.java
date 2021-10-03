@@ -27,8 +27,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
  * Basically, this class is called by the authentication & authorization filter.
  */
 
-// @Configuration
-// @EnableWebSecurity
+@Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -39,8 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String REPORT_API = "/reports/**";
     public static final String TASK_API = "/tasks/**";
     public static final String SECURITY_API = "/security/login";
-
-
 
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
