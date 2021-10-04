@@ -26,7 +26,7 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Test
-    public void saveUserTest() throws DuplicatedEmailException {
+    public void testSave_whenSuccess() throws DuplicatedEmailException {
         User user = new User(1, "nvdloc@apcs.vn", "1", "Loc Nguyen");
         RegisterRequest userDto = new RegisterRequest();
         userDto.setEmail(user.getEmail());

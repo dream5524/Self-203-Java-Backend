@@ -36,12 +36,10 @@ public class AuthControllerTest extends ControllerTest {
     private UserService userService;
 
     @Test
-    public void registerTest() throws Exception {
+    public void testRegister_whenSuccess_thenReturnRegisterRequestFormat() throws Exception {
         RegisterRequest mockUserDto =
                 new RegisterRequest("nvdloc@apcs.vn", "1", "Loc Nguyen");
-
-        // Test for successful case
-        Mockito.when(userService.save(mockUserDto)).thenReturn(mockUserDto);
+        Mockito.when(userService.save(Mockito.eq(mockUserDto))).thenReturn(mockUserDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                 .content(convertObjectToJsonString(mockUserDto))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -50,16 +48,17 @@ public class AuthControllerTest extends ControllerTest {
                 .andExpect(jsonPath("$.email").value("nvdloc@apcs.vn"))
                 .andExpect(jsonPath("$.password").value(IsNull.nullValue()))
                 .andExpect(jsonPath("$.fullName").value("Loc Nguyen"));
+    }
 
-        // Test for exception case (email duplication)
-        RegisterRequest failedMockUserDto = new RegisterRequest("a@gmail.com", "1", "A");
+    @Test
+    public void testRegister_whenFailed_thenReturnEmailDuplicationError() throws Exception {
+        RegisterRequest mockUserDto = new RegisterRequest("a@gmail.com", "1", "A");
         String message = "Duplicated error! Email is already used!";
-        DuplicatedEmailException exception = new DuplicatedEmailException(message);
-        Mockito.when(userService.save(failedMockUserDto)).thenThrow(exception);
-
+        Mockito.when(userService.save(Mockito.eq(mockUserDto)))
+                .thenThrow(new DuplicatedEmailException(message));
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                .content(convertObjectToJsonString(failedMockUserDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(mockUserDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotAcceptable())
                 .andExpect(jsonPath("$.statusCode").value(HttpStatus.NOT_ACCEPTABLE.value()))
