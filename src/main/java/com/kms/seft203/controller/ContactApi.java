@@ -1,43 +1,29 @@
 package com.kms.seft203.controller;
 
-import com.kms.seft203.entity.Contact;
-import com.kms.seft203.dto.SaveContactRequest;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.kms.seft203.dto.ContactRequestDTO;
+import com.kms.seft203.exception.EmailNotFoundException;
+import com.kms.seft203.service.ContactService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/contacts")
 public class ContactApi {
-    private static final Map<String, Contact> DATA = new HashMap<>();
-
-    @GetMapping
-    public List<Contact> getAll() {
-        return new ArrayList<>(DATA.values());
-    }
-
-    @GetMapping("/{id}")
-    public Contact getOne(@PathVariable String id) {
-        return DATA.get(id);
-    }
+    private static final Logger logger = LoggerFactory.getLogger(ContactApi.class);
+    @Autowired
+    private ContactService contactService;
 
     @PostMapping
-    public Contact create(@RequestBody SaveContactRequest request) {
-        DATA.put(request.getId(), request);
-        return request;
-    }
-
-    @PutMapping("/{id}")
-    public Contact update(@PathVariable String id, @RequestBody SaveContactRequest request) {
-        DATA.put(id, request);
-        return request;
-    }
-
-    @DeleteMapping("/{id}")
-    public Contact delete(@PathVariable String id) {
-        return DATA.remove(id);
+    public ResponseEntity<ContactRequestDTO> addContact(@RequestBody ContactRequestDTO contactDtoReq) throws EmailNotFoundException {
+        logger.info("create contact method started {}", contactDtoReq);
+        ContactRequestDTO contactDTOResponse = contactService.addContact(contactDtoReq);
+        return new ResponseEntity<>(contactDTOResponse, HttpStatus.CREATED);
     }
 }

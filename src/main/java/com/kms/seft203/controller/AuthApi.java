@@ -3,8 +3,15 @@ package com.kms.seft203.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.kms.seft203.dto.*;
+import com.kms.seft203.dto.LoginRequest;
+import com.kms.seft203.dto.LoginResponse;
+import com.kms.seft203.dto.LogoutRequest;
+import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.entity.User;
+import com.kms.seft203.exception.DuplicatedEmailException;
+import com.kms.seft203.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,23 +23,40 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@RestController @Slf4j
 @RequestMapping("/auth")
 public class AuthApi {
 
     private static final Map<String, User> DATA = new HashMap<>();
 
+    @Autowired
+    private UserService userService;
+
+    /**
+     * @param: a request
+     * @return: a DTO of user if the process succeeds
+     * @throws DuplicatedEmailException
+     *
+     * Request format:
+     * {
+     *     "email": "email@gmail.com",
+     *     "password": "my password",
+     *     "fullName": "Your Name"
+     * }
+     * Successful response format:
+     * {
+     *     "email": "email@gmail.com",
+     *     "password": null,
+     *     "fullName": "Your Name"
+     * }
+     *
+     * This method is used to receive and handle the user register request.
+     */
     @PostMapping("/register")
-    public User register(@RequestBody RegisterRequest request) {
-        User user = new User("user1",
-                request.getUsername(),
-                request.getPassword(),
-                request.getFullName());
-
-        DATA.put(user.getUsername(), user);
-
-        // TODO: remove user's password
-        return user;
+    public RegisterRequest register(@RequestBody RegisterRequest request) throws DuplicatedEmailException {
+        RegisterRequest responseUser = userService.save(request);
+        responseUser.setPassword(null);
+        return responseUser;
     }
 
     @PostMapping("/login")

@@ -1,4 +1,4 @@
-package com.kms.seft203.security;
+package com.kms.seft203.config;
 
 import com.kms.seft203.filter.CustomAuthenticationFilter;
 import com.kms.seft203.filter.CustomAuthorizationFilter;
@@ -27,8 +27,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
  * Basically, this class is called by the authentication & authorization filter.
  */
 
-// @Configuration
-// @EnableWebSecurity
+@Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 

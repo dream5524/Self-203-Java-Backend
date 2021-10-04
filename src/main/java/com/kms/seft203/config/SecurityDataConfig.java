@@ -1,4 +1,4 @@
-package com.kms.seft203.security;
+package com.kms.seft203.config;
 
 import com.kms.seft203.entity.RoleSecurity;
 import com.kms.seft203.entity.UserSecurity;

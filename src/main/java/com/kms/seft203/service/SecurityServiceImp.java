@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
-public class SecurityServiceImpl implements SecurityService, UserDetailsService {
+public class SecurityServiceImp implements SecurityService, UserDetailsService {
     @Autowired
     private UserSecurityRepo userSecurityRepo;
     @Autowired
