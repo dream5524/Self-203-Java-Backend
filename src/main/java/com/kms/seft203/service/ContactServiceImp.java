@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 /*
  * ContactServiceImp class is defined for mapping, creating new contact, and handing methods
@@ -31,8 +33,20 @@ public class ContactServiceImp implements ContactService {
      * Output: Otherwise, create new contact and save this contact.
      * */
     @Override
+    public List<ContactRequestDTO> getAllContact() {
+
+        List<Contact> listContacts = contactRepository.findAll();
+        List<ContactRequestDTO> contactResponses = new ArrayList<ContactRequestDTO>();
+        for (Contact contact : listContacts) {
+            ContactRequestDTO contactResponse = modelMapper.map(contact, ContactRequestDTO.class);
+            contactResponses.add(contactResponse);
+        }
+        return contactResponses;
+    }
+
+    @Override
     public ContactRequestDTO addContact(ContactRequestDTO newContact) throws EmailNotFoundException {
-        User user = findUserByEmail(newContact);
+        User user = findByEmail(newContact);
         if (user == null) {
             throw new EmailNotFoundException("Email " + newContact.getEmail() + " does not exist");
         }
@@ -47,7 +61,7 @@ public class ContactServiceImp implements ContactService {
     }
 
     //This method is defined for finding user by email and returning user.
-    public User findUserByEmail(ContactRequestDTO contactRequestDTO) {
+    public User findByEmail(ContactRequestDTO contactRequestDTO) {
         Optional<User> userOptional = userRepository.findByEmail(contactRequestDTO.getEmail());
         if (userOptional.isEmpty()) {
             return null;
