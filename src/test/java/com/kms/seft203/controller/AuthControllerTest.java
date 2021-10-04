@@ -3,7 +3,6 @@ package com.kms.seft203.controller;
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.exception.DuplicatedEmailException;
 import com.kms.seft203.service.UserService;
-
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -19,9 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @WebMvcTest(AuthApi.class)
 @AutoConfigureMockMvc(addFilters = false)

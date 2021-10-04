@@ -32,16 +32,16 @@ public class ContactServiceTest {
 
     @Test
     public void createContactServiceTest() throws EmailNotFoundException {
-        User user=new User(1,"huyenmo@gmail.com","2","Huyen Mo");
-        Contact contact=new Contact("Huyen","Mo","demo","demo");
+        User user = new User(1, "huyenmo@gmail.com", "2", "Huyen Mo");
+        Contact contact = new Contact("Huyen", "Mo", "demo", "demo");
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(java.util.Optional.of(user));
 
         Mockito.when(contactRepository.save(Mockito.any(Contact.class))).thenReturn(contact);
-        ContactRequestDTO contactRequestDTO = new ContactRequestDTO("huyenmo@gmail.com","Huyen", "Mo", "demo", "demo");
-        ContactRequestDTO contactSaveRequestDTO=contactService.addContact(contactRequestDTO);
-        Assert.assertEquals(contactRequestDTO.getFirstName(),contactSaveRequestDTO.getFirstName());
-        Assert.assertEquals(contactRequestDTO.getLastName(),contactSaveRequestDTO.getLastName());
-        Assert.assertEquals(contactRequestDTO.getProject(),contactSaveRequestDTO.getProject());
-        Assert.assertEquals(contactRequestDTO.getTitle(),contactSaveRequestDTO.getTitle());
+        ContactRequestDTO contactRequestDTO = new ContactRequestDTO("huyenmo@gmail.com", "Huyen", "Mo", "demo", "demo");
+        ContactRequestDTO contactSaveRequestDTO = contactService.addContact(contactRequestDTO);
+        Assert.assertEquals(contactRequestDTO.getFirstName(), contactSaveRequestDTO.getFirstName());
+        Assert.assertEquals(contactRequestDTO.getLastName(), contactSaveRequestDTO.getLastName());
+        Assert.assertEquals(contactRequestDTO.getProject(), contactSaveRequestDTO.getProject());
+        Assert.assertEquals(contactRequestDTO.getTitle(), contactSaveRequestDTO.getTitle());
     }
 }

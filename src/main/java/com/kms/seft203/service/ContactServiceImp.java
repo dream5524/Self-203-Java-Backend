@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 /*
- * ContactServiceImp class is defined for mapping, saving contact, and handing methods
+ * ContactServiceImp class is defined for mapping, creating new contact, and handing methods
  * */
 
 @Service
