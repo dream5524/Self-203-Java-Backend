@@ -1,5 +1,6 @@
 package com.kms.seft203.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 
 @Entity
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user", schema = "public")
 public class User {
@@ -27,10 +29,4 @@ public class User {
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
-
-    public User(String email, String password, String fullName) {
-        this.email = email;
-        this.password = password;
-        this.fullName = fullName;
-    }
 }

@@ -39,8 +39,8 @@ class ContactControllerTest extends ControllerTest {
     @Test
     void getAllContactTest() throws Exception {
         List<ContactResponseDto> listContactResponseDto = new ArrayList<ContactResponseDto>();
-        listContactResponseDto.add(new ContactResponseDto("Nguyen Van", "Teo", new User("teonv@gmail.com", "1", "Nguyen Van Teo"), "Tester", "Implement API"));
-        listContactResponseDto.add(new ContactResponseDto("Tran Thi", "No", new User("nott@gmail.com", "1", "Tran Thi No"), "Business Analyst", "Implement API" ));
+        listContactResponseDto.add(new ContactResponseDto("Nguyen Van", "Teo", new User(1,"teonv@gmail.com", "1", "Nguyen Van Teo"), "Tester", "Implement API"));
+        listContactResponseDto.add(new ContactResponseDto("Tran Thi", "No", new User(2,"nott@gmail.com", "1", "Tran Thi No"), "Business Analyst", "Implement API" ));
         Mockito.when(contactService.getAllContact()).thenReturn(listContactResponseDto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/contacts")
