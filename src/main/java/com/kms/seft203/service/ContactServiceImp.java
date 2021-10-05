@@ -37,7 +37,6 @@ public class ContactServiceImp implements ContactService {
     public List<ContactResponseDto> getAllContact() {
         List<Contact> listContacts = contactRepository.findAll();
         List<ContactResponseDto> listContactResponseDto = new ArrayList<>();
-
         for (Contact contact : listContacts) {
             //convert entity to dto
             ContactResponseDto contactResponse = modelMapper.map(contact, ContactResponseDto.class);
@@ -62,7 +61,9 @@ public class ContactServiceImp implements ContactService {
         return modelMapper.map(createContact, ContactRequestDto.class);
     }
 
-    //This method is defined for finding user by email and returning user.
+    /*This method is defined for finding user by email.
+    If find a specific email, it'll return user. Otherwise, return null.
+     */
     public User findByEmail(ContactRequestDto contactRequestDTO) {
         Optional<User> userOptional = userRepository.findByEmail(contactRequestDTO.getEmail());
         if (userOptional.isEmpty()) {
