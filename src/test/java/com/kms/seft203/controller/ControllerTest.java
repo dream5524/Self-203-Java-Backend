@@ -12,7 +12,7 @@ public abstract class ControllerTest {
         return objectMapper.writeValueAsString(object);
     }
 
-    public String convertListObjectToJsonString(List<Object> objectList) throws JsonProcessingException {
+    public String convertObjectListToJsonString(List<Object> objectList) throws JsonProcessingException {
         String result = null;
         for (Object object : objectList) {
             result = objectMapper.writeValueAsString(object);

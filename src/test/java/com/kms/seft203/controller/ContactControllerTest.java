@@ -44,7 +44,7 @@ class ContactControllerTest extends ControllerTest {
         Mockito.when(contactService.getAllContact()).thenReturn(listContactResponseDto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/contacts")
-                        .content(convertListObjectToJsonString(Arrays.asList(listContactResponseDto.toArray())))
+                        .content(convertObjectListToJsonString(Arrays.asList(listContactResponseDto.toArray())))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
