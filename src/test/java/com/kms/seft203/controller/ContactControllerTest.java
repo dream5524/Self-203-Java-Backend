@@ -51,16 +51,16 @@ class ContactControllerTest extends ControllerTest {
 
     @Test
     void createContactTest() throws Exception {
-        ContactRequestDto contactRequestDTO = new ContactRequestDto("huyenmo@gmail.com", "Huyen", "Mo", "title demo", "project demo");
-        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDTO);
+        ContactRequestDto contactRequestDto = new ContactRequestDto("huyenmo@gmail.com", "Huyen", "Mo", "title demo", "project demo");
+        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
         // Execute the POST request
         mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
-                        .content(convertObjectToJsonString(contactRequestDTO))
+                        .content(convertObjectToJsonString(contactRequestDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.firstName").value(contactRequestDTO.getFirstName()))
-                .andExpect(jsonPath("$.lastName").value(contactRequestDTO.getLastName()))
-                .andExpect(jsonPath("$.title").value(contactRequestDTO.getTitle()))
-                .andExpect(jsonPath("$.project").value(contactRequestDTO.getProject()));
+                .andExpect(jsonPath("$.firstName").value(contactRequestDto.getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(contactRequestDto.getLastName()))
+                .andExpect(jsonPath("$.title").value(contactRequestDto.getTitle()))
+                .andExpect(jsonPath("$.project").value(contactRequestDto.getProject()));
     }
 }
