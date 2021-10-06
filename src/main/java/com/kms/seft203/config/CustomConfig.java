@@ -15,18 +15,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.print.attribute.standard.Destination;
-
 @Component
 public class CustomConfig {
-//    @Bean
-//    CommandLineRunner runner(AppVersionRepository repo, SecurityDataConfig securityDataConfig) {
-//
-//        return args -> {
-//            repo.save(new AppVersion(1L, "SEFT Program", "1.0.0"));
-//            securityDataConfig.initSecurityData();
-//        };
-//    }
+    @Bean
+    CommandLineRunner runner(AppVersionRepository repo, SecurityDataConfig securityDataConfig) {
+
+        return args -> {
+            repo.save(new AppVersion(1L, "SEFT Program", "1.0.0"));
+            securityDataConfig.initSecurityData();
+        };
+    }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {

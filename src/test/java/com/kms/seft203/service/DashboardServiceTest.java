@@ -6,7 +6,6 @@ import com.kms.seft203.entity.Dashboard;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.DashboardRepository;
-import javassist.tools.web.BadHttpRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
