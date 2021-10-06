@@ -3,13 +3,18 @@ package com.kms.seft203.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
-import javax.persistence.*;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "user", schema = "public")
 public class User {
     @Id
@@ -24,5 +29,4 @@ public class User {
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
-
 }

@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ContactRequestDTO {
+public class ContactRequestDto {
     @NotNull
     private String email;
 
@@ -23,4 +23,5 @@ public class ContactRequestDTO {
 
     @NotNull
     private String project;
+
 }
