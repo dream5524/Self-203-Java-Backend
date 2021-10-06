@@ -18,6 +18,23 @@ public class DashboardApi {
     @Autowired
     private DashboardService dashboardService;
 
+    /**
+     * This method is implemented to handle the save request from FE.
+     * Sample of request.body:
+     * {
+     *   "email": "duclocdk1999@gmail.com",
+     *   "title": "Home page",
+     *   "layoutType": "Dark mode"
+     * }
+     *
+     * If the request is processed successfully, a response with the same body as request
+     * is returned (header - status code is created).
+     *
+     * @param dashboardDto
+     * @return
+     * @throws ContactNotFoundException
+     * @throws BadHttpRequest
+     */
     @PostMapping
     public ResponseEntity<DashboardDto> save(@RequestBody DashboardDto dashboardDto) throws ContactNotFoundException, BadHttpRequest {
         return ResponseEntity.status(HttpStatus.CREATED)

@@ -3,14 +3,15 @@ package com.kms.seft203.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
+
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -28,13 +29,13 @@ public class Contact {
     @Column(name = "first_name")
     private String firstName;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @NotNull
     @Column(name = "last_name")
     private String lastName;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @NotNull
     @Column(name = "title")
@@ -47,9 +48,10 @@ public class Contact {
     @Column(name = "date_created")
     private LocalDateTime dateCreated;
 
-    public Contact(String firstName, String lastName, String title, String project) {
+    public Contact( String firstName, String lastName, User user, String title, String project) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.user = user;
         this.title = title;
         this.project = project;
     }

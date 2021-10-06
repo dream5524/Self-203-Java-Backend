@@ -21,6 +21,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * This class is implemented to test the controller layer - AuthApi class
+ *
+ * Two unit testing is designed, including the successful case and the fail
+ * situation when the email is duplicated
+ */
 @WebMvcTest(AuthApi.class)
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)

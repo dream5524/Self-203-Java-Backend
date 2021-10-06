@@ -43,8 +43,7 @@ public class DashboardServiceTest {
         String password = "1";
         DashboardDto mockDashboardDto = new DashboardDto(email, title, layoutType);
         User mockUser = new User(null, email, password, firstName + " " + lastName);
-        Contact mockContact = new Contact(firstName, lastName, title, project);
-        mockContact.setUser(mockUser);
+        Contact mockContact = new Contact(firstName, lastName, mockUser, title, project);
         Dashboard mockDashboard = new Dashboard(null, title, layoutType, mockContact);
 
         Dashboard dashboardFromDb = null;
