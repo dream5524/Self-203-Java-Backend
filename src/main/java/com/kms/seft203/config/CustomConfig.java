@@ -1,6 +1,10 @@
 package com.kms.seft203.config;
 
+import com.kms.seft203.dto.ContactRequestDTO;
+import com.kms.seft203.dto.DashboardDto;
 import com.kms.seft203.entity.AppVersion;
+import com.kms.seft203.entity.Contact;
+import com.kms.seft203.entity.Dashboard;
 import com.kms.seft203.repository.AppVersionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
@@ -11,16 +15,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.print.attribute.standard.Destination;
+
 @Component
 public class CustomConfig {
-    @Bean
-    CommandLineRunner runner(AppVersionRepository repo, SecurityDataConfig securityDataConfig) {
-
-        return args -> {
-            repo.save(new AppVersion(1L, "SEFT Program", "1.0.0"));
-            securityDataConfig.initSecurityData();
-        };
-    }
+//    @Bean
+//    CommandLineRunner runner(AppVersionRepository repo, SecurityDataConfig securityDataConfig) {
+//
+//        return args -> {
+//            repo.save(new AppVersion(1L, "SEFT Program", "1.0.0"));
+//            securityDataConfig.initSecurityData();
+//        };
+//    }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -41,6 +47,17 @@ public class CustomConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+
+        // Config mapping for Contact -> ContactRequestDTO
+        modelMapper.typeMap(Contact.class, ContactRequestDTO.class).addMappings(mapper -> {
+           mapper.map(src -> src.getUser().getEmail(), ContactRequestDTO::setEmail);
+        });
+
+        // Config mapping for Dashboard -> DashboardDto
+        modelMapper.typeMap(Dashboard.class, DashboardDto.class).addMappings(mapper -> {
+            mapper.map(src -> src.getContact().getUser().getEmail(), DashboardDto::setEmail);
+        });
+        return modelMapper;
     }
 }
