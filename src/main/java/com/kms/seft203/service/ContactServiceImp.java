@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 /*
  * ContactServiceImp class is defined for mapping, creating new contact, and handing methods
  * */
@@ -36,18 +37,13 @@ public class ContactServiceImp implements ContactService {
     @Override
     public List<ContactResponseDto> getAllContact() {
         List<Contact> listContacts = contactRepository.findAll();
-        List<ContactResponseDto> listContactResponseDto = new ArrayList<>();
-        for (Contact contact : listContacts) {
-            //convert entity to dto
-            ContactResponseDto contactResponse = modelMapper.map(contact, ContactResponseDto.class);
-            listContactResponseDto.add(contactResponse);
-        }
-        return listContactResponseDto;
+        return listContacts.stream().map(contact -> modelMapper.map(contact, ContactResponseDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public ContactRequestDto addContact(ContactRequestDto newContact) throws EmailNotFoundException {
-        User user = findByEmail(newContact);
+        User user = findByEmail(newContact.getEmail());
         if (user == null) {
             throw new EmailNotFoundException("Email " + newContact.getEmail() + " does not exist");
         }
@@ -64,8 +60,8 @@ public class ContactServiceImp implements ContactService {
     /*This method is defined for finding user by email.
     If find a specific email, it'll return user. Otherwise, return null.
      */
-    public User findByEmail(ContactRequestDto contactRequestDTO) {
-        Optional<User> userOptional = userRepository.findByEmail(contactRequestDTO.getEmail());
+    public User findByEmail(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isEmpty()) {
             return null;
         }

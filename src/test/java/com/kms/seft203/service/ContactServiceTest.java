@@ -29,8 +29,7 @@ class ContactServiceTest {
     private ContactService contactService;
     @MockBean
     private ContactRepository contactRepository;
-    @Autowired
-    private MockMvc mockMvc;
+
     @MockBean
     private UserRepository userRepository;
 
@@ -38,30 +37,29 @@ class ContactServiceTest {
     void getAllContactServiceTest() {
         Contact contact = new Contact("Nguyen Chi",
                 "Pheo",
-                new User("pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
+                new User(1, "pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
                 "Tester",
                 "Implement API");
         ContactResponseDto contactResponseDto = new ContactResponseDto("Nguyen Chi",
                 "Pheo",
-                new User("pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
+                new User(1, "pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
                 "Tester",
                 "Implement API");
-        List<Contact> contactList = new ArrayList<Contact>();
+        List<Contact> contactList = new ArrayList<>();
         contactList.add(contact);
         Mockito.when(contactRepository.findAll()).thenReturn(contactList);
         List<ContactResponseDto> contactResponseDtoList = contactService.getAllContact();
-        contactResponseDtoList.add(contactResponseDto);
 
-        Assert.assertEquals(contactResponseDto.getFirstName(), contact.getFirstName());
-        Assert.assertEquals(contactResponseDto.getLastName(), contact.getLastName());
-        Assert.assertEquals(contactResponseDto.getTitle(), contact.getTitle());
-        Assert.assertEquals(contactResponseDto.getProject(), contact.getProject());
-        Assert.assertEquals(contactResponseDto.getUser(), contact.getUser());
+        Assert.assertEquals(contactResponseDtoList.get(0).getFirstName(), contact.getFirstName());
+        Assert.assertEquals(contactResponseDtoList.get(0).getLastName(), contact.getLastName());
+        Assert.assertEquals(contactResponseDtoList.get(0).getTitle(), contact.getTitle());
+        Assert.assertEquals(contactResponseDtoList.get(0).getProject(), contact.getProject());
+        Assert.assertEquals(contactResponseDtoList.get(0).getUser(), contact.getUser());
     }
 
     @Test
     void createContactServiceTest() throws EmailNotFoundException {
-        User user = new User("huyenmo@gmail.com", "2", "Huyen Mo");
+        User user = new User(1, "huyenmo@gmail.com", "2", "Huyen Mo");
         Contact contact = new Contact("Huyen", "Mo", user, "demo", "demo");
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(java.util.Optional.of(user));
 

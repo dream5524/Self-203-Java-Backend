@@ -11,18 +11,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Data
 public class ContactResponseDto {
-    @NotNull
     private String firstName;
-
-    @NotNull
     private String lastName;
-
-    @NotNull
     private User user;
-
-    @NotNull
     private String title;
-
-    @NotNull
     private String project;
 }
