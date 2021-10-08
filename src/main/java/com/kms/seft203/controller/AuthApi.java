@@ -53,10 +53,10 @@ public class AuthApi {
      * This method is used to receive and handle the user register request.
      */
     @PostMapping("/register")
-    public RegisterRequest register(@RequestBody RegisterRequest request) throws DuplicatedEmailException {
+    public ResponseEntity<RegisterRequest> register(@RequestBody RegisterRequest request) throws DuplicatedEmailException {
         RegisterRequest responseUser = userService.save(request);
         responseUser.setPassword(null);
-        return responseUser;
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
 
     @PostMapping("/login")
