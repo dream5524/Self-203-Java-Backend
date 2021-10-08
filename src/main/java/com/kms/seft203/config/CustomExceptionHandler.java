@@ -54,9 +54,9 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handlerCommonException(Exception e) {
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
-        return new ErrorResponse(HttpStatus.EXPECTATION_FAILED, HttpStatus.EXPECTATION_FAILED.value(), e.getMessage());
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
     }
 }

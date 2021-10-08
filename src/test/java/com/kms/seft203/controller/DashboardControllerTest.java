@@ -45,7 +45,7 @@ public class DashboardControllerTest extends ControllerTest {
     }
 
     @Test
-    public void testCreateDashboard_whenDashboardDuplicated_thenReturnDashboardDto() throws Exception {
+    public void testCreateDashboard_whenDashboardDuplicated_thenReturnBadHttpRequest() throws Exception {
         String email = "duclocdk1999@gmail.com";
         String title = "Home page";
         String layoutType = "Dark mode";
@@ -60,7 +60,7 @@ public class DashboardControllerTest extends ControllerTest {
     }
 
     @Test
-    public void testCreateDashboard_whenContactNotFound_thenReturnDashboardDto() throws Exception {
+    public void testCreateDashboard_whenContactNotFound_thenReturnContactNotFoundException() throws Exception {
         String email = "duclocdk1999@gmail.com";
         String title = "Home page";
         String layoutType = "Dark mode";

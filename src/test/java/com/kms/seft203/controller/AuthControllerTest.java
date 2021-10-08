@@ -46,7 +46,7 @@ class AuthControllerTest extends ControllerTest {
                 .content(convertObjectToJsonString(mockUserDto))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("nvdloc@apcs.vn"))
                 .andExpect(jsonPath("$.password").value(IsNull.nullValue()))
                 .andExpect(jsonPath("$.fullName").value("Loc Nguyen"));
