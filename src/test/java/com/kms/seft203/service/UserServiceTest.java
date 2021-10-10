@@ -14,7 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+/*
+ * This class is defined for validating all fields of RegisterRequest class.
+ * */
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
 @SpringBootTest

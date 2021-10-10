@@ -14,16 +14,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController @Slf4j
+@RestController
+@Slf4j
 @RequestMapping("/auth")
 public class AuthApi {
 
@@ -33,27 +36,25 @@ public class AuthApi {
     private UserService userService;
 
     /**
+     * @throws DuplicatedEmailException Request format:
+     *                                  {
+     *                                  "email": "email@gmail.com",
+     *                                  "password": "my password",
+     *                                  "fullName": "Your Name"
+     *                                  }
+     *                                  Successful response format:
+     *                                  {
+     *                                  "email": "email@gmail.com",
+     *                                  "password": null,
+     *                                  "fullName": "Your Name"
+     *                                  }
+     *                                  <p>
+     *                                  This method is used to receive and handle the user register request.
      * @param: a request
      * @return: a DTO of user if the process succeeds
-     * @throws DuplicatedEmailException
-     *
-     * Request format:
-     * {
-     *     "email": "email@gmail.com",
-     *     "password": "my password",
-     *     "fullName": "Your Name"
-     * }
-     * Successful response format:
-     * {
-     *     "email": "email@gmail.com",
-     *     "password": null,
-     *     "fullName": "Your Name"
-     * }
-     *
-     * This method is used to receive and handle the user register request.
      */
     @PostMapping("/register")
-    public RegisterRequest register(@RequestBody RegisterRequest request) throws DuplicatedEmailException {
+    public RegisterRequest register(@Valid @RequestBody RegisterRequest request) throws DuplicatedEmailException {
         RegisterRequest responseUser = userService.save(request);
         responseUser.setPassword(null);
         return responseUser;

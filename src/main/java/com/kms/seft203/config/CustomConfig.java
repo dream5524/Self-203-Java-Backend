@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.xml.validation.Validator;
+
 @Component
 public class CustomConfig {
     @Bean
@@ -43,4 +45,5 @@ public class CustomConfig {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
 }

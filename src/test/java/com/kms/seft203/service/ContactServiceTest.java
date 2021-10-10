@@ -16,10 +16,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -35,26 +35,31 @@ class ContactServiceTest {
 
     @Test
     void getAllContactServiceTest() {
-        Contact contact = new Contact("Nguyen Chi",
-                "Pheo",
-                new User(1, "pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
-                "Tester",
-                "Implement API");
-        ContactResponseDto contactResponseDto = new ContactResponseDto("Nguyen Chi",
-                "Pheo",
-                new User(1, "pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
-                "Tester",
-                "Implement API");
-        List<Contact> contactList = new ArrayList<>();
-        contactList.add(contact);
+        List<Contact> contactList = Stream.of(
+                        new Contact("Nguyen Chi",
+                                "Pheo",
+                                new User(1, "pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
+                                "Tester",
+                                "Implement API"))
+                .collect(Collectors.toList());
         Mockito.when(contactRepository.findAll()).thenReturn(contactList);
-        List<ContactResponseDto> contactResponseDtoList = contactService.getAllContact();
 
-        Assert.assertEquals(contactResponseDtoList.get(0).getFirstName(), contact.getFirstName());
-        Assert.assertEquals(contactResponseDtoList.get(0).getLastName(), contact.getLastName());
-        Assert.assertEquals(contactResponseDtoList.get(0).getTitle(), contact.getTitle());
-        Assert.assertEquals(contactResponseDtoList.get(0).getProject(), contact.getProject());
-        Assert.assertEquals(contactResponseDtoList.get(0).getUser(), contact.getUser());
+        List<ContactResponseDto> contactResponseDtoList = Stream.of(
+                        new ContactResponseDto("Nguyen Chi",
+                                "Pheo",
+                                new User(1, "pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
+                                "Tester",
+                                "Implement API"))
+                .collect(Collectors.toList());
+
+        contactResponseDtoList = contactService.getAllContact();
+
+        Assert.assertEquals(contactResponseDtoList.get(0).getFirstName(), contactList.get(0).getFirstName());
+        Assert.assertEquals(contactResponseDtoList.get(0).getLastName(), contactList.get(0).getLastName());
+        Assert.assertEquals(contactResponseDtoList.get(0).getTitle(), contactList.get(0).getTitle());
+        Assert.assertEquals(contactResponseDtoList.get(0).getProject(), contactList.get(0).getProject());
+        Assert.assertEquals(contactResponseDtoList.get(0).getUser(), contactList.get(0).getUser());
+        Assert.assertEquals(contactResponseDtoList.stream().count(), 1);
     }
 
     @Test

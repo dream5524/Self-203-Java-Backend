@@ -16,9 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,13 +37,23 @@ class ContactControllerTest extends ControllerTest {
 
     @Test
     void getAllContactTest() throws Exception {
-        List<ContactResponseDto> listContactResponseDto = new ArrayList<ContactResponseDto>();
-        listContactResponseDto.add(new ContactResponseDto("Nguyen Van", "Teo", new User(1, "teonv@gmail.com", "1", "Nguyen Van Teo"), "Tester", "Implement API"));
-        listContactResponseDto.add(new ContactResponseDto("Tran Thi", "No", new User(2, "nott@gmail.com", "1", "Tran Thi No"), "Business Analyst", "Implement API"));
+        List<ContactResponseDto> listContactResponseDto = Stream.of(
+                        new ContactResponseDto("Nguyen Van",
+                                "Teo",
+                                new User(1, "teonv@gmail.com", "1", "Nguyen Van Teo"),
+                                "Tester",
+                                "Implement API"),
+                        new ContactResponseDto("Tran Thi",
+                                "No",
+                                new User(2, "nott@gmail.com", "1", "Tran Thi No"),
+                                "Business Analyst",
+                                "Implement API"))
+                .collect(Collectors.toList());
+
         Mockito.when(contactService.getAllContact()).thenReturn(listContactResponseDto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/contacts")
-                        .content(convertObjectListToJsonString(Arrays.asList(listContactResponseDto.toArray())))
+                        .content(net.minidev.json.JSONArray.toJSONString(listContactResponseDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -53,6 +63,7 @@ class ContactControllerTest extends ControllerTest {
     void createContactTest() throws Exception {
         ContactRequestDto contactRequestDto = new ContactRequestDto("huyenmo@gmail.com", "Huyen", "Mo", "title demo", "project demo");
         Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
+
         // Execute the POST request
         mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
                         .content(convertObjectToJsonString(contactRequestDto))
