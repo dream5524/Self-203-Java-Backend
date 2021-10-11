@@ -20,6 +20,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * This class is implemented to test the controller layer - AuthApi class
+ *
+ * Two unit testing is designed, including the successful case and the fail
+ * situation when the email is duplicated
+ */
 @WebMvcTest(AuthApi.class)
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
@@ -39,7 +45,7 @@ class AuthControllerTest extends ControllerTest {
                         .content(convertObjectToJsonString(mockUserDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("nvdloc@apcs.vn"))
                 .andExpect(jsonPath("$.password").value(IsNull.nullValue()))
                 .andExpect(jsonPath("$.fullName").value("Loc Nguyen"));

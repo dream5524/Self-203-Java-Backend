@@ -21,6 +21,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AuthApi.class)
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
+/*
+ * This class is defined for validating all fields of RegisterRequest class.
+ * If all the fields are valid, return status 201 for client
+ * Otherwise, return BadRequest with status 400
+ * */
 public class UserValidationTest extends ControllerTest {
 
     RegisterRequest registerRequest = new RegisterRequest();

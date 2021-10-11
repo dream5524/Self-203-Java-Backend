@@ -14,6 +14,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = PasswordValidatorImp.class)
 @Target({TYPE, FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
+/*
+ * This class used to show message when errors occur from input clients side.
+ * */
 public @interface ValidPassword {
     String message() default "Invalid Password";
 

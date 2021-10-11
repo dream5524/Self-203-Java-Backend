@@ -59,7 +59,7 @@ class ContactServiceTest {
         Assert.assertEquals(contactResponseDtoList.get(0).getTitle(), contactList.get(0).getTitle());
         Assert.assertEquals(contactResponseDtoList.get(0).getProject(), contactList.get(0).getProject());
         Assert.assertEquals(contactResponseDtoList.get(0).getUser(), contactList.get(0).getUser());
-        Assert.assertEquals(contactResponseDtoList.stream().count(), 1);
+        Assert.assertEquals(1,contactResponseDtoList.stream().count());
     }
 
     @Test

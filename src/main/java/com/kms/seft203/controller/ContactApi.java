@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,8 +35,9 @@ public class ContactApi {
     @PostMapping
     public ResponseEntity<ContactRequestDto> addContact(@Valid @RequestBody ContactRequestDto contactDtoReq) throws EmailNotFoundException {
         logger.info("create contact method started {}", contactDtoReq);
-       ContactRequestDto contactDTOResponse = contactService.addContact(contactDtoReq);
-        return new ResponseEntity<ContactRequestDto>(HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(contactService.addContact(contactDtoReq));
     }
 
 }

@@ -23,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
         /*
          * This class is defined for validating all fields of ContactRequestDto class.
+         * If all the fields are valid, return status 200 for client
+         * Otherwise, return BadRequest with status 400
          * */
 
 class ContactValidationTest extends ControllerTest {

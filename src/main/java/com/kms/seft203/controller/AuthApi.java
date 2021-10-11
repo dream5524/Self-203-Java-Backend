@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,10 +53,11 @@ public class AuthApi {
      * @return: a DTO of user if the process succeeds
      */
     @PostMapping("/register")
-    public RegisterRequest register(@Valid @RequestBody RegisterRequest request) throws DuplicatedEmailException {
+
+    public ResponseEntity<RegisterRequest> register(@Valid @RequestBody RegisterRequest request) throws DuplicatedEmailException {
         RegisterRequest responseUser = userService.save(request);
         responseUser.setPassword(null);
-        return responseUser;
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
 
     @PostMapping("/login")

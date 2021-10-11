@@ -1,6 +1,10 @@
 package com.kms.seft203.config;
 
+import com.kms.seft203.dto.ContactRequestDto;
+import com.kms.seft203.dto.DashboardDto;
 import com.kms.seft203.entity.AppVersion;
+import com.kms.seft203.entity.Contact;
+import com.kms.seft203.entity.Dashboard;
 import com.kms.seft203.repository.AppVersionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
@@ -10,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.xml.validation.Validator;
 
 @Component
 public class CustomConfig {
@@ -43,7 +45,18 @@ public class CustomConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+
+        // Config mapping for Contact -> ContactRequestDTO
+        modelMapper.typeMap(Contact.class, ContactRequestDto.class).addMappings(mapper -> {
+           mapper.map(src -> src.getUser().getEmail(), ContactRequestDto::setEmail);
+        });
+
+        // Config mapping for Dashboard -> DashboardDto
+        modelMapper.typeMap(Dashboard.class, DashboardDto.class).addMappings(mapper -> {
+            mapper.map(src -> src.getContact().getUser().getEmail(), DashboardDto::setEmail);
+        });
+        return modelMapper;
     }
 
 }

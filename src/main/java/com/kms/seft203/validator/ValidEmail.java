@@ -15,6 +15,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD, ANNOTATION_TYPE, TYPE_USE})
 @Constraint(validatedBy = EmailValidatorImp.class)
 
+/*
+* This class used to show message when errors occur from input clients side.
+* */
 public @interface ValidEmail {
     String message() default "Please fill in correct format of email address, ex: abc@gmail.com";
 
