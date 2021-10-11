@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
          * */
 
 class ContactValidationTest extends ControllerTest {
-    ContactRequestDto contactRequestDto = new ContactRequestDto();
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,7 +35,8 @@ class ContactValidationTest extends ControllerTest {
     private ContactService contactService;
 
     @Test
-    void whenAllFieldsInputAreInValid_thenReturn400() throws Exception {
+    void whenAllFieldsInputAreInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen");
         contactRequestDto.setFirstName("H");
         contactRequestDto.setLastName("");
@@ -52,7 +52,8 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenEmailInputIsInValid_thenReturn400() throws Exception {
+    void whenEmailInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen");
         contactRequestDto.setFirstName("Huyen");
         contactRequestDto.setLastName("Mo");
@@ -68,7 +69,8 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenFirstNameInputIsInValid_thenReturn400() throws Exception {
+    void whenFirstNameInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen@gmail.com");
         contactRequestDto.setFirstName("H");
         contactRequestDto.setLastName("Mo");
@@ -84,7 +86,8 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenLastNameInputIsInValid_thenReturn400() throws Exception {
+    void whenLastNameInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen@gmail.com");
         contactRequestDto.setFirstName("Huyen");
         contactRequestDto.setLastName("");
@@ -100,7 +103,8 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenTitleInputIsInValid_thenReturn400() throws Exception {
+    void whenTitleInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyenWgmail.com");
         contactRequestDto.setFirstName("Huyen");
         contactRequestDto.setLastName("Mo");
@@ -116,7 +120,8 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenProjectInputIsInValid_thenReturn400() throws Exception {
+    void whenProjectInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen@gmail.com");
         contactRequestDto.setFirstName("Huyen");
         contactRequestDto.setLastName("Mo");
@@ -132,7 +137,8 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenEmailAndFirstNameInputAreInValid_thenReturn400() throws Exception {
+    void whenEmailAndFirstNameInputAreInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen");
         contactRequestDto.setFirstName("");
         contactRequestDto.setLastName("Mo");
@@ -148,7 +154,8 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenFirstNameAndLastNameAreInValid_thenReturn400() throws Exception {
+    void whenFirstNameAndLastNameAreInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen@gmail.com");
         contactRequestDto.setFirstName("");
         contactRequestDto.setLastName("");
@@ -164,7 +171,8 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenLastNameAndTitleAreInValid_thenReturn400() throws Exception {
+    void whenLastNameAndTitleAreInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen@gmail.com");
         contactRequestDto.setFirstName("Huyen");
         contactRequestDto.setLastName("");
@@ -180,7 +188,8 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenProjectAndTitleAreInValid_thenReturn400() throws Exception {
+    void whenProjectAndTitleAreInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen@gmail.com");
         contactRequestDto.setFirstName("Huyen");
         contactRequestDto.setLastName("Mo");
@@ -196,73 +205,10 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenProjectAndEmailAreInValid_thenReturn400() throws Exception {
+    void whenProjectAndEmailAreInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("@gmail.com");
         contactRequestDto.setFirstName("Huyen");
-        contactRequestDto.setLastName("Mo");
-        contactRequestDto.setTitle("Tester");
-        contactRequestDto.setProject("");
-
-        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
-                        .content(convertObjectToJsonString(contactRequestDto))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void whenEmailAndFirstNameAndLastNameAreInValid_thenReturn400() throws Exception {
-        contactRequestDto.setEmail("@gmail.com");
-        contactRequestDto.setFirstName("");
-        contactRequestDto.setLastName("");
-        contactRequestDto.setTitle("Tester");
-        contactRequestDto.setProject("Build Dashboard");
-
-        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
-                        .content(convertObjectToJsonString(contactRequestDto))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void whenTitleAndFirstNameAndLastNameAreInValid_thenReturn400() throws Exception {
-        contactRequestDto.setEmail("mohuyen@gmail.com");
-        contactRequestDto.setFirstName("");
-        contactRequestDto.setLastName("");
-        contactRequestDto.setTitle("");
-        contactRequestDto.setProject("Build Dashboard");
-
-        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
-                        .content(convertObjectToJsonString(contactRequestDto))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void whenProjectAndTitleAndLastNameAreInValid_thenReturn400() throws Exception {
-        contactRequestDto.setEmail("@gmail.com");
-        contactRequestDto.setFirstName("Huyen");
-        contactRequestDto.setLastName("");
-        contactRequestDto.setTitle("");
-        contactRequestDto.setProject("");
-
-        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
-                        .content(convertObjectToJsonString(contactRequestDto))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void whenProjectAndEmailAndFirstNameAreInValid_thenReturn400() throws Exception {
-        contactRequestDto.setEmail("@gmail.com");
-        contactRequestDto.setFirstName("");
         contactRequestDto.setLastName("Mo");
         contactRequestDto.setTitle("Tester");
         contactRequestDto.setProject("");
@@ -276,7 +222,76 @@ class ContactValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenAllFieldsInputAreValid_thenReturn201() throws Exception {
+    void whenEmailAndFirstNameAndLastNameAreInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
+        contactRequestDto.setEmail("@gmail.com");
+        contactRequestDto.setFirstName("");
+        contactRequestDto.setLastName("");
+        contactRequestDto.setTitle("Tester");
+        contactRequestDto.setProject("Build Dashboard");
+
+        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
+                        .content(convertObjectToJsonString(contactRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenTitleAndFirstNameAndLastNameAreInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
+        contactRequestDto.setEmail("mohuyen@gmail.com");
+        contactRequestDto.setFirstName("");
+        contactRequestDto.setLastName("");
+        contactRequestDto.setTitle("");
+        contactRequestDto.setProject("Build Dashboard");
+
+        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
+                        .content(convertObjectToJsonString(contactRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenProjectAndTitleAndLastNameAreInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
+        contactRequestDto.setEmail("@gmail.com");
+        contactRequestDto.setFirstName("Huyen");
+        contactRequestDto.setLastName("");
+        contactRequestDto.setTitle("");
+        contactRequestDto.setProject("");
+
+        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
+                        .content(convertObjectToJsonString(contactRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenProjectAndEmailAndFirstNameAreInValid_thenReturnStatusBadRequest() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
+        contactRequestDto.setEmail("@gmail.com");
+        contactRequestDto.setFirstName("");
+        contactRequestDto.setLastName("Mo");
+        contactRequestDto.setTitle("Tester");
+        contactRequestDto.setProject("");
+
+        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
+                        .content(convertObjectToJsonString(contactRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenAllFieldsInputAreValid_thenReturnStatusIsCreated() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen@gmail.com");
         contactRequestDto.setFirstName("Huyen");
         contactRequestDto.setLastName("Mo");

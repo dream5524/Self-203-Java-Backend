@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * */
 public class UserValidationTest extends ControllerTest {
 
-    RegisterRequest registerRequest = new RegisterRequest();
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,7 +35,8 @@ public class UserValidationTest extends ControllerTest {
     private UserService userService;
 
     @Test
-    void whenAllFieldsAreInValid_thenReturnStatus400() throws Exception {
+    void whenAllFieldsAreInValid_thenReturnStatusBadRequest() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setPassword("1Qa");
         registerRequest.setEmail("mohuyen");
         registerRequest.setFullName("");
@@ -50,7 +50,8 @@ public class UserValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenPasswordInputIsInValid_thenReturnStatus400() throws Exception {
+    void whenPasswordInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setPassword("1Qa");
         registerRequest.setEmail("mohuyen@gmail.com");
         registerRequest.setFullName("Huyen Mo");
@@ -64,7 +65,8 @@ public class UserValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenFullNameInputIsInValid_thenReturnStatus400() throws Exception {
+    void whenFullNameInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setPassword("1Qaz@123Aqe");
         registerRequest.setEmail("mohuyen@gmail.com");
         registerRequest.setFullName("");
@@ -78,7 +80,8 @@ public class UserValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenEmailInputIsInValid_thenReturnStatus400() throws Exception {
+    void whenEmailInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setPassword("1Qaz@123Aqe");
         registerRequest.setEmail("mohuyen@");
         registerRequest.setFullName("Huyen Mo");
@@ -92,7 +95,8 @@ public class UserValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenEmailAndFullNameInputAreInValid_thenReturnStatus400() throws Exception {
+    void whenEmailAndFullNameInputAreInValid_thenReturnStatusBadRequest() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setPassword("1Qaz@123Aqe");
         registerRequest.setEmail("mohuyen524");
         registerRequest.setFullName("H");
@@ -106,7 +110,8 @@ public class UserValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenPasswordAndFullNameInputAreInValid_thenReturnStatus400() throws Exception {
+    void whenPasswordAndFullNameInputAreInValid_thenReturnStatusBadRequest() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setPassword("1Qa");
         registerRequest.setEmail("mohuyen@gmail.com");
         registerRequest.setFullName("H");
@@ -120,7 +125,8 @@ public class UserValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenEmailAndPasswordInputAreInValid_thenReturnStatus400() throws Exception {
+    void whenEmailAndPasswordInputAreInValid_thenReturnStatusBadRequest() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setPassword("1Qa");
         registerRequest.setEmail("mohuyen@");
         registerRequest.setFullName("Huyen Mo");
@@ -134,7 +140,8 @@ public class UserValidationTest extends ControllerTest {
     }
 
     @Test
-    void whenAllFieldsAreValid_thenReturnStatus200() throws Exception {
+    void whenAllFieldsAreValid_thenReturnStatusIsCreated() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setPassword("1Qaz@123QAZ");
         registerRequest.setEmail("mohuyen@gmail.com");
         registerRequest.setFullName("Huyen Mo");

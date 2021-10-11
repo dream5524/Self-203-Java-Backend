@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
 @Component
 public class CustomConfig {
     @Bean
@@ -45,18 +46,18 @@ public class CustomConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        ModelMapper modelMapper = new ModelMapper();
-
-        // Config mapping for Contact -> ContactRequestDTO
-        modelMapper.typeMap(Contact.class, ContactRequestDto.class).addMappings(mapper -> {
-           mapper.map(src -> src.getUser().getEmail(), ContactRequestDto::setEmail);
-        });
-
-        // Config mapping for Dashboard -> DashboardDto
-        modelMapper.typeMap(Dashboard.class, DashboardDto.class).addMappings(mapper -> {
-            mapper.map(src -> src.getContact().getUser().getEmail(), DashboardDto::setEmail);
-        });
-        return modelMapper;
+//        ModelMapper modelMapper = new ModelMapper();
+//
+//        // Config mapping for Contact -> ContactRequestDTO
+//        modelMapper.typeMap(Contact.class, ContactRequestDto.class).addMappings(mapper -> {
+//           mapper.map(src -> src.getUser().getEmail(), ContactRequestDto::setEmail);
+//        });
+//
+//        // Config mapping for Dashboard -> DashboardDto
+//        modelMapper.typeMap(Dashboard.class, DashboardDto.class).addMappings(mapper -> {
+//            mapper.map(src -> src.getContact().getUser().getEmail(), DashboardDto::setEmail);
+//        });
+        return new ModelMapper();
     }
 
 }

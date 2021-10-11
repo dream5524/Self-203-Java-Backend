@@ -44,7 +44,7 @@ class ContactServiceTest {
                 .collect(Collectors.toList());
         Mockito.when(contactRepository.findAll()).thenReturn(contactList);
 
-        List<ContactResponseDto> contactResponseDtoList = Stream.of(
+        List<ContactResponseDto> expectedResponseList = Stream.of(
                         new ContactResponseDto("Nguyen Chi",
                                 "Pheo",
                                 new User(1, "pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
@@ -52,14 +52,15 @@ class ContactServiceTest {
                                 "Implement API"))
                 .collect(Collectors.toList());
 
-        contactResponseDtoList = contactService.getAllContact();
+        List<ContactResponseDto> actualResponseList = contactService.getAllContact();
 
-        Assert.assertEquals(contactResponseDtoList.get(0).getFirstName(), contactList.get(0).getFirstName());
-        Assert.assertEquals(contactResponseDtoList.get(0).getLastName(), contactList.get(0).getLastName());
-        Assert.assertEquals(contactResponseDtoList.get(0).getTitle(), contactList.get(0).getTitle());
-        Assert.assertEquals(contactResponseDtoList.get(0).getProject(), contactList.get(0).getProject());
-        Assert.assertEquals(contactResponseDtoList.get(0).getUser(), contactList.get(0).getUser());
-        Assert.assertEquals(1,contactResponseDtoList.stream().count());
+        Assert.assertEquals(1,actualResponseList.stream().count());
+        Assert.assertEquals(expectedResponseList.get(0).getFirstName(), actualResponseList.get(0).getFirstName());
+        Assert.assertEquals(expectedResponseList.get(0).getLastName(), actualResponseList.get(0).getLastName());
+        Assert.assertEquals(expectedResponseList.get(0).getTitle(), actualResponseList.get(0).getTitle());
+        Assert.assertEquals(expectedResponseList.get(0).getProject(), actualResponseList.get(0).getProject());
+        Assert.assertEquals(expectedResponseList.get(0).getUser(), actualResponseList.get(0).getUser());
+
     }
 
     @Test

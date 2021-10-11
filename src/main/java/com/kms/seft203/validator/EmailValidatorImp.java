@@ -7,7 +7,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
 /*
-* This class used to validate well-formed email and customize the @ValidEmail annotation
+ * This class used to validate well-formed email and customize the @ValidEmail annotation
  * */
 public class EmailValidatorImp implements ConstraintValidator<ValidEmail, String> {
     private String regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -20,9 +20,6 @@ public class EmailValidatorImp implements ConstraintValidator<ValidEmail, String
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
-        if (StringUtils.isBlank(email))
-            return true;
-
         Pattern pat = Pattern.compile(regex);
         return pat.matcher(email).matches();
     }

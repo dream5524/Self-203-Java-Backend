@@ -1,4 +1,4 @@
-package com.kms.seft203.exception;
+package com.kms.seft203.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorResponse {
+    //them vao dto
     private Date timestamp;
     private HttpStatus status;
     private int statusCode;
