@@ -34,7 +34,7 @@ public class DashboardControllerTest extends ControllerTest {
         String title = "Home page";
         String layoutType = "Dark mode";
         DashboardDto dashboardDto = new DashboardDto(email, title, layoutType);
-        Mockito.when(dashboardService.save(Mockito.eq(dashboardDto))).thenReturn(dashboardDto);
+        Mockito.when(dashboardService.save(dashboardDto)).thenReturn(dashboardDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
                         .content(convertObjectToJsonString(dashboardDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
