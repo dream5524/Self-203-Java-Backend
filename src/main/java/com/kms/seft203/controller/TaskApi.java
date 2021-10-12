@@ -1,15 +1,9 @@
 package com.kms.seft203.controller;
 
+
 import com.kms.seft203.dto.SaveTaskRequest;
 import com.kms.seft203.entity.Task;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +13,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/tasks")
 public class TaskApi {
-
     private static final Map<String, Task> DATA = new HashMap<>();
 
     @GetMapping
@@ -34,7 +27,7 @@ public class TaskApi {
 
     @PostMapping
     public Task create(@RequestBody SaveTaskRequest request) {
-        DATA.put(request.getId(), request);
+        //DATA.put(request.getId(), request);
         return request;
     }
 
@@ -48,4 +41,5 @@ public class TaskApi {
     public Task delete(@PathVariable String id) {
         return DATA.remove(id);
     }
+
 }

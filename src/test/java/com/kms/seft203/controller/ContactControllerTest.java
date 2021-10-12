@@ -40,12 +40,12 @@ class ContactControllerTest extends ControllerTest {
         List<ContactResponseDto> listContactResponseDto = Stream.of(
                         new ContactResponseDto("Nguyen Van",
                                 "Teo",
-                                new User(1, "teonv@gmail.com", "1", "Nguyen Van Teo"),
+                                new User(1, "teonv@gmail.com", "1Qaz123@@", "Nguyen Van Teo"),
                                 "Tester",
                                 "Implement API"),
                         new ContactResponseDto("Tran Thi",
                                 "No",
-                                new User(2, "nott@gmail.com", "1", "Tran Thi No"),
+                                new User(2, "nott@gmail.com", "1Qaz123@@", "Tran Thi No"),
                                 "Business Analyst",
                                 "Implement API"))
                 .collect(Collectors.toList());

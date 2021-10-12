@@ -2,16 +2,12 @@ package com.kms.seft203.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -41,6 +37,10 @@ public class Contact {
 
     @Column(name = "date_created")
     private LocalDateTime dateCreated;
+
+    @ToString.Exclude
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "contact")
+    private List<Task> taskList = new ArrayList<>();
 
     public Contact(String firstName, String lastName, User user, String title, String project) {
         this.firstName = firstName;

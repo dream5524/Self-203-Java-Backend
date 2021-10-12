@@ -1,8 +1,10 @@
 package com.kms.seft203.validation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kms.seft203.controller.ContactApi;
 import com.kms.seft203.controller.ControllerTest;
 import com.kms.seft203.dto.ContactRequestDto;
+import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.service.ContactService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

@@ -29,7 +29,7 @@ class UserServiceTest {
 
     @Test
     public void testSave_whenSuccess() throws DuplicatedEmailException {
-        User user = new User(1,"nvdloc@apcs.vn", "1", "Loc Nguyen");
+        User user = new User(1,"nvdloc@apcs.vn", "11Qaz123@@", "Loc Nguyen");
         RegisterRequest userDto = new RegisterRequest();
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());
@@ -39,7 +39,7 @@ class UserServiceTest {
 
         RegisterRequest userResponse = userService.save(userDto);
         assertEquals("nvdloc@apcs.vn", userResponse.getEmail());
-        assertEquals("1", userResponse.getPassword());
+        assertEquals("11Qaz123@@", userResponse.getPassword());
         assertEquals("Loc Nguyen", userResponse.getFullName());
     }
 }

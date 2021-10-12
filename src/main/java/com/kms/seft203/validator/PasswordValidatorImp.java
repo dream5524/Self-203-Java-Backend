@@ -42,9 +42,6 @@ public class PasswordValidatorImp implements ConstraintValidator<ValidPassword, 
                 //At least one special character
                 new WhitespaceRule()));
         RuleResult result = validator.validate(new PasswordData(password));
-        if (result.isValid()) {
-            return true;
-        }
-        return false;
+        return result.isValid();
     }
 }

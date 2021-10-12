@@ -4,16 +4,29 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Task implements Serializable {
-    private String id;
+@Table(name = "task",schema = "public")
+public class Task  {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "is_completed")
     private Boolean isCompleted;
-    private String contactId;
+
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "contact_id")
+    private Contact contact;
+
+    @Column(name = "date_created")
     private LocalDate dateCreated;
 }

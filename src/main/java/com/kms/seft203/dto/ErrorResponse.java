@@ -11,7 +11,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorResponse {
-    //them vao dto
     private Date timestamp;
     private HttpStatus status;
     private int statusCode;
