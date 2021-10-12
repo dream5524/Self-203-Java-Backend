@@ -34,123 +34,83 @@ public class UserValidationTest extends ControllerTest {
     @MockBean
     private UserService userService;
 
-    @Test
-    void whenAllFieldsAreInValid_thenReturnStatusBadRequest() throws Exception {
+    //    @ParameterizedTest
+//    @CsvSource({
+//            "'1Qa','mohuyen',' ',400",
+//            "'1Qa','mohuyen@gmail.com','Huyen Mo'",
+//            "'1Qaz@123Aqe','mohuyen@gmail.com',' '",
+//            "'1Qaz@123Aqe','mohuyen@','Huyen Mo'",
+//            "'1Qaz@123Aqe','mohuyen524','H'",
+//            "'1Qa','mohuyen524@gmail.com','H'",
+//            "'1Qa','mohuyen524@','Huyen Mo'"
+//    })
+    public void checkValidation_whenFailed_returnStatusBadRequest(String password, String email, String fullName) throws Exception {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qa");
-        registerRequest.setEmail("mohuyen");
-        registerRequest.setFullName("");
+        registerRequest.setEmail(email);
+        registerRequest.setFullName(fullName);
+        registerRequest.setPassword(password);
 
         Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .content(convertObjectToJsonString(registerRequest))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    public void checkValidation_whenSuccess_returnStatusCreated(String password, String email, String fullName) throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setPassword(password);
+        registerRequest.setEmail(email);
+        registerRequest.setFullName(fullName);
+
+        Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
+                        .content(convertObjectToJsonString(registerRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void whenAllFieldsAreInValid_thenReturnStatusBadRequest() throws Exception {
+        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen", "");
     }
 
     @Test
     void whenPasswordInputIsInValid_thenReturnStatusBadRequest() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qa");
-        registerRequest.setEmail("mohuyen@gmail.com");
-        registerRequest.setFullName("Huyen Mo");
-
-        Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerRequest))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen@gmail.com", "Huyen Mo");
     }
 
     @Test
     void whenFullNameInputIsInValid_thenReturnStatusBadRequest() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qaz@123Aqe");
-        registerRequest.setEmail("mohuyen@gmail.com");
-        registerRequest.setFullName("");
-
-        Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerRequest))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123Aqe", "mohuyen@gmail.com", "");
     }
 
     @Test
     void whenEmailInputIsInValid_thenReturnStatusBadRequest() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qaz@123Aqe");
-        registerRequest.setEmail("mohuyen@");
-        registerRequest.setFullName("Huyen Mo");
-
-        Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerRequest))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123Aqe", "mohuyen@", "Huyen Mo");
     }
 
     @Test
     void whenEmailAndFullNameInputAreInValid_thenReturnStatusBadRequest() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qaz@123Aqe");
-        registerRequest.setEmail("mohuyen524");
-        registerRequest.setFullName("H");
-
-        Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerRequest))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123Aqe", "mohuyen524", "H");
     }
 
     @Test
     void whenPasswordAndFullNameInputAreInValid_thenReturnStatusBadRequest() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qa");
-        registerRequest.setEmail("mohuyen@gmail.com");
-        registerRequest.setFullName("H");
-
-        Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerRequest))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen524@gmail.com", "H");
     }
 
     @Test
     void whenEmailAndPasswordInputAreInValid_thenReturnStatusBadRequest() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qa");
-        registerRequest.setEmail("mohuyen@");
-        registerRequest.setFullName("Huyen Mo");
-
-        Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerRequest))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen524@", "Huyen Mo");
     }
 
     @Test
-    void whenAllFieldsAreValid_thenReturnStatusIsCreated() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qaz@123QAZ");
-        registerRequest.setEmail("mohuyen@gmail.com");
-        registerRequest.setFullName("Huyen Mo");
-
-        Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerRequest))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+    void checkValidation_whenSuccess_returnStatusCreated() throws Exception {
+        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123QAZ", "mohuyen@gmail.com", "Huyen Mo");
     }
 }
