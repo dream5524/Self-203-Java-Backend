@@ -38,10 +38,10 @@ class AuthControllerTest extends ControllerTest {
     private UserService userService;
 
     @Test
-    public void testRegister_whenSuccess_thenReturnRegisterRequestFormat() throws Exception {
+    void testRegister_whenSuccess_thenReturnRegisterRequestFormat() throws Exception {
         RegisterRequest mockUserDto =
                 new RegisterRequest("nvdloc@apcs.vn", "1", "Loc Nguyen");
-        Mockito.when(userService.save(Mockito.eq(mockUserDto))).thenReturn(mockUserDto);
+        Mockito.when(userService.save(mockUserDto)).thenReturn(mockUserDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                 .content(convertObjectToJsonString(mockUserDto))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -53,10 +53,10 @@ class AuthControllerTest extends ControllerTest {
     }
 
     @Test
-    public void testRegister_whenFailed_thenReturnEmailDuplicationError() throws Exception {
+    void testRegister_whenFailed_thenReturnEmailDuplicationError() throws Exception {
         RegisterRequest mockUserDto = new RegisterRequest("a@gmail.com", "1", "A");
         String message = "Duplicated error! Email is already used!";
-        Mockito.when(userService.save(Mockito.eq(mockUserDto)))
+        Mockito.when(userService.save(mockUserDto))
                 .thenThrow(new DuplicatedEmailException(message));
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .content(convertObjectToJsonString(mockUserDto))

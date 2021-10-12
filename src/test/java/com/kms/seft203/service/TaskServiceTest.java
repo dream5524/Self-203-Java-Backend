@@ -32,7 +32,7 @@ public class TaskServiceTest {
     private TaskRepository taskRepository;
 
     @Test
-    public void getByUserEmailTest_whenSuccess_thenReturnTaskDtoList() {
+    void getByUserEmailTest_whenSuccess_thenReturnTaskDtoList() {
         String email = "duclocdk1999@gmail.com";
         String description = "fix bug";
         Boolean isCompleted = true;
@@ -51,7 +51,7 @@ public class TaskServiceTest {
         List<TaskDto> expectedResults = new ArrayList<>();
         expectedResults.add(new TaskDto(email, description, isCompleted, dateCreated));
 
-        Mockito.when(taskRepository.findByUserEmail(Mockito.eq(email))).thenReturn(mockContactList);
+        Mockito.when(taskRepository.findByUserEmail(email)).thenReturn(mockContactList);
 
         List<TaskDto> actualResults = taskService.getByUserEmail(email);
 

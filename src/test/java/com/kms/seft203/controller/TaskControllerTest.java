@@ -34,7 +34,7 @@ public class TaskControllerTest extends ControllerTest {
     private TaskService taskService;
 
     @Test
-    public void getTaskByUserEmailTest_whenSuccess_thenReturnStatusOk() throws Exception {
+    void getTaskByUserEmailTest_whenSuccess_thenReturnStatusOk() throws Exception {
         String email = "duclocdk1999@gmail.com";
         String description = "Edit database";
         Boolean isCompleted = false;
@@ -42,7 +42,7 @@ public class TaskControllerTest extends ControllerTest {
         List<TaskDto> mockTaskDtoList = new ArrayList<>();
         mockTaskDtoList.add(new TaskDto(email, description, isCompleted, dateCreated));
 
-        Mockito.when(taskService.getByUserEmail(Mockito.eq(email))).thenReturn(mockTaskDtoList);
+        Mockito.when(taskService.getByUserEmail(email)).thenReturn(mockTaskDtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/tasks/" + email)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
