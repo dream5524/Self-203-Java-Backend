@@ -66,9 +66,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     void whenAllFieldsInputAreValid_thenReturnStatusIsCreated(String password, String email, String fullName) throws Exception {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword(password);
-        registerRequest.setEmail(email);
-        registerRequest.setFullName(fullName);
+        registerRequest.setPassword("1Qa123@@qe");
+        registerRequest.setEmail("mohuyen@gmail.com");
+        registerRequest.setFullName("Huyen Mo");
 
         Mockito.when(userService.save(registerRequest)).thenReturn(registerRequest);
 

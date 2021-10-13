@@ -4,6 +4,7 @@ import com.kms.seft203.dto.ContactRequestDto;
 import com.kms.seft203.dto.ContactResponseDto;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.service.ContactService;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
@@ -42,26 +44,26 @@ class ContactControllerTest extends ControllerTest {
                                 "Teo",
                                 new User(1, "teonv@gmail.com", "1Qaz123@@", "Nguyen Van Teo"),
                                 "Tester",
-                                "Implement API"),
-                        new ContactResponseDto("Tran Thi",
-                                "No",
-                                new User(2, "nott@gmail.com", "1Qaz123@@", "Tran Thi No"),
-                                "Business Analyst",
                                 "Implement API"))
                 .collect(Collectors.toList());
 
         Mockito.when(contactService.getAllContact()).thenReturn(listContactResponseDto);
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/contacts")
-                        .content(net.minidev.json.JSONArray.toJSONString(listContactResponseDto))
+        MvcResult mvcResult = this.mockMvc.perform(MockMvcRequestBuilders.get("/contacts")
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
+
+        String expectedJsonList = this.convertObjectToJsonString(listContactResponseDto);
+        String actualJsonList = mvcResult.getResponse().getContentAsString();
+
+        Assert.assertEquals(expectedJsonList, actualJsonList);
     }
 
     @Test
     void createContactTest() throws Exception {
         ContactRequestDto contactRequestDto = new ContactRequestDto("huyenmo@gmail.com", "Huyen", "Mo", "title demo", "project demo");
+
         Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
 
         // Execute the POST request

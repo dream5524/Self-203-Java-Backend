@@ -71,14 +71,14 @@ class ContactValidationTest extends ControllerTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "mohuyen@gmail.com,Huyen,Mo,Tester,Build Dashboard"}, delimiter = ',')
+            "mohuyen@gmail.com,Huyen Mo,Tester,Build Dashboard"}, delimiter = ',')
     void whenAllFieldsInputAreValid_thenReturnStatusIsCreated(String email, String firstName, String lastName, String title, String project) throws Exception {
         ContactRequestDto contactRequestDto = new ContactRequestDto();
-        contactRequestDto.setEmail(email);
-        contactRequestDto.setFirstName(firstName);
-        contactRequestDto.setLastName(lastName);
-        contactRequestDto.setTitle(title);
-        contactRequestDto.setProject(project);
+        contactRequestDto.setEmail("mohuyen@gmail.com");
+        contactRequestDto.setFirstName("Huyen");
+        contactRequestDto.setLastName("Mo");
+        contactRequestDto.setTitle("Tester");
+        contactRequestDto.setProject("Build Dashboard");
 
         Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
 
