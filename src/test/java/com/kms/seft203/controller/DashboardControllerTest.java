@@ -29,12 +29,12 @@ public class DashboardControllerTest extends ControllerTest {
     private DashboardService dashboardService;
 
     @Test
-    public void testCreateDashboard_whenSuccess_thenReturnDashboardDto() throws Exception {
+    void testCreateDashboard_whenSuccess_thenReturnDashboardDto() throws Exception {
         String email = "duclocdk1999@gmail.com";
         String title = "Home page";
         String layoutType = "Dark mode";
         DashboardDto dashboardDto = new DashboardDto(email, title, layoutType);
-        Mockito.when(dashboardService.save(Mockito.eq(dashboardDto))).thenReturn(dashboardDto);
+        Mockito.when(dashboardService.save(dashboardDto)).thenReturn(dashboardDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
                         .content(convertObjectToJsonString(dashboardDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -45,12 +45,12 @@ public class DashboardControllerTest extends ControllerTest {
     }
 
     @Test
-    public void testCreateDashboard_whenDashboardDuplicated_thenReturnBadHttpRequest() throws Exception {
+    void testCreateDashboard_whenDashboardDuplicated_thenReturnBadHttpRequest() throws Exception {
         String email = "duclocdk1999@gmail.com";
         String title = "Home page";
         String layoutType = "Dark mode";
         DashboardDto dashboardDto = new DashboardDto(email, title, layoutType);
-        Mockito.when(dashboardService.save(Mockito.eq(dashboardDto))).thenThrow(
+        Mockito.when(dashboardService.save(dashboardDto)).thenThrow(
                 new BadHttpRequest(new Exception("Dashboard exists, pls change method to put"))
         );
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
@@ -60,13 +60,13 @@ public class DashboardControllerTest extends ControllerTest {
     }
 
     @Test
-    public void testCreateDashboard_whenContactNotFound_thenReturnContactNotFoundException() throws Exception {
+    void testCreateDashboard_whenContactNotFound_thenReturnContactNotFoundException() throws Exception {
         String email = "duclocdk1999@gmail.com";
         String title = "Home page";
         String layoutType = "Dark mode";
         String message = "Contact of user " + email + " not found!";
         DashboardDto dashboardDto = new DashboardDto(email, title, layoutType);
-        Mockito.when(dashboardService.save(Mockito.eq(dashboardDto))).thenThrow(
+        Mockito.when(dashboardService.save(dashboardDto)).thenThrow(
                 new ContactNotFoundException(message)
         );
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
@@ -75,5 +75,4 @@ public class DashboardControllerTest extends ControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(message));
     }
-
 }

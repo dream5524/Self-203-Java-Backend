@@ -33,7 +33,7 @@ public class DashboardServiceTest {
     private DashboardRepository dashboardRepository;
 
     @Test
-    public void testSave_whenSuccess_thenReturnDashboardDto() throws Exception {
+    void testSave_whenSuccess_thenReturnDashboardDto() throws Exception {
         String email = "duclocdk1999@gmail.com";
         String title = "Login page";
         String layoutType = "Light mode";
@@ -49,7 +49,7 @@ public class DashboardServiceTest {
         Dashboard dashboardFromDb = null;
         Mockito.when(contactRepository.findByEmail(email)).thenReturn(Optional.of(mockContact));
         Mockito.when(dashboardRepository.save(Mockito.any())).thenReturn(mockDashboard);
-        Mockito.when(dashboardRepository.findByContact(Mockito.eq(mockContact))).thenReturn(Optional.ofNullable(dashboardFromDb));
+        Mockito.when(dashboardRepository.findByContact(mockContact)).thenReturn(Optional.ofNullable(dashboardFromDb));
 
         DashboardDto dashboardResponse = dashboardService.save(mockDashboardDto);
         assertEquals(mockDashboardDto.getEmail(), dashboardResponse.getEmail());
