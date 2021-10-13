@@ -5,6 +5,8 @@ import com.kms.seft203.controller.ControllerTest;
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.service.UserService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +36,17 @@ public class UserValidationTest extends ControllerTest {
     @MockBean
     private UserService userService;
 
-    //    @ParameterizedTest
-//    @CsvSource({
-//            "'1Qa','mohuyen',' ',400",
-//            "'1Qa','mohuyen@gmail.com','Huyen Mo'",
+    @ParameterizedTest
+    @CsvSource(value = {
+            "1Qa,mohuyen,",
+            "1Qa,mohuyen@gmail.com,Huyen Mo"
 //            "'1Qaz@123Aqe','mohuyen@gmail.com',' '",
 //            "'1Qaz@123Aqe','mohuyen@','Huyen Mo'",
 //            "'1Qaz@123Aqe','mohuyen524','H'",
 //            "'1Qa','mohuyen524@gmail.com','H'",
 //            "'1Qa','mohuyen524@','Huyen Mo'"
-//    })
+    }, delimiter = ',')
+
     public void checkValidation_whenFailed_returnStatusBadRequest(String password, String email, String fullName) throws Exception {
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setEmail(email);
@@ -59,58 +62,58 @@ public class UserValidationTest extends ControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    public void checkValidation_whenSuccess_returnStatusCreated(String password, String email, String fullName) throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword(password);
-        registerRequest.setEmail(email);
-        registerRequest.setFullName(fullName);
+//    public void checkValidation_whenSuccess_returnStatusCreated(String password, String email, String fullName) throws Exception {
+//        RegisterRequest registerRequest = new RegisterRequest();
+//        registerRequest.setPassword(password);
+//        registerRequest.setEmail(email);
+//        registerRequest.setFullName(fullName);
+//
+//        Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
+//
+//        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
+//                        .content(convertObjectToJsonString(registerRequest))
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isCreated());
+//    }
 
-        Mockito.when(userService.save(Mockito.eq(registerRequest))).thenReturn(registerRequest);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerRequest))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    void whenAllFieldsAreInValid_thenReturnStatusBadRequest() throws Exception {
-        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen", "");
-    }
-
-    @Test
-    void whenPasswordInputIsInValid_thenReturnStatusBadRequest() throws Exception {
-        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen@gmail.com", "Huyen Mo");
-    }
-
-    @Test
-    void whenFullNameInputIsInValid_thenReturnStatusBadRequest() throws Exception {
-        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123Aqe", "mohuyen@gmail.com", "");
-    }
-
-    @Test
-    void whenEmailInputIsInValid_thenReturnStatusBadRequest() throws Exception {
-        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123Aqe", "mohuyen@", "Huyen Mo");
-    }
-
-    @Test
-    void whenEmailAndFullNameInputAreInValid_thenReturnStatusBadRequest() throws Exception {
-        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123Aqe", "mohuyen524", "H");
-    }
-
-    @Test
-    void whenPasswordAndFullNameInputAreInValid_thenReturnStatusBadRequest() throws Exception {
-        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen524@gmail.com", "H");
-    }
-
-    @Test
-    void whenEmailAndPasswordInputAreInValid_thenReturnStatusBadRequest() throws Exception {
-        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen524@", "Huyen Mo");
-    }
-
-    @Test
-    void checkValidation_whenSuccess_returnStatusCreated() throws Exception {
-        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123QAZ", "mohuyen@gmail.com", "Huyen Mo");
-    }
+//    @Test
+//    void whenAllFieldsAreInValid_thenReturnStatusBadRequest() throws Exception {
+//        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen", "");
+//    }
+//
+//    @Test
+//    void whenPasswordInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+//        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen@gmail.com", "Huyen Mo");
+//    }
+//
+//    @Test
+//    void whenFullNameInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+//        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123Aqe", "mohuyen@gmail.com", "");
+//    }
+//
+//    @Test
+//    void whenEmailInputIsInValid_thenReturnStatusBadRequest() throws Exception {
+//        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123Aqe", "mohuyen@", "Huyen Mo");
+//    }
+//
+//    @Test
+//    void whenEmailAndFullNameInputAreInValid_thenReturnStatusBadRequest() throws Exception {
+//        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123Aqe", "mohuyen524", "H");
+//    }
+//
+//    @Test
+//    void whenPasswordAndFullNameInputAreInValid_thenReturnStatusBadRequest() throws Exception {
+//        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen524@gmail.com", "H");
+//    }
+//
+//    @Test
+//    void whenEmailAndPasswordInputAreInValid_thenReturnStatusBadRequest() throws Exception {
+//        checkValidation_whenFailed_returnStatusBadRequest("1Qa", "mohuyen524@", "Huyen Mo");
+//    }
+//
+//    @Test
+//    void checkValidation_whenSuccess_returnStatusCreated() throws Exception {
+//        checkValidation_whenFailed_returnStatusBadRequest("1Qaz@123QAZ", "mohuyen@gmail.com", "Huyen Mo");
+//    }
 }
