@@ -9,14 +9,12 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskDto {
-    private String email;
+public class TaskResponseDto {
     private String description;
     private Boolean isCompleted;
     private LocalDate dateCreated;
 
-    public TaskDto(String email, String description, Boolean isCompleted) {
-        this.email = email;
+    public TaskResponseDto(String description, Boolean isCompleted) {
         this.description = description;
         this.isCompleted = isCompleted;
     }

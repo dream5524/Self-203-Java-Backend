@@ -1,6 +1,6 @@
 package com.kms.seft203.service;
 
-import com.kms.seft203.dto.TaskDto;
+import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.entity.Task;
 import com.kms.seft203.repository.TaskRepository;
 import org.modelmapper.ModelMapper;
@@ -25,9 +25,9 @@ public class TaskServiceImp implements TaskService {
      * @return
      */
     @Override
-    public List<TaskDto> getByUserEmail(String email) {
+    public List<TaskResponseDto> getByUserEmail(String email) {
         List<Task> tasks = taskRepository.findByUserEmail(email);
-        return tasks.stream().map(task -> modelMapper.map(task, TaskDto.class))
+        return tasks.stream().map(task -> modelMapper.map(task, TaskResponseDto.class))
                 .collect(Collectors.toList());
     }
 }

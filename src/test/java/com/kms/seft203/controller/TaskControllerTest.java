@@ -1,6 +1,6 @@
 package com.kms.seft203.controller;
 
-import com.kms.seft203.dto.TaskDto;
+import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -39,15 +39,14 @@ public class TaskControllerTest extends ControllerTest {
         String description = "Edit database";
         Boolean isCompleted = false;
         LocalDate dateCreated = LocalDate.of(2021, Month.JANUARY, 22);
-        List<TaskDto> mockTaskDtoList = new ArrayList<>();
-        mockTaskDtoList.add(new TaskDto(email, description, isCompleted, dateCreated));
+        List<TaskResponseDto> mockTaskResponseDtoList = new ArrayList<>();
+        mockTaskResponseDtoList.add(new TaskResponseDto(description, isCompleted, dateCreated));
 
-        Mockito.when(taskService.getByUserEmail(email)).thenReturn(mockTaskDtoList);
+        Mockito.when(taskService.getByUserEmail(email)).thenReturn(mockTaskResponseDtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/tasks/" + email)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].email").value(email))
                 .andExpect(jsonPath("$.[0].description").value(description))
                 .andExpect(jsonPath("$.[0].isCompleted").value(isCompleted))
                 .andExpect(jsonPath("$.[0].dateCreated").value(dateCreated.toString()));

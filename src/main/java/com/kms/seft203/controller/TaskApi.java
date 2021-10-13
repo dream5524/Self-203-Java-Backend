@@ -1,6 +1,6 @@
 package com.kms.seft203.controller;
 
-import com.kms.seft203.dto.TaskDto;
+import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +20,8 @@ public class TaskApi {
     private TaskService taskService;
 
     @GetMapping("/{email}")
-    public ResponseEntity<List<TaskDto>> getByUserEmail(@PathVariable String email) {
-        List<TaskDto> tasks = taskService.getByUserEmail(email);
+    public ResponseEntity<List<TaskResponseDto>> getByUserEmail(@PathVariable String email) {
+        List<TaskResponseDto> tasks = taskService.getByUserEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(tasks);
     }
 }

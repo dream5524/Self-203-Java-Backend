@@ -2,7 +2,7 @@ package com.kms.seft203.config;
 
 import com.kms.seft203.dto.ContactRequestDto;
 import com.kms.seft203.dto.DashboardDto;
-import com.kms.seft203.dto.TaskDto;
+import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.entity.AppVersion;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
@@ -56,11 +56,6 @@ public class CustomConfig {
         // Config mapping for Dashboard -> DashboardDto
         modelMapper.typeMap(Dashboard.class, DashboardDto.class).addMappings(mapper -> {
             mapper.map(src -> src.getContact().getUser().getEmail(), DashboardDto::setEmail);
-        });
-
-        // Config mapping for Task -> TaskDto
-        modelMapper.typeMap(Task.class, TaskDto.class).addMappings(mapper -> {
-           mapper.map(src -> src.getContact().getUser().getEmail(), TaskDto::setEmail);
         });
 
         return modelMapper;

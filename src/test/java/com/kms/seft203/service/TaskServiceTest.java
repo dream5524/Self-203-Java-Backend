@@ -1,6 +1,6 @@
 package com.kms.seft203.service;
 
-import com.kms.seft203.dto.TaskDto;
+import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Task;
 import com.kms.seft203.entity.User;
@@ -42,23 +42,19 @@ public class TaskServiceTest {
         String password = "Abc123456789";
         String title = "Developer";
         String project = "Dashboard-seft203";
-        User mockUser = new User(null, email, password, firstName + " " + lastName);
-
-        Contact mockContact = new Contact(firstName, lastName, mockUser, title, project);
+        User user = new User(null, email, password, firstName + " " + lastName);
+        Contact contact = new Contact(firstName, lastName, user, title, project);
+        Task task = new Task(null, description, isCompleted, contact, dateCreated);
         List<Task> mockContactList = new ArrayList<>();
-        mockContactList.add(new Task(null, description, isCompleted, mockContact, dateCreated));
-
-        List<TaskDto> expectedResults = new ArrayList<>();
-        expectedResults.add(new TaskDto(email, description, isCompleted, dateCreated));
+        mockContactList.add(task);
 
         Mockito.when(taskRepository.findByUserEmail(email)).thenReturn(mockContactList);
 
-        List<TaskDto> actualResults = taskService.getByUserEmail(email);
+        List<TaskResponseDto> actualResults = taskService.getByUserEmail(email);
 
         assertEquals(1, actualResults.size());
-        assertEquals(expectedResults.get(0).getEmail(), actualResults.get(0).getEmail());
-        assertEquals(expectedResults.get(0).getDescription(), actualResults.get(0).getDescription());
-        assertEquals(expectedResults.get(0).getIsCompleted(), actualResults.get(0).getIsCompleted());
-        assertEquals(expectedResults.get(0).getDateCreated(), actualResults.get(0).getDateCreated());
+        assertEquals(description, actualResults.get(0).getDescription());
+        assertEquals(isCompleted, actualResults.get(0).getIsCompleted());
+        assertEquals(dateCreated, actualResults.get(0).getDateCreated());
     }
 }
