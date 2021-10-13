@@ -25,7 +25,7 @@ public class PasswordValidatorImp implements ConstraintValidator<ValidPassword, 
 
     @Override
     public void initialize(ValidPassword constraintAnnotation) {
-
+        //Do not anything
     }
 
     @Override
