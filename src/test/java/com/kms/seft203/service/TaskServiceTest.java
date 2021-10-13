@@ -4,7 +4,9 @@ import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Task;
 import com.kms.seft203.entity.User;
+import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.repository.TaskRepository;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -56,5 +58,18 @@ public class TaskServiceTest {
         assertEquals(description, actualResults.get(0).getDescription());
         assertEquals(isCompleted, actualResults.get(0).getIsCompleted());
         assertEquals(dateCreated, actualResults.get(0).getDateCreated());
+    }
+
+    @Test
+    void getTaskByIdTest_whenSuccess_thenReturnTaskDto() throws ContactNotFoundException {
+        Integer id = 10;
+        Task expectedTask = new Task("Apply logger", false);
+
+        Mockito.when(taskRepository.findById(id)).thenReturn(java.util.Optional.of(expectedTask));
+
+        TaskResponseDto actualTaskTask = taskService.getById(id);
+
+        Assert.assertEquals(expectedTask.getDescription(), actualTaskTask.getDescription());
+        Assert.assertEquals(expectedTask.getIsCompleted(), actualTaskTask.getIsCompleted());
     }
 }

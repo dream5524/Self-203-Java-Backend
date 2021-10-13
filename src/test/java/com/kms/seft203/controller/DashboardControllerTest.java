@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(DashboardApi.class)
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
-public class DashboardControllerTest extends ControllerTest {
+class DashboardControllerTest extends ControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean

@@ -1,7 +1,10 @@
 package com.kms.seft203.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kms.seft203.dto.TaskResponseDto;
+import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.service.TaskService;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -25,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(TaskApi.class)
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
-public class TaskControllerTest extends ControllerTest {
+class TaskControllerTest extends ControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,10 +48,25 @@ public class TaskControllerTest extends ControllerTest {
         Mockito.when(taskService.getByUserEmail(email)).thenReturn(mockTaskResponseDtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/tasks/" + email)
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].description").value(description))
                 .andExpect(jsonPath("$.[0].isCompleted").value(isCompleted))
                 .andExpect(jsonPath("$.[0].dateCreated").value(dateCreated.toString()));
+    }
+
+    @Test
+    void getOneTaskByIdTest_WhenSuccess_ThenReturnStatusIsOk() throws Exception {
+        Integer id = 10;
+        TaskResponseDto taskResponseDto = new TaskResponseDto("Apply Logger", false);
+
+        Mockito.when(taskService.getById(id)).thenReturn(taskResponseDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/tasks/id/" + id)
+                        .content(convertObjectToJsonString(taskResponseDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description").value(taskResponseDto.getDescription()))
+                .andExpect(jsonPath("$.isCompleted").value(taskResponseDto.getIsCompleted()));
     }
 }

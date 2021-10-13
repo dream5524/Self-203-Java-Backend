@@ -43,4 +43,9 @@ public class Task {
         this.isCompleted = isCompleted;
         this.contact = contact;
     }
+
+    public Task(String description, Boolean isCompleted) {
+        this.description = description;
+        this.isCompleted = isCompleted;
+    }
 }
