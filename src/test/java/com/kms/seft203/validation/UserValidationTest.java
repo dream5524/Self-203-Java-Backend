@@ -7,6 +7,7 @@ import com.kms.seft203.service.UserService;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -61,14 +62,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 .andExpect(status().isBadRequest());
     }
 
-    @ParameterizedTest
-    @CsvSource(value = {"1Qa123@@qe,mohuyen@gmail.com,Huyen Mo"}, delimiter = ',')
-
-    void whenAllFieldsInputAreValid_thenReturnStatusIsCreated(String password, String email, String fullName) throws Exception {
+    @Test
+    void whenAllFieldsInputAreValid_thenReturnStatusIsCreated() throws Exception {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword(password);
-        registerRequest.setEmail(email);
-        registerRequest.setFullName(fullName);
+        registerRequest.setPassword("1Qaz12wsss@@");
+        registerRequest.setEmail("mohuyen@gmail.com");
+        registerRequest.setFullName("Huyen Mo");
 
         Mockito.when(userService.save(registerRequest)).thenReturn(registerRequest);
 
