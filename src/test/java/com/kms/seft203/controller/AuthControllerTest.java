@@ -18,8 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * This class is implemented to test the controller layer - AuthApi class
@@ -40,11 +39,11 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void testRegister_whenSuccess_thenReturnRegisterRequestFormat() throws Exception {
         RegisterRequest mockUserDto =
-                new RegisterRequest("nvdloc@apcs.vn", "1", "Loc Nguyen");
+                new RegisterRequest("nvdloc@apcs.vn", "11Qwaz#()(423A", "Loc Nguyen");
         Mockito.when(userService.save(mockUserDto)).thenReturn(mockUserDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                .content(convertObjectToJsonString(mockUserDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(mockUserDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("nvdloc@apcs.vn"))
@@ -53,8 +52,8 @@ class AuthControllerTest extends ControllerTest {
     }
 
     @Test
-    void testRegister_whenFailed_thenReturnEmailDuplicationError() throws Exception {
-        RegisterRequest mockUserDto = new RegisterRequest("a@gmail.com", "1", "A");
+    public void testRegister_whenFailed_thenReturnEmailDuplicationError() throws Exception {
+        RegisterRequest mockUserDto = new RegisterRequest("huyenmo@gmail.com", "11Qaz123@@", "Loc");
         String message = "Duplicated error! Email is already used!";
         Mockito.when(userService.save(mockUserDto))
                 .thenThrow(new DuplicatedEmailException(message));

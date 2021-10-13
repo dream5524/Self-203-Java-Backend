@@ -24,4 +24,5 @@ public class TaskApi {
         List<TaskResponseDto> tasks = taskService.getByUserEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(tasks);
     }
+
 }

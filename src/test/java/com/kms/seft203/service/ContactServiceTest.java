@@ -17,8 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -34,31 +35,37 @@ class ContactServiceTest {
 
     @Test
     void getAllContactServiceTest() {
-        Contact contact = new Contact("Nguyen Chi",
-                "Pheo",
-                new User(1, "pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
-                "Tester",
-                "Implement API");
-        ContactResponseDto contactResponseDto = new ContactResponseDto("Nguyen Chi",
-                "Pheo",
-                new User(1, "pheonc@gmail.com", "1", "Nguyen Chi Pheo"),
-                "Tester",
-                "Implement API");
-        List<Contact> contactList = new ArrayList<>();
-        contactList.add(contact);
+        List<Contact> contactList = Stream.of(
+                        new Contact("Nguyen Chi",
+                                "Pheo",
+                                new User(1, "pheonc@gmail.com", "11Qaz123@@", "Nguyen Chi Pheo"),
+                                "Tester",
+                                "Implement API"))
+                .collect(Collectors.toList());
         Mockito.when(contactRepository.findAll()).thenReturn(contactList);
-        List<ContactResponseDto> contactResponseDtoList = contactService.getAllContact();
 
-        Assert.assertEquals(contactResponseDtoList.get(0).getFirstName(), contact.getFirstName());
-        Assert.assertEquals(contactResponseDtoList.get(0).getLastName(), contact.getLastName());
-        Assert.assertEquals(contactResponseDtoList.get(0).getTitle(), contact.getTitle());
-        Assert.assertEquals(contactResponseDtoList.get(0).getProject(), contact.getProject());
-        Assert.assertEquals(contactResponseDtoList.get(0).getUser(), contact.getUser());
+        List<ContactResponseDto> expectedResponseList = Stream.of(
+                        new ContactResponseDto("Nguyen Chi",
+                                "Pheo",
+                                new User(1, "pheonc@gmail.com", "11Qaz123@@", "Nguyen Chi Pheo"),
+                                "Tester",
+                                "Implement API"))
+                .collect(Collectors.toList());
+
+        List<ContactResponseDto> actualResponseList = contactService.getAllContact();
+
+        Assert.assertEquals(1,actualResponseList.stream().count());
+        Assert.assertEquals(expectedResponseList.get(0).getFirstName(), actualResponseList.get(0).getFirstName());
+        Assert.assertEquals(expectedResponseList.get(0).getLastName(), actualResponseList.get(0).getLastName());
+        Assert.assertEquals(expectedResponseList.get(0).getTitle(), actualResponseList.get(0).getTitle());
+        Assert.assertEquals(expectedResponseList.get(0).getProject(), actualResponseList.get(0).getProject());
+        Assert.assertEquals(expectedResponseList.get(0).getUser(), actualResponseList.get(0).getUser());
+
     }
 
     @Test
     void createContactServiceTest() throws EmailNotFoundException {
-        User user = new User(1, "huyenmo@gmail.com", "2", "Huyen Mo");
+        User user = new User(1, "huyenmo@gmail.com", "21Qaz123@@", "Huyen Mo");
         Contact contact = new Contact("Huyen", "Mo", user, "demo", "demo");
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(java.util.Optional.of(user));
 
