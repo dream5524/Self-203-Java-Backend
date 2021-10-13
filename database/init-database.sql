@@ -105,7 +105,6 @@ CREATE TABLE IF NOT EXISTS public."task"
     date_created timestamp without time zone DEFAULT (now() + '07:00:00'::interval),
     is_completed integer NOT NULL,
     CONSTRAINT task_pkey PRIMARY KEY (id),
-    CONSTRAINT task_contact_id_key UNIQUE (contact_id),
     CONSTRAINT task_contact_id_fkey FOREIGN KEY (contact_id)
         REFERENCES public."contact" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
