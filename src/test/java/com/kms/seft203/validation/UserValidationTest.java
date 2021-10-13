@@ -65,7 +65,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     @Test
     void whenAllFieldsInputAreValid_thenReturnStatusIsCreated() throws Exception {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qaz12wsss@@");
+        registerRequest.setPassword("1Qa123@@qe");
         registerRequest.setEmail("mohuyen@gmail.com");
         registerRequest.setFullName("Huyen Mo");
 

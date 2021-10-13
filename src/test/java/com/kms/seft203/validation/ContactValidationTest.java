@@ -4,10 +4,10 @@ import com.kms.seft203.controller.ContactApi;
 import com.kms.seft203.controller.ControllerTest;
 import com.kms.seft203.dto.ContactRequestDto;
 import com.kms.seft203.service.ContactService;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -69,7 +69,8 @@ class ContactValidationTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
-    @Test
+
+   @Test
     void whenAllFieldsInputAreValid_thenReturnStatusIsCreated() throws Exception {
         ContactRequestDto contactRequestDto = new ContactRequestDto();
         contactRequestDto.setEmail("mohuyen@gmail.com");
