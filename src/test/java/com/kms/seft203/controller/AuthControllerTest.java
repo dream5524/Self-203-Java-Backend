@@ -39,7 +39,7 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void testRegister_whenSuccess_thenReturnRegisterRequestFormat() throws Exception {
         RegisterRequest mockUserDto =
-                new RegisterRequest("nvdloc@apcs.vn", "1", "Loc Nguyen");
+                new RegisterRequest("nvdloc@apcs.vn", "11Qwaz#()(423A", "Loc Nguyen");
         Mockito.when(userService.save(mockUserDto)).thenReturn(mockUserDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .content(convertObjectToJsonString(mockUserDto))
