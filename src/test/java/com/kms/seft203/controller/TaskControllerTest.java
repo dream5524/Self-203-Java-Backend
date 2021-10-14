@@ -3,6 +3,7 @@ package com.kms.seft203.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.service.TaskService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -62,7 +63,8 @@ class TaskControllerTest extends ControllerTest {
 
         Mockito.when(taskService.getById(id)).thenReturn(taskResponseDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/tasks/id/" + id)
+        mockMvc.perform(MockMvcRequestBuilders.get("/tasks")
+                        .param("id", String.valueOf(id))
                         .content(convertObjectToJsonString(taskResponseDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

@@ -3,6 +3,7 @@ package com.kms.seft203.service;
 import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.entity.Task;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.repository.TaskRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +22,15 @@ public class TaskServiceImp implements TaskService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private TaskService taskService;
-
     /**
      * This function return a list of taskDto from database which belong to a particular contact.
      *
      * @param email
+     * @param id
      * @return
      */
+
+
     @Override
     public List<TaskResponseDto> getByUserEmail(String email) {
         List<Task> tasks = taskRepository.findByUserEmail(email);
@@ -38,10 +39,10 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public TaskResponseDto getById(Integer id) throws ContactNotFoundException {
+    public TaskResponseDto getById(Integer id) throws TaskNotFoundException {
         Optional<Task> optionalTask = taskRepository.findById(id);
         if (optionalTask.isEmpty()) {
-            throw new ContactNotFoundException("Do not find any task with id: " + id);
+            throw new TaskNotFoundException("Do not find any task with id: " + id);
         }
         Task task = optionalTask.get();
         return modelMapper.map(task, TaskResponseDto.class);
