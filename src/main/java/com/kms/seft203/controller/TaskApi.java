@@ -37,5 +37,4 @@ public class TaskApi {
         }
         return ResponseEntity.status(HttpStatus.OK).body(taskResponseDtoList);
     }
-
 }
