@@ -67,9 +67,9 @@ public class TaskServiceTest {
 
         Mockito.when(taskRepository.findById(id)).thenReturn(java.util.Optional.of(expectedTask));
 
-        TaskResponseDto actualTaskTask = taskService.getById(id);
+        TaskResponseDto actualTask = taskService.getById(id);
 
-        Assert.assertEquals(expectedTask.getDescription(), actualTaskTask.getDescription());
-        Assert.assertEquals(expectedTask.getIsCompleted(), actualTaskTask.getIsCompleted());
+        Assert.assertEquals(expectedTask.getDescription(), actualTask.getDescription());
+        Assert.assertEquals(expectedTask.getIsCompleted(), actualTask.getIsCompleted());
     }
 }

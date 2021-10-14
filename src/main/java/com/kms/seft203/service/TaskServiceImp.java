@@ -41,7 +41,7 @@ public class TaskServiceImp implements TaskService {
     public TaskResponseDto getById(Integer id) throws ContactNotFoundException {
         Optional<Task> optionalTask = taskRepository.findById(id);
         if (optionalTask.isEmpty()) {
-            throw new ContactNotFoundException("Do not find any user with task id: " + id);
+            throw new ContactNotFoundException("Do not find any task with id: " + id);
         }
         Task task = optionalTask.get();
         return modelMapper.map(task, TaskResponseDto.class);
