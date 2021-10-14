@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface TaskService {
     List<TaskResponseDto> getByUserEmail(String email);
-    TaskResponseDto getById(Integer id) throws TaskNotFoundException;
+    List<TaskResponseDto> getById(Integer id) throws TaskNotFoundException;
 }

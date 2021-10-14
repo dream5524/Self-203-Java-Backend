@@ -48,7 +48,8 @@ class TaskControllerTest extends ControllerTest {
 
         Mockito.when(taskService.getByUserEmail(email)).thenReturn(mockTaskResponseDtoList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/tasks/" + email)
+        mockMvc.perform(MockMvcRequestBuilders.get("/tasks")
+                        .param("email", email)
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].description").value(description))
@@ -60,15 +61,17 @@ class TaskControllerTest extends ControllerTest {
     void getOneTaskByIdTest_WhenSuccess_ThenReturnStatusIsOk() throws Exception {
         Integer id = 10;
         TaskResponseDto taskResponseDto = new TaskResponseDto("Apply Logger", false);
+        List<TaskResponseDto> mockTaskResponseDtoList = new ArrayList<>();
+        mockTaskResponseDtoList.add(taskResponseDto);
 
-        Mockito.when(taskService.getById(id)).thenReturn(taskResponseDto);
+        Mockito.when(taskService.getById(id)).thenReturn(mockTaskResponseDtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/tasks")
                         .param("id", String.valueOf(id))
                         .content(convertObjectToJsonString(taskResponseDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.description").value(taskResponseDto.getDescription()))
-                .andExpect(jsonPath("$.isCompleted").value(taskResponseDto.getIsCompleted()));
+                .andExpect(jsonPath("$.[0].description").value(taskResponseDto.getDescription()))
+                .andExpect(jsonPath("$.[0].isCompleted").value(taskResponseDto.getIsCompleted()));
     }
 }
