@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class DashboardServiceTest {
+class DashboardServiceTest {
     @Autowired
     private DashboardService dashboardService;
 
