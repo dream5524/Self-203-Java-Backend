@@ -20,8 +20,8 @@ public class TaskApi {
     @Autowired
     private TaskService taskService;
 
-    @GetMapping("/")
-    public ResponseEntity<List<TaskResponseDto>> getByUserEmailOrEmail(@RequestParam String email) {
+    @GetMapping
+    public ResponseEntity<List<TaskResponseDto>> getByUserEmail(@RequestParam String email) {
         logger.info("Get all tasks by email: " + email + " started...");
         List<TaskResponseDto> tasks = taskService.getByUserEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(tasks);
@@ -32,5 +32,4 @@ public class TaskApi {
         TaskResponseDto taskResponseDto = taskService.getById(id);
         return ResponseEntity.status(HttpStatus.OK).body(taskResponseDto);
     }
-
 }
