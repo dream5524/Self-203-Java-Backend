@@ -2,6 +2,7 @@ package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.DashboardDto;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.DashboardDuplicatedException;
 import com.kms.seft203.service.DashboardService;
 import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class DashboardApi {
      * @throws BadHttpRequest
      */
     @PostMapping
-    public ResponseEntity<DashboardDto> save(@RequestBody DashboardDto dashboardDto) throws ContactNotFoundException, BadHttpRequest {
+    public ResponseEntity<DashboardDto> save(@RequestBody DashboardDto dashboardDto) throws ContactNotFoundException, DashboardDuplicatedException {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(dashboardService.save(dashboardDto));
     }

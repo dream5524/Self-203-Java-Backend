@@ -9,4 +9,5 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     @Query("select task from Task task where task.contact.user.email = ?1")
     List<Task> findByUserEmail(String email);
+
 }

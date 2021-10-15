@@ -35,7 +35,7 @@ public class Task {
     @JoinColumn(name = "contact_id", nullable = false)
     private Contact contact;
 
-    @Column(name = "date_created")
+    @Column(name = "date_created", insertable = false)
     private LocalDate dateCreated;
 
     public Task(String description, Boolean isCompleted, Contact contact) {

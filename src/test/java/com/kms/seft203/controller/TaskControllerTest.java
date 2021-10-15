@@ -1,12 +1,13 @@
 package com.kms.seft203.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.kms.seft203.dto.TaskCreateDto;
 import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.exception.ContactNotFoundException;
-import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.service.TaskService;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -73,5 +75,40 @@ class TaskControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].description").value(taskResponseDto.getDescription()))
                 .andExpect(jsonPath("$.[0].isCompleted").value(taskResponseDto.getIsCompleted()));
+    }
+
+    @Test
+    void getTaskByUserEmailTest_whenEmailNotFound_thenReturnErrorResponse() throws Exception {
+        String email = "duclocdk1999@gmail.com";
+        String description = "Edit database";
+        Boolean isCompleted = false;
+        LocalDate dateCreated = LocalDate.of(2021, Month.JANUARY, 22);
+        String message = "Error occurs! Contact not found!";
+        TaskCreateDto taskCreateDto = new TaskCreateDto(email, description, isCompleted);
+
+        Mockito.when(taskService.save(taskCreateDto)).thenThrow(new ContactNotFoundException(message));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/tasks")
+                    .content(convertObjectToJsonString(taskCreateDto))
+                    .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.messages[0]").value(message));
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "ab@ab.com,Fix bug,true",
+            "duclocdk1999,,false",
+            "duclocdk1999@gmail.com,Fix bug,",
+            ",,,"
+    }, delimiter = ',')
+    void testSave_whenInputAreInvalid_thenReturnStatusBadRequest(
+            String email, String description, Boolean isCompleted) throws Exception {
+        TaskCreateDto taskCreateDto = new TaskCreateDto(email, description, isCompleted);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/tasks")
+                .content(convertObjectToJsonString(taskCreateDto))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 }

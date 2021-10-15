@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS public."task"
     description character varying(50) NOT NULL,
     contact_id integer NOT NULL,
     date_created timestamp without time zone DEFAULT (now() + '07:00:00'::interval),
-    is_completed integer NOT NULL,
+    is_completed boolean NOT NULL,
     CONSTRAINT task_pkey PRIMARY KEY (id),
     CONSTRAINT task_contact_id_fkey FOREIGN KEY (contact_id)
         REFERENCES public."contact" (id) MATCH SIMPLE
@@ -192,16 +192,16 @@ VALUES
 --
 INSERT INTO public."task" 
 (id, 	description, 					contact_id, 	date_created, 					is_completed) values 
-(9,		'Create Database',				33,				'2021-09-18 16:12:32.147452',		1),
-(10,	'Add logger',					37,				'2021-09-18 16:12:32.147452',		0),
-(11,	'Management Quality Project',	34,				'2021-09-18 16:12:32.147452',		1),
-(12,	'Apply for Spring Security',	40,				'2021-09-18 16:12:32.147452',		0),
-(13,	'Write Integration Test',		36,				'2021-09-18 16:12:32.147452',		1),
-(14,	'Create BPMN',					35,				'2021-09-18 16:12:32.147452',		1),
-(15,	'Planning',						39,				'2021-09-18 16:12:32.147452',		1),
-(16,	'Manage meeting',				32,				'2021-09-18 16:12:32.147452',		0),
-(17,	'Assurance testing models',		38,				'2021-09-18 16:12:32.147452',		0),
-(18,	'Handle errors',				41,				'2021-09-18 16:12:32.147452',		1);
+(9,		'Create Database',				33,				'2021-09-18 16:12:32.147452',		true),
+(10,	'Add logger',					37,				'2021-09-18 16:12:32.147452',		false),
+(11,	'Management Quality Project',	34,				'2021-09-18 16:12:32.147452',		true),
+(12,	'Apply for Spring Security',	40,				'2021-09-18 16:12:32.147452',		false),
+(13,	'Write Integration Test',		36,				'2021-09-18 16:12:32.147452',		true),
+(14,	'Create BPMN',					35,				'2021-09-18 16:12:32.147452',		true),
+(15,	'Planning',						39,				'2021-09-18 16:12:32.147452',		true),
+(16,	'Manage meeting',				32,				'2021-09-18 16:12:32.147452',		false),
+(17,	'Assurance testing models',		38,				'2021-09-18 16:12:32.147452',		false),
+(18,	'Handle errors',				41,				'2021-09-18 16:12:32.147452',		true);
 
 
 

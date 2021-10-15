@@ -2,8 +2,8 @@ package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.DashboardDto;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.DashboardDuplicatedException;
 import com.kms.seft203.service.DashboardService;
-import javassist.tools.web.BadHttpRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -49,14 +49,16 @@ class DashboardControllerTest extends ControllerTest {
         String email = "duclocdk1999@gmail.com";
         String title = "Home page";
         String layoutType = "Dark mode";
+        String message = "Dashboard exsist! Pls change method to put";
         DashboardDto dashboardDto = new DashboardDto(email, title, layoutType);
-        Mockito.when(dashboardService.save(dashboardDto)).thenThrow(
-                new BadHttpRequest(new Exception("Dashboard exists, pls change method to put"))
-        );
+
+        Mockito.when(dashboardService.save(dashboardDto)).thenThrow(new DashboardDuplicatedException(message));
+
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
                 .content(convertObjectToJsonString(dashboardDto))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.messages[0]").value(message));
     }
 
     @Test
@@ -73,6 +75,8 @@ class DashboardControllerTest extends ControllerTest {
                         .content(convertObjectToJsonString(dashboardDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value(message));
+                .andExpect(jsonPath("$.messages[0]").value(message));
     }
+
+
 }
