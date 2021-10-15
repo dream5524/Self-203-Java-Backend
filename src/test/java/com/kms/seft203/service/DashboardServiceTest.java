@@ -1,11 +1,13 @@
 package com.kms.seft203.service;
 
-import com.kms.seft203.dto.DashboardDto;
+import com.kms.seft203.dto.DashboardCreateDto;
+import com.kms.seft203.dto.DashboardResponseDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.DashboardRepository;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -15,7 +17,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -41,7 +46,7 @@ class DashboardServiceTest {
         String lastName = "Nguyen";
         String project = "Healthcare";
         String password = "11Qaz123@@";
-        DashboardDto mockDashboardDto = new DashboardDto(email, title, layoutType);
+        DashboardCreateDto mockDashboardDto = new DashboardCreateDto(email, title, layoutType);
         User mockUser = new User(null, email, password, firstName + " " + lastName);
         Contact mockContact = new Contact(firstName, lastName, mockUser, title, project);
         Dashboard mockDashboard = new Dashboard(null, title, layoutType, mockContact);
@@ -51,9 +56,25 @@ class DashboardServiceTest {
         Mockito.when(dashboardRepository.save(Mockito.any())).thenReturn(mockDashboard);
         Mockito.when(dashboardRepository.findByContact(mockContact)).thenReturn(Optional.ofNullable(dashboardFromDb));
 
-        DashboardDto dashboardResponse = dashboardService.save(mockDashboardDto);
-        assertEquals(mockDashboardDto.getEmail(), dashboardResponse.getEmail());
-        assertEquals(mockDashboardDto.getTitle(), dashboardResponse.getTitle());
-        assertEquals(mockDashboardDto.getLayoutType(), dashboardResponse.getLayoutType());
+        DashboardResponseDto dashboardResponseDto = dashboardService.save(mockDashboardDto);
+        assertEquals(mockDashboardDto.getTitle(), dashboardResponseDto.getTitle());
+        assertEquals(mockDashboardDto.getLayoutType(), dashboardResponseDto.getLayoutType());
     }
+
+    @Test
+    void getAllDashboardsTest_WhenSuccess_ThenReturnListDashboardDto() {
+        List<Dashboard> expectedDashboardList = Stream.of(new Dashboard(1, "Home Page", "Desktop",
+                new Contact("Huyen", "Mo", new User(1, "huyenmo@gmail.com",
+                        "1qaz@@123QA", "Huyen Mo"), "Tester", "Build Dashboard"))
+        ).collect(Collectors.toList());
+
+        Mockito.when(dashboardRepository.findAll()).thenReturn(expectedDashboardList);
+
+        List<DashboardResponseDto> actualDashboardResponseDtoList = dashboardService.getAllDashboards();
+
+        Assert.assertEquals(1, actualDashboardResponseDtoList.stream().count());
+        Assert.assertEquals(expectedDashboardList.get(0).getTitle(), actualDashboardResponseDtoList.get(0).getTitle());
+        Assert.assertEquals(expectedDashboardList.get(0).getLayoutType(), actualDashboardResponseDtoList.get(0).getLayoutType());
+    }
+
 }
