@@ -1,12 +1,12 @@
 package com.kms.seft203.validator;
 
-import org.passay.PasswordValidator;
-import org.passay.LengthRule;
-import org.passay.EnglishCharacterData;
 import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.LengthRule;
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
 import org.passay.RuleResult;
 import org.passay.WhitespaceRule;
-import org.passay.PasswordData;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

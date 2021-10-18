@@ -18,8 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * This class is implemented to test the controller layer - AuthApi class
@@ -52,7 +52,7 @@ class AuthControllerTest extends ControllerTest {
     }
 
     @Test
-    public void testRegister_whenFailed_thenReturnEmailDuplicationError() throws Exception {
+    void testRegister_whenFailed_thenReturnEmailDuplicationError() throws Exception {
         RegisterRequest mockUserDto = new RegisterRequest("huyenmo@gmail.com", "11Qaz123@@", "Loc");
         String message = "Duplicated error! Email is already used!";
 

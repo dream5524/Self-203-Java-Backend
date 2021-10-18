@@ -1,12 +1,11 @@
 package com.kms.seft203.config;
 
+import com.kms.seft203.dto.ErrorResponse;
 import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.DashboardDuplicatedException;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
-import com.kms.seft203.dto.ErrorResponse;
 import com.kms.seft203.exception.TaskNotFoundException;
-import javassist.tools.web.BadHttpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;

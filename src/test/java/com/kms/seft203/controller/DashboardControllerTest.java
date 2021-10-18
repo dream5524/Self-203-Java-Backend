@@ -1,6 +1,5 @@
 package com.kms.seft203.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kms.seft203.dto.DashboardCreateDto;
 import com.kms.seft203.dto.DashboardResponseDto;
 import com.kms.seft203.exception.ContactNotFoundException;
@@ -20,7 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.stream.Collectors;
