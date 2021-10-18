@@ -22,7 +22,7 @@ public class TaskApi {
     private TaskService taskService;
 
     @GetMapping
-    public ResponseEntity<List<TaskResponseDto>> getByEmailOrId(
+    public ResponseEntity<List<TaskResponseDto>> getByFilter(
             @RequestParam(required = false) Integer id,
             @RequestParam(required = false) String email) throws TaskNotFoundException {
 

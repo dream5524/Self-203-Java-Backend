@@ -91,8 +91,7 @@ class DashboardControllerTest extends ControllerTest {
         Mockito.when(dashboardService.getAllDashboards()).thenReturn(dashboardResponseDtoList);
 
          mockMvc.perform(MockMvcRequestBuilders.get("/dashboards")
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-                        .content(convertObjectToJsonString(dashboardResponseDtoList)))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(2))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].title").value("Home Page"))
