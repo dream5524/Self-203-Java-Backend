@@ -18,8 +18,10 @@ public class DashboardCreateDto {
     private String email;
 
     @NotNull(message = "title must not be null")
+    @Size(min = 5, max = 40)
     private String title;
 
     @NotNull(message = "layoutType must not be null")
+    @Size(min = 5, max = 40)
     private String layoutType;
 }

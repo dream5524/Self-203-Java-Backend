@@ -94,6 +94,7 @@ class DashboardControllerTest extends ControllerTest {
             "ab@ab.com,home-page,dark-mode",
             "duclocdk1999,,dark-mode",
             "duclocdk1999@gmail.com,home-page,",
+            "duclocdk1999@gmail.com,,",
             ",home-page,dark-mode",
             ",home-page,",
             ",,dark-mode",

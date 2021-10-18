@@ -36,24 +36,19 @@ public class TaskServiceImp implements TaskService {
      * return: a list of TaskResponseDto
      */
     @Override
-    public List<TaskResponseDto> getByUserEmail(String email) throws ContactNotFoundException {
-        Optional<Contact> contactFromDb = contactRepository.findByEmail(email);
-        if (contactFromDb.isEmpty()) {
-            throw new ContactNotFoundException("Error occurs! No contact found for email " + email + "!");
-        }
+    public List<TaskResponseDto> getByUserEmail(String email) {
         List<Task> tasks = taskRepository.findByUserEmail(email);
         return tasks.stream().map(task -> modelMapper.map(task, TaskResponseDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<TaskResponseDto> getById(Integer id) throws TaskNotFoundException {
-        Optional<Task> optionalTask = taskRepository.findById(id);
-        if (optionalTask.isEmpty()) {
-            throw new TaskNotFoundException("Do not find any task with id: " + id);
-        }
+    public List<TaskResponseDto> getById(Integer id) {
         List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
-        taskResponseDtoList.add(modelMapper.map(optionalTask.get(), TaskResponseDto.class));
+        Optional<Task> optionalTask = taskRepository.findById(id);
+        if (optionalTask.isPresent()) {
+            taskResponseDtoList.add(modelMapper.map(optionalTask.get(), TaskResponseDto.class));
+        }
         return taskResponseDtoList;
     }
 

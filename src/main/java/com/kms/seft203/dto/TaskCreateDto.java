@@ -17,6 +17,7 @@ public class TaskCreateDto {
     private String email;
 
     @NotNull(message = "Description cannot be null")
+    @Size(min = 5, max = 40)
     private String description;
 
     @NotNull(message = "status of Task (isCompleted=true/false) cannot be null")

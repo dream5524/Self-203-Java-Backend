@@ -99,6 +99,7 @@ class TaskControllerTest extends ControllerTest {
             "ab@ab.com,Fix bug,true",
             "duclocdk1999,,false",
             "duclocdk1999@gmail.com,Fix bug,",
+            "duclocdk1999@gmail.com,,",
             ",Fix bug,true",
             ",Fix bug,",
             ",,false",
