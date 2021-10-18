@@ -2,7 +2,7 @@ package com.kms.seft203.service;
 
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.entity.User;
-import com.kms.seft203.exception.DuplicatedEmailException;
+import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -38,10 +38,10 @@ public class UserServiceImp implements UserService {
      * @return RegisterRequest (a userDTO object) for controller. The front end will
      * receive this DTO object.
      *
-     * @throws DuplicatedEmailException
+     * @throws EmailDuplicatedException
      */
     @Override
-    public RegisterRequest save(RegisterRequest userFromReq) throws DuplicatedEmailException {
+    public RegisterRequest save(RegisterRequest userFromReq) throws EmailDuplicatedException {
 
         log.info("Saving user {} to database...", userFromReq.getEmail());
         String email = userFromReq.getEmail();
@@ -49,7 +49,7 @@ public class UserServiceImp implements UserService {
         Optional<User> userFromDb = userRepository.findByEmail(email);
         if (userFromDb.isPresent()) {
             log.error("Failed to save user {} to database! Duplicated exception", email);
-            throw new DuplicatedEmailException("Duplicated email error! Register request for " + email + " rejected!");
+            throw new EmailDuplicatedException("Duplicated email error! Register request for " + email + " rejected!");
         }
         User user = modelMapper.map(userFromReq, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

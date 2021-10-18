@@ -1,18 +1,24 @@
 package com.kms.seft203.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class ErrorResponse {
     private Date timestamp;
-    private HttpStatus status;
-    private int statusCode;
-    private String message;
+    private List<String> messages;
+
+    public ErrorResponse(String message) {
+        this.timestamp = new Date();
+        this.messages = new ArrayList<>();
+        this.messages.add(message);
+    }
+
+    public ErrorResponse(List<String> messages) {
+        this.timestamp = new Date();
+        this.messages = messages;
+    }
 }

@@ -2,7 +2,7 @@ package com.kms.seft203.service;
 
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.entity.User;
-import com.kms.seft203.exception.DuplicatedEmailException;
+import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +28,7 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @Test
-    public void testSave_whenSuccess() throws DuplicatedEmailException {
+    void testSave_whenSuccess_thenReturnRegisterRequest() throws EmailDuplicatedException {
         User user = new User(1,"nvdloc@apcs.vn", "11Qaz123@@", "Loc Nguyen");
         RegisterRequest userDto = new RegisterRequest();
         userDto.setEmail(user.getEmail());

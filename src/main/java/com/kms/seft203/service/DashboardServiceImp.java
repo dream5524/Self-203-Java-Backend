@@ -5,6 +5,7 @@ import com.kms.seft203.dto.DashboardResponseDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.DashboardDuplicatedException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.DashboardRepository;
 import javassist.tools.web.BadHttpRequest;
@@ -39,7 +40,7 @@ public class DashboardServiceImp implements DashboardService {
      * @throws BadHttpRequest
      */
     @Override
-    public DashboardResponseDto save(DashboardCreateDto dashboardDto) throws ContactNotFoundException, BadHttpRequest {
+    public DashboardResponseDto save(DashboardCreateDto dashboardDto) throws ContactNotFoundException, DashboardDuplicatedException {
         String email = dashboardDto.getEmail();
         Optional<Contact> contactOptional = contactRepository.findByEmail(email);
         if (contactOptional.isEmpty()) {
@@ -49,9 +50,8 @@ public class DashboardServiceImp implements DashboardService {
         Contact contact = contactOptional.get();
         Optional<Dashboard> dashboardFromDb = dashboardRepository.findByContact(contact);
         if (dashboardFromDb.isPresent()) {
-            throw new BadHttpRequest(new Exception("Dashboard of user " + email +
-                    " does exist, pls change method to PUT to update the current dashboard"
-            ));
+            throw new DashboardDuplicatedException("Dashboard of user " + email
+                    + " does exist, pls change method to PUT to update the current dashboard");
         }
         Dashboard dashboard = modelMapper.map(dashboardDto, Dashboard.class);
         dashboard.setContact(contact);

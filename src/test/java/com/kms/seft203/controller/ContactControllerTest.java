@@ -6,6 +6,8 @@ import com.kms.seft203.entity.User;
 import com.kms.seft203.service.ContactService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +77,56 @@ class ContactControllerTest extends ControllerTest {
                 .andExpect(jsonPath("$.lastName").value(contactRequestDto.getLastName()))
                 .andExpect(jsonPath("$.title").value(contactRequestDto.getTitle()))
                 .andExpect(jsonPath("$.project").value(contactRequestDto.getProject()));
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "mohuyen,H,,,,",
+            "mohuyen,Huyen,Mo,Tester,Build Dashboard",
+            "mohuyen@gmail.com,H,Mo,Tester,Build Dashboard",
+            "mohuyen@gmail.com,Huyen,,Tester,Build Dashboard",
+            "mohuyenWgmail.com,Huyen,Mo,,Build Dashboard",
+            "mohuyen@gmail.com,Huyen,Mo,Tester,,",
+            "mohuyen,,Mo,Tester,Build Dashboard",
+            "mohuyen@gmail.com,,,Tester,Build Dashboard",
+            "mohuyen@gmail.com,Huyen,,,Build Dashboard",
+            "mohuyen@gmail.com,Huyen,Mo,,,",
+            "@gmail.com,Huyen,Mo,Tester,,",
+            "@gmail.com,,,Tester,Build Dashboard",
+            "mohuyen@gmail.com,,,,Build Dashboard",
+            "@gmail.com,Huyen,,,,",
+            "@gmail.com,,Mo,Tester,"
+    }, delimiter = ',')
+    void whenFieldsInputAreInvalid_thenReturnStatusBadRequest(String email, String firstName, String lastName, String title, String project) throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
+        contactRequestDto.setEmail(email);
+        contactRequestDto.setFirstName(firstName);
+        contactRequestDto.setLastName(lastName);
+        contactRequestDto.setTitle(title);
+        contactRequestDto.setProject(project);
+
+        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
+                        .content(convertObjectToJsonString(contactRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenAllFieldsInputAreValid_thenReturnStatusIsCreated() throws Exception {
+        ContactRequestDto contactRequestDto = new ContactRequestDto();
+        contactRequestDto.setEmail("mohuyen@gmail.com");
+        contactRequestDto.setFirstName("Huyen");
+        contactRequestDto.setLastName("Mo");
+        contactRequestDto.setTitle("Tester");
+        contactRequestDto.setProject("Build Dashboard");
+
+        Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/contacts")
+                        .content(convertObjectToJsonString(contactRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
     }
 }

@@ -1,12 +1,12 @@
 package com.kms.seft203.validator;
 
-import org.passay.PasswordValidator;
-import org.passay.LengthRule;
-import org.passay.EnglishCharacterData;
 import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.LengthRule;
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
 import org.passay.RuleResult;
 import org.passay.WhitespaceRule;
-import org.passay.PasswordData;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -30,6 +30,9 @@ public class PasswordValidatorImp implements ConstraintValidator<ValidPassword, 
 
     @Override
     public boolean isValid(String password, final ConstraintValidatorContext context) {
+        if (password == null) {
+            return false;
+        }
         PasswordValidator validator = new PasswordValidator(Arrays.asList(
                 //At least 8 characters
                 new LengthRule(8, 30),

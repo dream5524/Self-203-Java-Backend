@@ -8,7 +8,7 @@ import com.kms.seft203.dto.LoginResponse;
 import com.kms.seft203.dto.LogoutRequest;
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.entity.User;
-import com.kms.seft203.exception.DuplicatedEmailException;
+import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class AuthApi {
     private UserService userService;
 
     /**
-     * @throws DuplicatedEmailException Request format:
+     * @throws EmailDuplicatedException Request format:
      *                                  {
      *                                  "email": "email@gmail.com",
      *                                  "password": "my password",
@@ -54,7 +54,7 @@ public class AuthApi {
      */
     @PostMapping("/register")
 
-    public ResponseEntity<RegisterRequest> register(@Valid @RequestBody RegisterRequest request) throws DuplicatedEmailException {
+    public ResponseEntity<RegisterRequest> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
         RegisterRequest responseUser = userService.save(request);
         responseUser.setPassword(null);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);

@@ -3,9 +3,11 @@ package com.kms.seft203.controller;
 import com.kms.seft203.dto.DashboardCreateDto;
 import com.kms.seft203.dto.DashboardResponseDto;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.DashboardDuplicatedException;
 import com.kms.seft203.service.DashboardService;
-import javassist.tools.web.BadHttpRequest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,14 +57,17 @@ class DashboardControllerTest extends ControllerTest {
         String email = "duclocdk1999@gmail.com";
         String title = "Home page";
         String layoutType = "Dark mode";
-        DashboardCreateDto dashboardDto = new DashboardCreateDto(email, title, layoutType);
-        Mockito.when(dashboardService.save(dashboardDto)).thenThrow(
-                new BadHttpRequest(new Exception("Dashboard exists, pls change method to put"))
-        );
+
+        String message = "Dashboard exists! Pls change method to put";
+        DashboardCreateDto dashboardCreateDto = new DashboardCreateDto(email, title, layoutType);
+
+        Mockito.when(dashboardService.save(dashboardCreateDto)).thenThrow(new DashboardDuplicatedException(message));
+
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
-                        .content(convertObjectToJsonString(dashboardDto))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .content(convertObjectToJsonString(dashboardCreateDto))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.messages[0]").value(message));
     }
 
     @Test
@@ -78,7 +84,27 @@ class DashboardControllerTest extends ControllerTest {
                         .content(convertObjectToJsonString(dashboardDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value(message));
+                .andExpect(jsonPath("$.messages[0]").value(message));
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "ab@ab.com,home-page,dark-mode",
+            "duclocdk1999,,dark-mode",
+            "duclocdk1999@gmail.com,home-page,",
+            "duclocdk1999@gmail.com,,",
+            ",home-page,dark-mode",
+            ",home-page,",
+            ",,dark-mode",
+            ",,"
+    }, delimiter = ',')
+    void testCreateDashboard_whenInputIsInvalid_thenReturnStatusBadRequest(String email, String title, String layoutType) throws Exception {
+        DashboardCreateDto dashboardCreateDto = new DashboardCreateDto(email, title, layoutType);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
+                        .content(convertObjectToJsonString(dashboardCreateDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
