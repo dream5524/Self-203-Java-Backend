@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DashboardDto {
+public class DashboardCreateDto {
     private String email;
     private String title;
     private String layoutType;

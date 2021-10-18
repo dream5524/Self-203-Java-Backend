@@ -28,11 +28,11 @@ public class TaskApi {
 
         List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
         if (id != null) {
-            logger.info("Get one task by id: " + id + " started...");
+            logger.info("Get one task by Id: {}", id);
             taskResponseDtoList = taskService.getById(id);
         }
         else if (email != null) {
-            logger.info("Get all tasks by email: " + email + " started...");
+            logger.info("Get all tasks by email: {}", email);
             taskResponseDtoList = taskService.getByUserEmail(email);
         }
         return ResponseEntity.status(HttpStatus.OK).body(taskResponseDtoList);

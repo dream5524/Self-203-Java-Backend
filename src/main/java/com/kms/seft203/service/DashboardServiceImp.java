@@ -1,6 +1,7 @@
 package com.kms.seft203.service;
 
-import com.kms.seft203.dto.DashboardDto;
+import com.kms.seft203.dto.DashboardCreateDto;
+import com.kms.seft203.dto.DashboardResponseDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
 import com.kms.seft203.exception.ContactNotFoundException;
@@ -12,9 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Service @Transactional
+@Service
+@Transactional
 public class DashboardServiceImp implements DashboardService {
 
     @Autowired
@@ -28,13 +32,14 @@ public class DashboardServiceImp implements DashboardService {
 
     /**
      * This function is implemented to save a DashboardRequest to database
+     *
      * @param dashboardDto
      * @return DashboardResponse
      * @throws ContactNotFoundException
      * @throws BadHttpRequest
      */
     @Override
-    public DashboardDto save(DashboardDto dashboardDto) throws ContactNotFoundException, BadHttpRequest {
+    public DashboardResponseDto save(DashboardCreateDto dashboardDto) throws ContactNotFoundException, BadHttpRequest {
         String email = dashboardDto.getEmail();
         Optional<Contact> contactOptional = contactRepository.findByEmail(email);
         if (contactOptional.isEmpty()) {
@@ -51,6 +56,13 @@ public class DashboardServiceImp implements DashboardService {
         Dashboard dashboard = modelMapper.map(dashboardDto, Dashboard.class);
         dashboard.setContact(contact);
         Dashboard savedDashboard = dashboardRepository.save(dashboard);
-        return modelMapper.map(savedDashboard, DashboardDto.class);
+        return modelMapper.map(savedDashboard, DashboardResponseDto.class);
+    }
+
+    @Override
+    public List<DashboardResponseDto> getAllDashboards() {
+        List<Dashboard> dashboardList = dashboardRepository.findAll();
+        return dashboardList.stream().map(dashboard -> modelMapper.map(dashboard, DashboardResponseDto.class))
+                .collect(Collectors.toList());
     }
 }

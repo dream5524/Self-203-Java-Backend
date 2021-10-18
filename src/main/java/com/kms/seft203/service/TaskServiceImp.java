@@ -2,7 +2,6 @@ package com.kms.seft203.service;
 
 import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.entity.Task;
-import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.repository.TaskRepository;
 import org.modelmapper.ModelMapper;
