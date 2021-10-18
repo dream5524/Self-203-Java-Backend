@@ -78,7 +78,7 @@ public class CustomExceptionHandler {
     public ErrorResponse handleValidationException(MethodArgumentNotValidException e){
         List<String> errors = new ArrayList<>();
         BindingResult bindingResult = e.getBindingResult();
-        if (bindingResult != null && bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
             fieldErrorList.forEach(error -> {
                     log.info(error.getDefaultMessage());
