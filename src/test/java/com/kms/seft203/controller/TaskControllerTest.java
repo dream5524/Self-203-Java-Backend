@@ -1,9 +1,9 @@
 package com.kms.seft203.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kms.seft203.dto.TaskCreateDto;
 import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.exception.ContactNotFoundException;
+
 import com.kms.seft203.service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -100,10 +99,14 @@ class TaskControllerTest extends ControllerTest {
             "ab@ab.com,Fix bug,true",
             "duclocdk1999,,false",
             "duclocdk1999@gmail.com,Fix bug,",
-            ",,,"
+            ",Fix bug,true",
+            ",Fix bug,",
+            ",,false",
+            ",,"
     }, delimiter = ',')
     void testSave_whenInputAreInvalid_thenReturnStatusBadRequest(
             String email, String description, Boolean isCompleted) throws Exception {
+
         TaskCreateDto taskCreateDto = new TaskCreateDto(email, description, isCompleted);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/tasks")

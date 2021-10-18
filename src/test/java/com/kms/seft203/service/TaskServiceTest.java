@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TaskServiceTest {
+class TaskServiceTest {
     @Autowired
     private TaskService taskService;
 
