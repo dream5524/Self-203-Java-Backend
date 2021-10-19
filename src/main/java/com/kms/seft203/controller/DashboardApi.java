@@ -6,6 +6,9 @@ import com.kms.seft203.dto.DashboardDto;
 import com.kms.seft203.dto.DashboardCreateDto;
 import com.kms.seft203.dto.DashboardResponseDto;
 import com.kms.seft203.dto.DashboardUpdateDto;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.DashboardNotFoundException;
@@ -15,11 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 =======
+=======
+>>>>>>> Stashed changes
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,5 +73,8 @@ public class DashboardApi {
         dashboardService.updateById(dashboardUpdateDto);
         return ResponseEntity.ok("The information were successful updated !");
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }

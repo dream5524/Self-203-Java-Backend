@@ -68,4 +68,17 @@ public class DashboardServiceImp implements DashboardService {
 
     }
 
+<<<<<<< Updated upstream
+=======
+    @Override
+    public DashboardUpdateDto updateById(DashboardUpdateDto newDashboard) throws DashboardNotFoundException {
+       Dashboard dashboardFromDb = dashboardRepository.findById(newDashboard.getId()).get();
+        dashboardFromDb.setTitle(newDashboard.getTitle());
+        dashboardFromDb.setLayoutType(newDashboard.getLayoutType());
+        Dashboard saveDashboard = dashboardRepository.save(dashboardFromDb);
+        return modelMapper.map(saveDashboard, DashboardUpdateDto.class);
+
+    }
+
+>>>>>>> Stashed changes
 }
