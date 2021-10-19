@@ -1,7 +1,6 @@
 package com.kms.seft203.dto;
 
 import com.kms.seft203.validator.ValidEmail;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
