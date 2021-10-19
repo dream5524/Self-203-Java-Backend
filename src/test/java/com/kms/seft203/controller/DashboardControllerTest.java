@@ -1,10 +1,12 @@
 package com.kms.seft203.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kms.seft203.dto.DashboardCreateDto;
 import com.kms.seft203.dto.DashboardRequestDto;
 import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.DashboardDuplicatedException;
+import com.kms.seft203.exception.DashboardNotFoundException;
 import com.kms.seft203.service.DashboardService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -136,5 +139,41 @@ class DashboardControllerTest extends ControllerTest {
                         .content(convertObjectToJsonString(dashboardUpdateDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void updateDashboardByIdTest_whenDashboardNotFound_thenReturnDashboardNotFoundException() throws Exception {
+        Integer id = 1;
+        String title = "IT Operation";
+        String layoutType = "Desktop";
+        String message = "There is no dashboard with the given id: " + id;
+        DashboardUpdateDto dashboardUpdateDto = new DashboardUpdateDto(title, layoutType, id);
+        Mockito.when(dashboardService.updateById(dashboardUpdateDto)).thenThrow(
+                new DashboardNotFoundException(message));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/dashboards")
+                        .content(convertObjectToJsonString(dashboardUpdateDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.messages[0]").value(message));
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "IT Operation,Desktop,",
+            "IT,Desktop,1",
+            "IT Operation,De,1",
+            "IT,Desktop,",
+            "IT Operation,De,",
+            "IT,De,1",
+            ",,"
+    }, delimiter = ',')
+    void updateDashboardByIdTest_WhenFieldsAreInValid_ThenReturnStatusBadRequest(String title, String layoutType, Integer id) throws Exception {
+        DashboardUpdateDto dashboardUpdateDto = new DashboardUpdateDto(title, layoutType, id);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/dashboards")
+                        .content(convertObjectToJsonString(dashboardUpdateDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 }
