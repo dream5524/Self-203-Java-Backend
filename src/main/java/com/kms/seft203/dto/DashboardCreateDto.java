@@ -10,7 +10,6 @@ import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class DashboardCreateDto extends DashboardRequestDto{
     @ValidEmail
     @Size(min = 12, max = 30, message = "Please email lengthen must be least 12 characters or more ")
