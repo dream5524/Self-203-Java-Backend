@@ -31,6 +31,6 @@ public class Dashboard {
     private String layoutType;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "contact_id", nullable = false)
+    @JoinColumn(name = "contact_id")
     private Contact contact;
 }

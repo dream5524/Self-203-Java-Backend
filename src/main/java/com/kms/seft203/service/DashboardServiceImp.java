@@ -1,9 +1,13 @@
 package com.kms.seft203.service;
 
-import com.kms.seft203.dto.DashboardDto;
+
+import com.kms.seft203.dto.DashboardCreateDto;
+import com.kms.seft203.dto.DashboardResponseDto;
+import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.DashboardNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.DashboardRepository;
 import javassist.tools.web.BadHttpRequest;
@@ -53,4 +57,15 @@ public class DashboardServiceImp implements DashboardService {
         Dashboard savedDashboard = dashboardRepository.save(dashboard);
         return modelMapper.map(savedDashboard, DashboardDto.class);
     }
+
+    @Override
+    public DashboardUpdateDto updateById(DashboardUpdateDto newDashboard) throws DashboardNotFoundException {
+       Dashboard dashboardFromDb = dashboardRepository.findById(newDashboard.getId()).get();
+        dashboardFromDb.setTitle(newDashboard.getTitle());
+        dashboardFromDb.setLayoutType(newDashboard.getLayoutType());
+        Dashboard saveDashboard = dashboardRepository.save(dashboardFromDb);
+        return modelMapper.map(saveDashboard, DashboardUpdateDto.class);
+
+    }
+
 }

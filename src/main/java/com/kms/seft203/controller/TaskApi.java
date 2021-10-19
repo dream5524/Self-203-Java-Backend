@@ -1,5 +1,6 @@
 package com.kms.seft203.controller;
 
+import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.service.TaskService;

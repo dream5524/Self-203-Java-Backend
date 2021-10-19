@@ -1,16 +1,29 @@
 package com.kms.seft203.controller;
 
+<<<<<<< Updated upstream
 import com.kms.seft203.dto.DashboardDto;
+=======
+import com.kms.seft203.dto.DashboardCreateDto;
+import com.kms.seft203.dto.DashboardResponseDto;
+import com.kms.seft203.dto.DashboardUpdateDto;
+>>>>>>> Stashed changes
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.DashboardNotFoundException;
 import com.kms.seft203.service.DashboardService;
 import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+<<<<<<< Updated upstream
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+=======
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+>>>>>>> Stashed changes
 
 @RestController
 @RequestMapping("/dashboards")
@@ -40,4 +53,19 @@ public class DashboardApi {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(dashboardService.save(dashboardDto));
     }
+<<<<<<< Updated upstream
+=======
+
+    @GetMapping
+    public ResponseEntity<List<DashboardResponseDto>> getAllDashboards() {
+        logger.info("Get all dashboards method started...");
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(dashboardService.getAllDashboards());
+    }
+    @PutMapping
+    public ResponseEntity<String> updateById(@RequestBody DashboardUpdateDto dashboardUpdateDto) throws DashboardNotFoundException {
+        dashboardService.updateById(dashboardUpdateDto);
+        return ResponseEntity.ok("The information were successful updated !");
+    }
+>>>>>>> Stashed changes
 }

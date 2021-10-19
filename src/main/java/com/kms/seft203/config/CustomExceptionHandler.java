@@ -1,10 +1,7 @@
 package com.kms.seft203.config;
 
-import com.kms.seft203.exception.ContactNotFoundException;
-import com.kms.seft203.exception.DuplicatedEmailException;
-import com.kms.seft203.exception.EmailNotFoundException;
+import com.kms.seft203.exception.*;
 import com.kms.seft203.dto.ErrorResponse;
-import com.kms.seft203.exception.TaskNotFoundException;
 import javassist.tools.web.BadHttpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -52,6 +49,12 @@ public class CustomExceptionHandler {
     @ExceptionHandler(TaskNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerTaskNotFoundException(TaskNotFoundException e) {
+        log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
+        return new ErrorResponse(new Date(), HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), e.getMessage());
+    }
+    @ExceptionHandler(DashboardNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handlerDashboardNotFoundException(DashboardNotFoundException e) {
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
         return new ErrorResponse(new Date(), HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), e.getMessage());
     }

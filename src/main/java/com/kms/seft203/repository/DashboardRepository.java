@@ -3,6 +3,7 @@ package com.kms.seft203.repository;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
