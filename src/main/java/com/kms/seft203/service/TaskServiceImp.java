@@ -62,10 +62,10 @@ public class TaskServiceImp implements TaskService {
     public List<TaskResponseDto> getByStatus(String status) {
         List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
         List<Task> tasks = null;
-        if (status.toLowerCase().equals("inactive")) {
+        if (status.equalsIgnoreCase("inactive")) {
             tasks = taskRepository.findByIsCompleted(true);
         }
-        else if (status.toLowerCase().equals("active")) {
+        else if (status.equalsIgnoreCase("active")) {
             tasks = taskRepository.findByIsCompleted(false);
         }
         if (tasks != null) {
