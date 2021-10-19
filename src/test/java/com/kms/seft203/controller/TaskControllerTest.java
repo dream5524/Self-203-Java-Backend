@@ -76,6 +76,26 @@ class TaskControllerTest extends ControllerTest {
     }
 
     @Test
+    void getTasksByStatus_whenSuccess_thenReturnTaskList() throws Exception {
+        String description = "Edit database";
+        Boolean isCompleted = false;
+        String status = "active";
+        LocalDate dateCreated = LocalDate.of(2021, Month.JANUARY, 22);
+        List<TaskResponseDto> mockTaskResponseDtoList = new ArrayList<>();
+        mockTaskResponseDtoList.add(new TaskResponseDto(description, isCompleted, dateCreated));
+
+        Mockito.when(taskService.getByStatus(status)).thenReturn(mockTaskResponseDtoList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/tasks")
+                .param("status", status))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].description").value(description))
+                .andExpect(jsonPath("$[0].isCompleted").value(isCompleted))
+                .andExpect(jsonPath("$[0].dateCreated").value(dateCreated.toString()));
+    }
+
+    @Test
     void getTaskByUserEmailTest_whenEmailNotFound_thenReturnErrorResponse() throws Exception {
         String email = "duclocdk1999@gmail.com";
         String description = "Edit database";

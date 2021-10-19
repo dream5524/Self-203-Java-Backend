@@ -29,15 +29,16 @@ public class TaskApi {
     private TaskService taskService;
 
     /**
-     * @param id
-     * @param email
+     * @param: id
+     * @param: email
      * @return
      * @throws TaskNotFoundException
      */
     @GetMapping
     public ResponseEntity<List<TaskResponseDto>> getByFilter(
             @RequestParam(required = false) Integer id,
-            @RequestParam(required = false) String email) throws TaskNotFoundException, ContactNotFoundException {
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String status) {
 
         List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
         if (id != null) {
@@ -45,8 +46,12 @@ public class TaskApi {
             taskResponseDtoList = taskService.getById(id);
         }
         else if (email != null) {
-            log.info("Get all tasks by email: {} started", email);
+            log.info("Get all tasks by email: {} started...", email);
             taskResponseDtoList = taskService.getByUserEmail(email);
+        }
+        else if (status != null) {
+            log.info("Get all tasks by status: {} started...", status);
+            taskResponseDtoList = taskService.getByStatus(status);
         }
         return ResponseEntity.status(HttpStatus.OK).body(taskResponseDtoList);
     }

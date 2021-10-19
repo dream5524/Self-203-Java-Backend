@@ -82,6 +82,24 @@ class TaskServiceTest {
     }
 
     @Test
+    void getTasksByStatusTest_whenSuccess_thenReturnTaskResponseList() {
+        String description = "Write unit testing";
+        Boolean isCompleted = false;
+        String status = "active";
+
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(new Task(description, isCompleted));
+
+        Mockito.when(taskRepository.findByIsCompleted(isCompleted)).thenReturn(tasks);
+
+        List<TaskResponseDto> actualTaskResponseDtoList = taskService.getByStatus(status);
+
+        assertEquals(1, actualTaskResponseDtoList.size());
+        assertEquals(description, tasks.get(0).getDescription());
+        assertEquals(isCompleted, tasks.get(0).getIsCompleted());
+    }
+
+    @Test
     void saveTest_whenSuccess_thenReturnTaskResponseDto() throws ContactNotFoundException {
         String email = "duclocdk1999@gmail.com";
         String description = "fix bug";

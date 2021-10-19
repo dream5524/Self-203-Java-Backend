@@ -10,4 +10,5 @@ public interface TaskService {
     TaskResponseDto save(TaskCreateDto task) throws ContactNotFoundException;
     List<TaskResponseDto> getByUserEmail(String email);
     List<TaskResponseDto> getById(Integer id);
+    List<TaskResponseDto> getByStatus(String status);
 }

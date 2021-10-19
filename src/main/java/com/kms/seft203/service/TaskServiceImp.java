@@ -52,6 +52,31 @@ public class TaskServiceImp implements TaskService {
     }
 
     /**
+     * This method is used to get a list of taskResponseDto from Database using status
+     * ex: status = "active" (isCompleted = false) or status = "inactive" (isCompleted = true)
+     *
+     * @param: status
+     * @return List<TaskResponseDto>
+     */
+    @Override
+    public List<TaskResponseDto> getByStatus(String status) {
+        List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
+        List<Task> tasks = null;
+        if (status.toLowerCase().equals("inactive")) {
+            tasks = taskRepository.findByIsCompleted(true);
+        }
+        else if (status.toLowerCase().equals("active")) {
+            tasks = taskRepository.findByIsCompleted(false);
+        }
+        if (tasks != null) {
+            tasks.forEach(task -> {
+                taskResponseDtoList.add(modelMapper.map(task, TaskResponseDto.class));
+            });
+        }
+        return taskResponseDtoList;
+    }
+
+    /**
      * This function is implemented to create and save a new Task into database.
      * @param taskCreateDto
      * @return TaskResponseDto
