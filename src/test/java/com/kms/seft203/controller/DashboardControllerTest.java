@@ -1,7 +1,8 @@
 package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.DashboardCreateDto;
-import com.kms.seft203.dto.DashboardResponseDto;
+import com.kms.seft203.dto.DashboardRequestDto;
+import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.DashboardDuplicatedException;
 import com.kms.seft203.service.DashboardService;
@@ -42,8 +43,8 @@ class DashboardControllerTest extends ControllerTest {
         String title = "Home page";
         String layoutType = "Dark mode";
         DashboardCreateDto dashboardCreateDto = new DashboardCreateDto(email, title, layoutType);
-        DashboardResponseDto dashboardResponseDto = new DashboardResponseDto(title, layoutType);
-        Mockito.when(dashboardService.save(dashboardCreateDto)).thenReturn(dashboardResponseDto);
+        DashboardRequestDto dashboardRequestDto = new DashboardRequestDto(title, layoutType);
+        Mockito.when(dashboardService.save(dashboardCreateDto)).thenReturn(dashboardRequestDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
                         .content(convertObjectToJsonString(dashboardCreateDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -64,8 +65,8 @@ class DashboardControllerTest extends ControllerTest {
         Mockito.when(dashboardService.save(dashboardCreateDto)).thenThrow(new DashboardDuplicatedException(message));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
-                .content(convertObjectToJsonString(dashboardCreateDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(dashboardCreateDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.messages[0]").value(message));
     }
@@ -109,20 +110,31 @@ class DashboardControllerTest extends ControllerTest {
 
     @Test
     void getAllDashboardsTest_WhenSuccess_ThenReturnListDashboardDto() throws Exception {
-        List<DashboardResponseDto> dashboardResponseDtoList = Stream.of(
-                new DashboardResponseDto("Home Page", "Desktop"),
-                new DashboardResponseDto("Internship Assignment", "Desktop")
+        List<DashboardRequestDto> dashboardRequestDtoList = Stream.of(
+                new DashboardRequestDto("Home Page", "Desktop"),
+                new DashboardRequestDto("Internship Assignment", "Desktop")
         ).collect(Collectors.toList());
 
-        Mockito.when(dashboardService.getAllDashboards()).thenReturn(dashboardResponseDtoList);
+        Mockito.when(dashboardService.getAllDashboards()).thenReturn(dashboardRequestDtoList);
 
-         mockMvc.perform(MockMvcRequestBuilders.get("/dashboards")
+        mockMvc.perform(MockMvcRequestBuilders.get("/dashboards")
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(2))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].title").value("Home Page"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].layoutType").value("Desktop"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].title").value("Internship Assignment"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].layoutType").value("Desktop"));;
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].layoutType").value("Desktop"));
+    }
+
+    @Test
+    void updateDashboardByIdTest_WhenSuccess_ThenReturnStatusOk() throws Exception {
+        DashboardUpdateDto dashboardUpdateDto = new DashboardUpdateDto("IT Operation", "Desktop", 1);
+        Mockito.when(dashboardService.updateById(dashboardUpdateDto)).thenReturn(dashboardUpdateDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/dashboards")
+                        .content(convertObjectToJsonString(dashboardUpdateDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

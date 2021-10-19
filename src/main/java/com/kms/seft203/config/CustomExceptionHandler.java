@@ -1,11 +1,7 @@
 package com.kms.seft203.config;
 
 import com.kms.seft203.dto.ErrorResponse;
-import com.kms.seft203.exception.ContactNotFoundException;
-import com.kms.seft203.exception.DashboardDuplicatedException;
-import com.kms.seft203.exception.EmailDuplicatedException;
-import com.kms.seft203.exception.EmailNotFoundException;
-import com.kms.seft203.exception.TaskNotFoundException;
+import com.kms.seft203.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -18,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * When the error occurs, the exception will be thrown and caught by the ExceptionHandler.
@@ -35,41 +32,47 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleEmailDuplicatedException(EmailDuplicatedException e) {
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(e.getMessage(),UUID.randomUUID());
     }
 
     @ExceptionHandler(DashboardDuplicatedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleDashboardDuplicatedException (DashboardDuplicatedException e) {
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(e.getMessage(),UUID.randomUUID());
     }
 
     @ExceptionHandler(EmailNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleEmailNotFoundException(EmailNotFoundException e) {
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(e.getMessage(),UUID.randomUUID());
     }
 
     @ExceptionHandler(ContactNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleContactNotFoundException(ContactNotFoundException e) {
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(e.getMessage(),UUID.randomUUID());
     }
     @ExceptionHandler(TaskNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleTaskNotFoundException(TaskNotFoundException e) {
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(e.getMessage(),UUID.randomUUID());
+    }
+    @ExceptionHandler(DashboardNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleDashboardNotFoundException(DashboardNotFoundException e){
+        log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
+        return new ErrorResponse(e.getMessage(),UUID.randomUUID());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleCommonException(Exception e) {
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(e.getMessage(),UUID.randomUUID());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -84,6 +87,6 @@ public class CustomExceptionHandler {
                     errors.add(error.getDefaultMessage());
             });
         }
-        return new ErrorResponse(errors);
+        return new ErrorResponse(errors, UUID.randomUUID());
     }
 }

@@ -1,10 +1,12 @@
 package com.kms.seft203.service;
 
 import com.kms.seft203.dto.DashboardCreateDto;
-import com.kms.seft203.dto.DashboardResponseDto;
+import com.kms.seft203.dto.DashboardRequestDto;
+import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
 import com.kms.seft203.entity.User;
+import com.kms.seft203.exception.DashboardNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.DashboardRepository;
 import org.junit.Assert;
@@ -21,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @AutoConfigureMockMvc(addFilters = false)
@@ -56,9 +57,9 @@ class DashboardServiceTest {
         Mockito.when(dashboardRepository.save(Mockito.any())).thenReturn(mockDashboard);
         Mockito.when(dashboardRepository.findByContact(mockContact)).thenReturn(Optional.ofNullable(dashboardFromDb));
 
-        DashboardResponseDto dashboardResponseDto = dashboardService.save(mockDashboardDto);
-        assertEquals(mockDashboardDto.getTitle(), dashboardResponseDto.getTitle());
-        assertEquals(mockDashboardDto.getLayoutType(), dashboardResponseDto.getLayoutType());
+        DashboardRequestDto dashboardRequestDto = dashboardService.save(mockDashboardDto);
+        assertEquals(mockDashboardDto.getTitle(), dashboardRequestDto.getTitle());
+        assertEquals(mockDashboardDto.getLayoutType(), dashboardRequestDto.getLayoutType());
     }
 
     @Test
@@ -70,11 +71,30 @@ class DashboardServiceTest {
 
         Mockito.when(dashboardRepository.findAll()).thenReturn(expectedDashboardList);
 
-        List<DashboardResponseDto> actualDashboardResponseDtoList = dashboardService.getAllDashboards();
+        List<DashboardRequestDto> actualDashboardRequestDtoList = dashboardService.getAllDashboards();
 
-        Assert.assertEquals(1, actualDashboardResponseDtoList.stream().count());
-        Assert.assertEquals(expectedDashboardList.get(0).getTitle(), actualDashboardResponseDtoList.get(0).getTitle());
-        Assert.assertEquals(expectedDashboardList.get(0).getLayoutType(), actualDashboardResponseDtoList.get(0).getLayoutType());
+        Assert.assertEquals(1, actualDashboardRequestDtoList.stream().count());
+        Assert.assertEquals(expectedDashboardList.get(0).getTitle(), actualDashboardRequestDtoList.get(0).getTitle());
+        Assert.assertEquals(expectedDashboardList.get(0).getLayoutType(), actualDashboardRequestDtoList.get(0).getLayoutType());
+    }
+
+    @Test
+    void updateByIdTest_WhenSuccess_ThenReturnDashboardUpdateDto() throws DashboardNotFoundException {
+        User user = new User(1, "mohuyen@gmail.com", "1QAZa@@123", "Huyen Mo");
+        Contact contact = new Contact("Huyen", "Mo", user, "Tester", "Build Dashboard");
+        Dashboard dashboardFromDb = new Dashboard(1, "IT Operation", "Desktop", contact);
+
+        Mockito.when(dashboardRepository.findById(dashboardFromDb.getId())).thenReturn(Optional.of(dashboardFromDb));
+        dashboardFromDb.setTitle("Internship Assignment");
+        dashboardFromDb.setLayoutType("Tablet");
+        Mockito.when(dashboardRepository.save(dashboardFromDb)).thenReturn(dashboardFromDb);
+
+        DashboardUpdateDto dashboardUpdateDto = new DashboardUpdateDto("Internship Assignment", "Tablet", 1);
+
+        DashboardUpdateDto actualDashboardUpdateDto = dashboardService.updateById(dashboardUpdateDto);
+
+        Assert.assertEquals(dashboardFromDb.getTitle(), actualDashboardUpdateDto.getTitle());
+        Assert.assertEquals(dashboardFromDb.getLayoutType(), actualDashboardUpdateDto.getLayoutType());
     }
 
 }
