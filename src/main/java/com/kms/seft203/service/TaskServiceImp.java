@@ -30,53 +30,6 @@ public class TaskServiceImp implements TaskService {
     private ModelMapper modelMapper;
 
     /**
-     * This function return a list of taskDto from database which belong to a particular contact.
-     * param: email
-     * return: a list of TaskResponseDto
-     */
-    @Override
-    public List<TaskResponseDto> getByUserEmail(String email) {
-        List<Task> tasks = taskRepository.findByUserEmail(email);
-        return tasks.stream().map(task -> modelMapper.map(task, TaskResponseDto.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TaskResponseDto> getById(Integer id) {
-        List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
-        Optional<Task> optionalTask = taskRepository.findById(id);
-        if (optionalTask.isPresent()) {
-            taskResponseDtoList.add(modelMapper.map(optionalTask.get(), TaskResponseDto.class));
-        }
-        return taskResponseDtoList;
-    }
-
-    /**
-     * This method is used to get a list of taskResponseDto from Database using status
-     * ex: status = "active" (isCompleted = false) or status = "inactive" (isCompleted = true)
-     *
-     * @param: status
-     * @return List<TaskResponseDto>
-     */
-    @Override
-    public List<TaskResponseDto> getByStatus(String status) {
-        List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
-        List<Task> tasks = null;
-        if (status.equalsIgnoreCase("inactive")) {
-            tasks = taskRepository.findByIsCompleted(true);
-        }
-        else if (status.equalsIgnoreCase("active")) {
-            tasks = taskRepository.findByIsCompleted(false);
-        }
-        if (tasks != null) {
-            tasks.forEach(task -> {
-                taskResponseDtoList.add(modelMapper.map(task, TaskResponseDto.class));
-            });
-        }
-        return taskResponseDtoList;
-    }
-
-    /**
      * This function is implemented to create and save a new Task into database.
      * @param taskCreateDto
      * @return TaskResponseDto
@@ -95,5 +48,30 @@ public class TaskServiceImp implements TaskService {
         task.setDateCreated(LocalDate.now());
         Task savedTask = taskRepository.save(task);
         return modelMapper.map(savedTask, TaskResponseDto.class);
+    }
+
+    /**
+     * This function is the combination of getById, getByEmail, and getByStatus
+     * It looks for all records that satisfy 3 given filter elements, and return
+     * a list of TaskResponseDto
+     *
+     * @param id
+     * @param email
+     * @param status
+     * @return
+     */
+    @Override
+    public List<TaskResponseDto> getAllByFilter(Integer id, String email, String status) {
+        Boolean isCompleted = null;
+        if (status != null) {
+            isCompleted = true;
+            if (status.equalsIgnoreCase("active")) {
+                isCompleted = false;
+            }
+        }
+        List<Task> tasksFromDb = taskRepository.findAllByInputField(id, email, isCompleted);
+        return tasksFromDb.stream()
+                .map(task -> modelMapper.map(task, TaskResponseDto.class))
+                .collect(Collectors.toList());
     }
 }

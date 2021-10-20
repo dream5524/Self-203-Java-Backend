@@ -1,15 +1,20 @@
 package com.kms.seft203.repository;
 
 import com.kms.seft203.entity.Task;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface TaskRepository extends JpaRepository<Task, Integer> {
+public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor, PagingAndSortingRepository<Task, Integer> {
 
-    @Query("select task from Task task where task.contact.user.email = ?1")
-    List<Task> findByUserEmail(String email);
-
-    List<Task> findByIsCompleted(Boolean isCompleted);
+    @Query(value = "SELECT task FROM Task as task " +
+            "WHERE (:id is null or task.id=:id) " +
+            "and (:email is null or task.contact.user.email like %:email% ) " +
+            "and (:isCompleted is null or task.isCompleted is :isCompleted )")
+    List<Task> findAllByInputField(Integer id, String email, Boolean isCompleted);
 }
