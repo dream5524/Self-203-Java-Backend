@@ -12,10 +12,10 @@ import javax.validation.constraints.Size;
 @Data
 public class DashboardResponseDto {
     @NotNull(message = "title must not be null")
-    @Size(min = 5, max = 40,message = "Please title lengthen must be least 5 characters or more")
+    @Size(min = 5, max = 40, message = "Please title lengthen must be least 5 characters or more")
     private String title;
 
     @NotNull(message = "layoutType must not be null")
-    @Size(min = 5, max = 40,message = "Please layoutType lengthen must be least 5 characters or more")
+    @Size(min = 5, max = 40, message = "Please layoutType lengthen must be least 5 characters or more")
     private String layoutType;
 }

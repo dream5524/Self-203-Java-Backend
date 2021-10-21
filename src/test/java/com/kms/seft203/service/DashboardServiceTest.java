@@ -49,7 +49,7 @@ class DashboardServiceTest {
         String lastName = "Nguyen";
         String project = "Healthcare";
         String password = "11Qaz123@@";
-        DashboardCreateDto mockDashboardDto = new DashboardCreateDto(email, title, layoutType);
+        DashboardCreateDto mockDashboardDto = new DashboardCreateDto(title, layoutType, email);
         User mockUser = new User(null, email, password, firstName + " " + lastName);
         Contact mockContact = new Contact(firstName, lastName, mockUser, title, project);
         Dashboard mockDashboard = new Dashboard(null, title, layoutType, mockContact);

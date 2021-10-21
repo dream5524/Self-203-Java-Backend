@@ -43,7 +43,7 @@ class DashboardControllerTest extends ControllerTest {
         String email = "duclocdk1999@gmail.com";
         String title = "Home page";
         String layoutType = "Dark mode";
-        DashboardCreateDto dashboardCreateDto = new DashboardCreateDto(email, title, layoutType);
+        DashboardCreateDto dashboardCreateDto = new DashboardCreateDto(title, layoutType, email);
         DashboardResponseDto dashboardResponseDto = new DashboardResponseDto(title, layoutType);
         Mockito.when(dashboardService.save(dashboardCreateDto)).thenReturn(dashboardResponseDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
@@ -61,7 +61,7 @@ class DashboardControllerTest extends ControllerTest {
         String layoutType = "Dark mode";
 
         String message = "Dashboard exists! Pls change method to put";
-        DashboardCreateDto dashboardCreateDto = new DashboardCreateDto(email, title, layoutType);
+        DashboardCreateDto dashboardCreateDto = new DashboardCreateDto(title, layoutType, email);
 
         Mockito.when(dashboardService.save(dashboardCreateDto)).thenThrow(new DashboardDuplicatedException(message));
 
@@ -78,7 +78,7 @@ class DashboardControllerTest extends ControllerTest {
         String title = "Home page";
         String layoutType = "Dark mode";
         String message = "Contact of user " + email + " not found!";
-        DashboardCreateDto dashboardDto = new DashboardCreateDto(email, title, layoutType);
+        DashboardCreateDto dashboardDto = new DashboardCreateDto(title, layoutType, email);
         Mockito.when(dashboardService.save(dashboardDto)).thenThrow(
                 new ContactNotFoundException(message)
         );
@@ -101,7 +101,7 @@ class DashboardControllerTest extends ControllerTest {
             ",,"
     }, delimiter = ',')
     void testCreateDashboard_whenInputIsInvalid_thenReturnStatusBadRequest(String email, String title, String layoutType) throws Exception {
-        DashboardCreateDto dashboardCreateDto = new DashboardCreateDto(email, title, layoutType);
+        DashboardCreateDto dashboardCreateDto = new DashboardCreateDto(title, layoutType, email);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
                         .content(convertObjectToJsonString(dashboardCreateDto))
