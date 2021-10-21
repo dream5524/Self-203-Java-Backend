@@ -87,7 +87,7 @@ public class CustomExceptionHandler {
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
             fieldErrorList.forEach(error -> {
-                    log.info(error.getDefaultMessage());
+                    log.error(error.getDefaultMessage());
                     errors.add(error.getDefaultMessage());
             });
         }
