@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @Data
-public class DashboardUpdateDto extends DashboardRequestDto {
+public class DashboardUpdateDto extends DashboardResponseDto {
     @NotNull
     @Min(1)
     private Integer id;

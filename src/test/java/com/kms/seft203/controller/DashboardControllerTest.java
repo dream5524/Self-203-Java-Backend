@@ -1,8 +1,7 @@
 package com.kms.seft203.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kms.seft203.dto.DashboardCreateDto;
-import com.kms.seft203.dto.DashboardRequestDto;
+import com.kms.seft203.dto.DashboardResponseDto;
 import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.DashboardDuplicatedException;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -46,8 +44,8 @@ class DashboardControllerTest extends ControllerTest {
         String title = "Home page";
         String layoutType = "Dark mode";
         DashboardCreateDto dashboardCreateDto = new DashboardCreateDto(email, title, layoutType);
-        DashboardRequestDto dashboardRequestDto = new DashboardRequestDto(title, layoutType);
-        Mockito.when(dashboardService.save(dashboardCreateDto)).thenReturn(dashboardRequestDto);
+        DashboardResponseDto dashboardResponseDto = new DashboardResponseDto(title, layoutType);
+        Mockito.when(dashboardService.save(dashboardCreateDto)).thenReturn(dashboardResponseDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/dashboards")
                         .content(convertObjectToJsonString(dashboardCreateDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -113,12 +111,12 @@ class DashboardControllerTest extends ControllerTest {
 
     @Test
     void getAllDashboardsTest_WhenSuccess_ThenReturnListDashboardDto() throws Exception {
-        List<DashboardRequestDto> dashboardRequestDtoList = Stream.of(
-                new DashboardRequestDto("Home Page", "Desktop"),
-                new DashboardRequestDto("Internship Assignment", "Desktop")
+        List<DashboardResponseDto> dashboardResponseDtoList = Stream.of(
+                new DashboardResponseDto("Home Page", "Desktop"),
+                new DashboardResponseDto("Internship Assignment", "Desktop")
         ).collect(Collectors.toList());
 
-        Mockito.when(dashboardService.getAllDashboards()).thenReturn(dashboardRequestDtoList);
+        Mockito.when(dashboardService.getAllDashboards()).thenReturn(dashboardResponseDtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/dashboards")
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))

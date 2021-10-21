@@ -1,7 +1,7 @@
 package com.kms.seft203.service;
 
 import com.kms.seft203.dto.DashboardCreateDto;
-import com.kms.seft203.dto.DashboardRequestDto;
+import com.kms.seft203.dto.DashboardResponseDto;
 import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
@@ -17,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +26,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
@@ -62,9 +59,9 @@ class DashboardServiceTest {
         Mockito.when(dashboardRepository.save(Mockito.any())).thenReturn(mockDashboard);
         Mockito.when(dashboardRepository.findByContact(mockContact)).thenReturn(Optional.ofNullable(dashboardFromDb));
 
-        DashboardRequestDto dashboardRequestDto = dashboardService.save(mockDashboardDto);
-        assertEquals(mockDashboardDto.getTitle(), dashboardRequestDto.getTitle());
-        assertEquals(mockDashboardDto.getLayoutType(), dashboardRequestDto.getLayoutType());
+        DashboardResponseDto dashboardResponseDto = dashboardService.save(mockDashboardDto);
+        assertEquals(mockDashboardDto.getTitle(), dashboardResponseDto.getTitle());
+        assertEquals(mockDashboardDto.getLayoutType(), dashboardResponseDto.getLayoutType());
     }
 
     @Test
@@ -76,11 +73,11 @@ class DashboardServiceTest {
 
         Mockito.when(dashboardRepository.findAll()).thenReturn(expectedDashboardList);
 
-        List<DashboardRequestDto> actualDashboardRequestDtoList = dashboardService.getAllDashboards();
+        List<DashboardResponseDto> actualDashboardResponseDtoList = dashboardService.getAllDashboards();
 
-        Assert.assertEquals(1, actualDashboardRequestDtoList.stream().count());
-        Assert.assertEquals(expectedDashboardList.get(0).getTitle(), actualDashboardRequestDtoList.get(0).getTitle());
-        Assert.assertEquals(expectedDashboardList.get(0).getLayoutType(), actualDashboardRequestDtoList.get(0).getLayoutType());
+        Assert.assertEquals(1, actualDashboardResponseDtoList.stream().count());
+        Assert.assertEquals(expectedDashboardList.get(0).getTitle(), actualDashboardResponseDtoList.get(0).getTitle());
+        Assert.assertEquals(expectedDashboardList.get(0).getLayoutType(), actualDashboardResponseDtoList.get(0).getLayoutType());
     }
 
     @Test

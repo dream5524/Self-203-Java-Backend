@@ -9,19 +9,16 @@ import java.util.UUID;
 
 @Data
 public class ErrorResponse {
-    private UUID id;
     private Date timestamp;
     private List<String> messages;
 
-    public ErrorResponse(String message, UUID id) {
-        this.id = id;
+    public ErrorResponse(String message) {
         this.timestamp = new Date();
         this.messages = new ArrayList<>();
         this.messages.add(message);
     }
 
-    public ErrorResponse(List<String> messages, UUID id) {
-        this.id = id;
+    public ErrorResponse(List<String> messages) {
         this.timestamp = new Date();
         this.messages = messages;
     }

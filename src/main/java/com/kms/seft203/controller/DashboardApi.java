@@ -1,7 +1,7 @@
 package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.DashboardCreateDto;
-import com.kms.seft203.dto.DashboardRequestDto;
+import com.kms.seft203.dto.DashboardResponseDto;
 import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.DashboardDuplicatedException;
@@ -48,13 +48,13 @@ public class DashboardApi {
      * @throws BadHttpRequest
      */
     @PostMapping
-    public ResponseEntity<DashboardRequestDto> save(@RequestBody @Valid DashboardCreateDto dashboardCreateDto) throws ContactNotFoundException, DashboardDuplicatedException {
+    public ResponseEntity<DashboardResponseDto> save(@RequestBody @Valid DashboardCreateDto dashboardCreateDto) throws ContactNotFoundException, DashboardDuplicatedException {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(dashboardService.save(dashboardCreateDto));
     }
 
     @GetMapping
-    public ResponseEntity<List<DashboardRequestDto>> getAllDashboards() {
+    public ResponseEntity<List<DashboardResponseDto>> getAllDashboards() {
         logger.info("Get all dashboards method started...");
         return ResponseEntity.status(HttpStatus.OK)
                 .body(dashboardService.getAllDashboards());

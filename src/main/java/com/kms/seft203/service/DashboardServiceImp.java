@@ -1,7 +1,7 @@
 package com.kms.seft203.service;
 
 import com.kms.seft203.dto.DashboardCreateDto;
-import com.kms.seft203.dto.DashboardRequestDto;
+import com.kms.seft203.dto.DashboardResponseDto;
 import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
@@ -42,7 +42,7 @@ public class DashboardServiceImp implements DashboardService {
      * @throws BadHttpRequest
      */
     @Override
-    public DashboardRequestDto save(DashboardCreateDto dashboardDto) throws ContactNotFoundException, DashboardDuplicatedException {
+    public DashboardResponseDto save(DashboardCreateDto dashboardDto) throws ContactNotFoundException, DashboardDuplicatedException {
         String email = dashboardDto.getEmail();
         Optional<Contact> contactOptional = contactRepository.findByEmail(email);
         if (contactOptional.isEmpty()) {
@@ -58,13 +58,13 @@ public class DashboardServiceImp implements DashboardService {
         Dashboard dashboard = modelMapper.map(dashboardDto, Dashboard.class);
         dashboard.setContact(contact);
         Dashboard savedDashboard = dashboardRepository.save(dashboard);
-        return modelMapper.map(savedDashboard, DashboardRequestDto.class);
+        return modelMapper.map(savedDashboard, DashboardResponseDto.class);
     }
 
     @Override
-    public List<DashboardRequestDto> getAllDashboards() {
+    public List<DashboardResponseDto> getAllDashboards() {
         List<Dashboard> dashboardList = dashboardRepository.findAll();
-        return dashboardList.stream().map(dashboard -> modelMapper.map(dashboard, DashboardRequestDto.class))
+        return dashboardList.stream().map(dashboard -> modelMapper.map(dashboard, DashboardResponseDto.class))
                 .collect(Collectors.toList());
     }
     /**
