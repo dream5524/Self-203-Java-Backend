@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
@@ -37,42 +38,47 @@ class TaskControllerTest extends ControllerTest {
     @MockBean
     private TaskService taskService;
 
-    @Test
-    void getTaskByUserEmailTest_whenSuccess_thenReturnStatusOk() throws Exception {
-        String email = "duclocdk1999@gmail.com";
+    @ParameterizedTest
+    @CsvSource(value = {
+            "1,duclocdk1999@gmail.com,active",
+            ",duclocdk1999@gmail.com,inactive",
+            "1,,",
+            ",,active",
+            ",duclocdk1999@gmail.com,",
+            ",,",
+    }, delimiter = ',')
+    void getTaskByFilterTest_whenSuccess_thenReturnStatusOk(Integer id, String email, String status) throws Exception {
         String description = "Edit database";
-        Boolean isCompleted = false;
         LocalDate dateCreated = LocalDate.of(2021, Month.JANUARY, 22);
+        Boolean isCompleted = null;
+        if (status != null) {
+            isCompleted = false;
+            if (status.equalsIgnoreCase("active")) {
+                isCompleted = true;
+            }
+        }
         List<TaskResponseDto> mockTaskResponseDtoList = new ArrayList<>();
         mockTaskResponseDtoList.add(new TaskResponseDto(description, isCompleted, dateCreated));
 
-        Mockito.when(taskService.getByUserEmail(email)).thenReturn(mockTaskResponseDtoList);
+        Mockito.when(taskService.getAllByFilter(id, email, status, null, null)).thenReturn(mockTaskResponseDtoList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/tasks")
-                        .param("email", email)
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/tasks");
+        if (id != null) {
+            requestBuilder.param("id", id.toString());
+        }
+        if (email != null) {
+            requestBuilder.param("email", email);
+        }
+        if (status != null) {
+            requestBuilder.param("status", status);
+        }
+        requestBuilder.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].description").value(description))
                 .andExpect(jsonPath("$.[0].isCompleted").value(isCompleted))
                 .andExpect(jsonPath("$.[0].dateCreated").value(dateCreated.toString()));
-    }
-
-    @Test
-    void getOneTaskByIdTest_WhenSuccess_ThenReturnStatusIsOk() throws Exception {
-        Integer id = 10;
-        TaskResponseDto taskResponseDto = new TaskResponseDto("Apply Logger", false);
-        List<TaskResponseDto> mockTaskResponseDtoList = new ArrayList<>();
-        mockTaskResponseDtoList.add(taskResponseDto);
-
-        Mockito.when(taskService.getById(id)).thenReturn(mockTaskResponseDtoList);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/tasks")
-                        .param("id", String.valueOf(id))
-                        .content(convertObjectToJsonString(taskResponseDto))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].description").value(taskResponseDto.getDescription()))
-                .andExpect(jsonPath("$.[0].isCompleted").value(taskResponseDto.getIsCompleted()));
     }
 
     @Test

@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface TaskService {
     TaskResponseDto save(TaskCreateDto task) throws ContactNotFoundException;
-    List<TaskResponseDto> getByUserEmail(String email);
-    List<TaskResponseDto> getById(Integer id);
+    List<TaskResponseDto> getAllByFilter(Integer id, String email, String status, Integer page, Integer size);
 }

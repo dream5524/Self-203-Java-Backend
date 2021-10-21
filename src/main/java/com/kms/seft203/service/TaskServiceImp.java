@@ -9,10 +9,12 @@ import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.TaskRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,28 +30,6 @@ public class TaskServiceImp implements TaskService {
 
     @Autowired
     private ModelMapper modelMapper;
-
-    /**
-     * This function return a list of taskDto from database which belong to a particular contact.
-     * param: email
-     * return: a list of TaskResponseDto
-     */
-    @Override
-    public List<TaskResponseDto> getByUserEmail(String email) {
-        List<Task> tasks = taskRepository.findByUserEmail(email);
-        return tasks.stream().map(task -> modelMapper.map(task, TaskResponseDto.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TaskResponseDto> getById(Integer id) {
-        List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
-        Optional<Task> optionalTask = taskRepository.findById(id);
-        if (optionalTask.isPresent()) {
-            taskResponseDtoList.add(modelMapper.map(optionalTask.get(), TaskResponseDto.class));
-        }
-        return taskResponseDtoList;
-    }
 
     /**
      * This function is implemented to create and save a new Task into database.
@@ -70,5 +50,38 @@ public class TaskServiceImp implements TaskService {
         task.setDateCreated(LocalDate.now());
         Task savedTask = taskRepository.save(task);
         return modelMapper.map(savedTask, TaskResponseDto.class);
+    }
+
+    /**
+     * This function is the combination of getById, getByEmail, and getByStatus
+     * It looks for all records that satisfy 3 given filter elements, and return
+     * a list of TaskResponseDto
+     *
+     * @param id
+     * @param email
+     * @param status
+     * @return
+     */
+    @Override
+    public List<TaskResponseDto> getAllByFilter(Integer id, String email, String status, Integer page, Integer size) {
+
+        if (page == null) {
+            page = 0;
+        }
+        if (size == null) {
+            size = 10;
+        }
+        Boolean isCompleted = null;
+        if (status != null) {
+            isCompleted = true;
+            if (status.equalsIgnoreCase("active")) {
+                isCompleted = false;
+            }
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Task> tasksFromDb = taskRepository.findAllByInputField(id, email, isCompleted, pageable);
+        return tasksFromDb.stream()
+                .map(task -> modelMapper.map(task, TaskResponseDto.class))
+                .collect(Collectors.toList());
     }
 }
