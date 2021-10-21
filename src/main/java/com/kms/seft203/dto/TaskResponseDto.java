@@ -1,21 +1,23 @@
 package com.kms.seft203.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class TaskResponseDto {
-    private String description;
-    private Boolean isCompleted;
+public class TaskResponseDto extends TaskDto {
     private LocalDate dateCreated;
 
     public TaskResponseDto(String description, Boolean isCompleted) {
-        this.description = description;
-        this.isCompleted = isCompleted;
+        super(description, isCompleted);
+    }
+
+    public TaskResponseDto(String description, Boolean isCompleted, LocalDate dateCreated) {
+        super(description, isCompleted);
+        this.dateCreated = dateCreated;
     }
 }

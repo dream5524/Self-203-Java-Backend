@@ -55,7 +55,7 @@ class TaskServiceTest {
         User user = new User(null, email, password, firstName + " " + lastName);
         Contact contact = new Contact(firstName, lastName, user, title, project);
         Task mockTask = new Task(1, description, isCompleted, contact, dateCreated);
-        TaskCreateDto taskCreateDto = new TaskCreateDto(email, description, isCompleted);
+        TaskCreateDto taskCreateDto = new TaskCreateDto(description, isCompleted, email);
 
         Mockito.when(contactRepository.findByEmail(email)).thenReturn(Optional.of(contact));
         Mockito.when(taskRepository.save(Mockito.any())).thenReturn(mockTask);
