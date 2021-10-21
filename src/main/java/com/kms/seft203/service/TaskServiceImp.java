@@ -9,10 +9,12 @@ import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.TaskRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,7 +63,14 @@ public class TaskServiceImp implements TaskService {
      * @return
      */
     @Override
-    public List<TaskResponseDto> getAllByFilter(Integer id, String email, String status) {
+    public List<TaskResponseDto> getAllByFilter(Integer id, String email, String status, Integer page, Integer size) {
+
+        if (page == null) {
+            page = 0;
+        }
+        if (size == null) {
+            size = 10;
+        }
         Boolean isCompleted = null;
         if (status != null) {
             isCompleted = true;
@@ -69,7 +78,8 @@ public class TaskServiceImp implements TaskService {
                 isCompleted = false;
             }
         }
-        List<Task> tasksFromDb = taskRepository.findAllByInputField(id, email, isCompleted);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Task> tasksFromDb = taskRepository.findAllByInputField(id, email, isCompleted, pageable);
         return tasksFromDb.stream()
                 .map(task -> modelMapper.map(task, TaskResponseDto.class))
                 .collect(Collectors.toList());

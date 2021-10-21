@@ -6,7 +6,6 @@ import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Task;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.ContactNotFoundException;
-import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.TaskRepository;
 import org.junit.Assert;
@@ -19,10 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,11 +86,16 @@ class TaskServiceTest {
                 isCompleted = false;
             }
         }
-        List<Task> mockTasks = new ArrayList<>();
-        mockTasks.add(new Task(id, description, isCompleted, null, dateCreated));
-        Mockito.when(taskRepository.findAllByInputField(id, email, isCompleted)).thenReturn(mockTasks);
+        Page<Task> mockTasks = new PageImpl<Task>(Arrays.asList(
+                new Task(id, description, isCompleted, null, dateCreated)
+        ));
+        Mockito.when(taskRepository.findAllByInputField(
+                Mockito.eq(id),
+                Mockito.eq(email),
+                Mockito.eq(isCompleted),
+                Mockito.any(Pageable.class))).thenReturn(mockTasks);
 
-        List<TaskResponseDto> actualTaskResponseDtoList = taskService.getAllByFilter(id, email, status);
+        List<TaskResponseDto> actualTaskResponseDtoList = taskService.getAllByFilter(id, email, status, null, null);
 
         Assert.assertEquals(description, actualTaskResponseDtoList.get(0).getDescription());
         Assert.assertEquals(dateCreated, actualTaskResponseDtoList.get(0).getDateCreated());

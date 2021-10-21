@@ -60,7 +60,7 @@ class TaskControllerTest extends ControllerTest {
         List<TaskResponseDto> mockTaskResponseDtoList = new ArrayList<>();
         mockTaskResponseDtoList.add(new TaskResponseDto(description, isCompleted, dateCreated));
 
-        Mockito.when(taskService.getAllByFilter(id, email, status)).thenReturn(mockTaskResponseDtoList);
+        Mockito.when(taskService.getAllByFilter(id, email, status, null, null)).thenReturn(mockTaskResponseDtoList);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/tasks");
         if (id != null) {

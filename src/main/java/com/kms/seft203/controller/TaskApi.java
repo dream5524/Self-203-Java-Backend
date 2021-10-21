@@ -37,9 +37,11 @@ public class TaskApi {
     public ResponseEntity<List<TaskResponseDto>> getByFilter(
             @RequestParam(required = false) Integer id,
             @RequestParam(required = false) String email,
-            @RequestParam(required = false) String status
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
     ) {
-        List<TaskResponseDto> taskResponseDtoList = taskService.getAllByFilter(id, email, status);
+        List<TaskResponseDto> taskResponseDtoList = taskService.getAllByFilter(id, email, status, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(taskResponseDtoList);
     }
 
