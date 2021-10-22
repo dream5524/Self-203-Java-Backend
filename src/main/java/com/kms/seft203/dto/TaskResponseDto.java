@@ -1,14 +1,14 @@
 package com.kms.seft203.dto;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class TaskResponseDto extends TaskDto {
     private LocalDate dateCreated;
 
