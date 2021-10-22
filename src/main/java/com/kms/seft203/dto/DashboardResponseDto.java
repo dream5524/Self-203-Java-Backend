@@ -1,13 +1,15 @@
 package com.kms.seft203.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class DashboardResponseDto {
-    private String title;
-    private String layoutType;
+@EqualsAndHashCode(callSuper = false)
+public class DashboardResponseDto extends DashboardDto {
+
+    public DashboardResponseDto(String title, String layoutType) {
+        super(title, layoutType);
+    }
 }

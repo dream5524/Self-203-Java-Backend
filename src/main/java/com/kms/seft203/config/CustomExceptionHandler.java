@@ -3,6 +3,7 @@ package com.kms.seft203.config;
 import com.kms.seft203.dto.ErrorResponse;
 import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.DashboardDuplicatedException;
+import com.kms.seft203.exception.DashboardNotFoundException;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.exception.TaskNotFoundException;
@@ -61,6 +62,12 @@ public class CustomExceptionHandler {
     @ExceptionHandler(TaskNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleTaskNotFoundException(TaskNotFoundException e) {
+        log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
+        return new ErrorResponse(e.getMessage());
+    }
+    @ExceptionHandler(DashboardNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleDashboardNotFoundException(DashboardNotFoundException e){
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
         return new ErrorResponse(e.getMessage());
     }

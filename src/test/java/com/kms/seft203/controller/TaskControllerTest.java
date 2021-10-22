@@ -2,9 +2,7 @@ package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.TaskCreateDto;
 import com.kms.seft203.dto.TaskResponseDto;
-import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.service.TaskService;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
@@ -81,24 +79,6 @@ class TaskControllerTest extends ControllerTest {
                 .andExpect(jsonPath("$.[0].dateCreated").value(dateCreated.toString()));
     }
 
-    @Test
-    void getTaskByUserEmailTest_whenEmailNotFound_thenReturnErrorResponse() throws Exception {
-        String email = "duclocdk1999@gmail.com";
-        String description = "Edit database";
-        Boolean isCompleted = false;
-        LocalDate dateCreated = LocalDate.of(2021, Month.JANUARY, 22);
-        String message = "Error occurs! Contact not found!";
-        TaskCreateDto taskCreateDto = new TaskCreateDto(email, description, isCompleted);
-
-        Mockito.when(taskService.save(taskCreateDto)).thenThrow(new ContactNotFoundException(message));
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/tasks")
-                    .content(convertObjectToJsonString(taskCreateDto))
-                    .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.messages[0]").value(message));
-    }
-
     @ParameterizedTest
     @CsvSource(value = {
             "ab@ab.com,Fix bug,true",
@@ -113,7 +93,7 @@ class TaskControllerTest extends ControllerTest {
     void testSave_whenInputAreInvalid_thenReturnStatusBadRequest(
             String email, String description, Boolean isCompleted) throws Exception {
 
-        TaskCreateDto taskCreateDto = new TaskCreateDto(email, description, isCompleted);
+        TaskCreateDto taskCreateDto = new TaskCreateDto(description, isCompleted, email);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/tasks")
                 .content(convertObjectToJsonString(taskCreateDto))

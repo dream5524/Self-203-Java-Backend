@@ -2,9 +2,11 @@ package com.kms.seft203.service;
 
 import com.kms.seft203.dto.DashboardCreateDto;
 import com.kms.seft203.dto.DashboardResponseDto;
+import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
 import com.kms.seft203.entity.User;
+import com.kms.seft203.exception.DashboardNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.DashboardRepository;
 import org.junit.Assert;
@@ -46,7 +48,7 @@ class DashboardServiceTest {
         String lastName = "Nguyen";
         String project = "Healthcare";
         String password = "11Qaz123@@";
-        DashboardCreateDto mockDashboardDto = new DashboardCreateDto(email, title, layoutType);
+        DashboardCreateDto mockDashboardDto = new DashboardCreateDto(title, layoutType, email);
         User mockUser = new User(null, email, password, firstName + " " + lastName);
         Contact mockContact = new Contact(firstName, lastName, mockUser, title, project);
         Dashboard mockDashboard = new Dashboard(null, title, layoutType, mockContact);
@@ -77,4 +79,22 @@ class DashboardServiceTest {
         Assert.assertEquals(expectedDashboardList.get(0).getLayoutType(), actualDashboardResponseDtoList.get(0).getLayoutType());
     }
 
+    @Test
+    void updateByIdTest_WhenSuccess_ThenReturnDashboardUpdateDto() throws DashboardNotFoundException {
+        User user = new User(1, "mohuyen@gmail.com", "1QAZa@@123", "Huyen Mo");
+        Contact contact = new Contact("Huyen", "Mo", user, "Tester", "Build Dashboard");
+        Dashboard dashboardFromDb = new Dashboard(1, "IT Operation", "Desktop", contact);
+
+        Mockito.when(dashboardRepository.findById(dashboardFromDb.getId())).thenReturn(Optional.of(dashboardFromDb));
+        dashboardFromDb.setTitle("Internship Assignment");
+        dashboardFromDb.setLayoutType("Tablet");
+        Mockito.when(dashboardRepository.save(dashboardFromDb)).thenReturn(dashboardFromDb);
+
+        DashboardUpdateDto dashboardUpdateDto = new DashboardUpdateDto("Internship Assignment", "Tablet", 1);
+
+        DashboardUpdateDto actualDashboardUpdateDto = dashboardService.updateById(dashboardUpdateDto);
+
+        Assert.assertEquals(dashboardFromDb.getTitle(), actualDashboardUpdateDto.getTitle());
+        Assert.assertEquals(dashboardFromDb.getLayoutType(), actualDashboardUpdateDto.getLayoutType());
+    }
 }

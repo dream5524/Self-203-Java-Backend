@@ -2,10 +2,12 @@ package com.kms.seft203.service;
 
 import com.kms.seft203.dto.DashboardCreateDto;
 import com.kms.seft203.dto.DashboardResponseDto;
+import com.kms.seft203.dto.DashboardUpdateDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Dashboard;
 import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.DashboardDuplicatedException;
+import com.kms.seft203.exception.DashboardNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.DashboardRepository;
 import javassist.tools.web.BadHttpRequest;
@@ -64,5 +66,25 @@ public class DashboardServiceImp implements DashboardService {
         List<Dashboard> dashboardList = dashboardRepository.findAll();
         return dashboardList.stream().map(dashboard -> modelMapper.map(dashboard, DashboardResponseDto.class))
                 .collect(Collectors.toList());
+    }
+    /**
+     * This function is defined to update a DashboardUpdateDto to database
+     *  @param dashboardUpdateDto
+     * If it finds a specific dashboard by id, it will return:
+     * @return DashboardUpdateDto
+     * Otherwise, it throws an exception:
+     * @throws DashboardNotFoundException
+     */
+    @Override
+    public DashboardUpdateDto updateById(DashboardUpdateDto dashboardUpdateDto) throws DashboardNotFoundException {
+        Optional<Dashboard> dashboardOptional = dashboardRepository.findById(dashboardUpdateDto.getId());
+        if (dashboardOptional.isEmpty()) {
+            throw new DashboardNotFoundException("There is no dashboard with the given id: " + dashboardUpdateDto.getId());
+        }
+        Dashboard dashboard = dashboardOptional.get();
+        dashboard.setTitle(dashboardUpdateDto.getTitle());
+        dashboard.setLayoutType(dashboardUpdateDto.getLayoutType());
+        Dashboard saveDashboard = dashboardRepository.save(dashboard);
+        return modelMapper.map(saveDashboard, DashboardUpdateDto.class);
     }
 }
