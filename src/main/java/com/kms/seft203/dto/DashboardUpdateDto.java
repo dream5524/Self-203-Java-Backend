@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class DashboardUpdateDto extends DashboardDto {
     @NotNull
     @Min(1)
