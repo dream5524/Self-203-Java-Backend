@@ -31,6 +31,13 @@ public class TaskServiceImp implements TaskService {
     @Autowired
     private ModelMapper modelMapper;
 
+    Boolean getIsCompletedFromStatusString(String status) {
+        if (status == null || status.isEmpty() || status.isBlank()) {
+            return null;
+        }
+        return !status.equalsIgnoreCase("active");
+    }
+
     /**
      * This function is implemented to create and save a new Task into database.
      * @param taskCreateDto
@@ -64,20 +71,13 @@ public class TaskServiceImp implements TaskService {
      */
     @Override
     public List<TaskResponseDto> getAllByFilter(Integer id, String email, String status, Integer page, Integer size) {
-
         if (page == null) {
             page = 0;
         }
         if (size == null) {
             size = 10;
         }
-        Boolean isCompleted = null;
-        if (status != null) {
-            isCompleted = true;
-            if (status.equalsIgnoreCase("active")) {
-                isCompleted = false;
-            }
-        }
+        Boolean isCompleted = getIsCompletedFromStatusString(status);
         Pageable pageable = PageRequest.of(page, size);
         Page<Task> tasksFromDb = taskRepository.findAllByInputField(id, email, isCompleted, pageable);
         return tasksFromDb.stream()
