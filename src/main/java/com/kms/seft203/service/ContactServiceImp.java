@@ -61,7 +61,7 @@ public class ContactServiceImp implements ContactService {
     public ContactRequestDto addContact(ContactRequestDto newContact) throws EmailNotFoundException {
         User user = findByEmail(newContact.getEmail());
         if (user == null) {
-            throw new EmailNotFoundException("Email " + newContact.getEmail() + " does not exist.");
+            throw new EmailNotFoundException("Email " + newContact.getEmail() + " does not exist");
         }
         //Convert DTO to entity
         Contact contact = modelMapper.map(newContact, Contact.class);
