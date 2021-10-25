@@ -4,6 +4,7 @@ import com.kms.seft203.dto.ContactRequestDto;
 import com.kms.seft203.dto.ContactResponseDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.User;
+import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.UserRepository;
@@ -76,5 +77,33 @@ class ContactServiceTest {
         Assert.assertEquals(contactRequestDto.getLastName(), contactSaveRequestDTO.getLastName());
         Assert.assertEquals(contactRequestDto.getProject(), contactSaveRequestDTO.getProject());
         Assert.assertEquals(contactRequestDto.getTitle(), contactSaveRequestDTO.getTitle());
+    }
+    @Test
+    void updateByEmailTest_WhenSuccess_ThenReturnContactResponseDto() throws ContactNotFoundException {
+        String email = "huyenmo@gmail.com";
+        String firstName = "Huyen";
+        String lastName = "Mo";
+        String title = "Developer";
+        String project = "Build Dashboard";
+        User user = new User(1,"huyenmo@gmail.com","1QAZqaz@!","Huyen Mo");
+
+        ContactRequestDto contactRequestDto = new ContactRequestDto("huyenmo@gmail.com",
+                "Elisabeth", "II", "Queen", "Manager");
+
+        Contact contactFromDb = new Contact(firstName, lastName, user, title, project);
+
+        Mockito.when(contactRepository.findByEmail(email)).thenReturn(java.util.Optional.of(contactFromDb));
+        contactFromDb.setFirstName(contactRequestDto.getFirstName());
+        contactFromDb.setLastName(contactRequestDto.getLastName());
+        contactFromDb.setTitle(contactRequestDto.getTitle());
+        contactFromDb.setProject(contactRequestDto.getProject());
+        Mockito.when(contactRepository.save(contactFromDb)).thenReturn(contactFromDb);
+
+        ContactResponseDto contactResponseDto = contactService.updateByEmail(contactRequestDto);
+
+        Assert.assertEquals(contactFromDb.getFirstName(), contactResponseDto.getFirstName());
+        Assert.assertEquals(contactFromDb.getLastName(), contactResponseDto.getLastName());
+        Assert.assertEquals(contactFromDb.getTitle(), contactResponseDto.getTitle());
+        Assert.assertEquals(contactFromDb.getProject(), contactResponseDto.getProject());
     }
 }

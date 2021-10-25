@@ -1,8 +1,11 @@
 package com.kms.seft203.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kms.seft203.dto.ContactRequestDto;
 import com.kms.seft203.dto.ContactResponseDto;
 import com.kms.seft203.entity.User;
+import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.DashboardNotFoundException;
 import com.kms.seft203.service.ContactService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -20,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -128,5 +132,43 @@ class ContactControllerTest extends ControllerTest {
                         .content(convertObjectToJsonString(contactRequestDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
+    }
+    @Test
+    void updateByEmailTest_WhenSuccess_ThenReturnStatusOK() throws Exception {
+        String email = "huyenmo@gmail.com";
+        String firstName = "Huyen";
+        String lastName = "Mo";
+        String title = "Developer";
+        String project = "Build Dashboard";
+        User user = new User(1,"huyenmo@gmail.com","1QAZqaz@!","Huyen Mo");
+
+        ContactResponseDto contactResponseDto = new ContactResponseDto(firstName, lastName, user, title, project);
+        ContactRequestDto contactRequestDto = new ContactRequestDto(email, firstName, lastName, title, project);
+
+        Mockito.when(contactService.updateByEmail(contactRequestDto)).thenReturn(contactResponseDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/contacts")
+                .content(convertObjectToJsonString(contactRequestDto))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+    @Test
+    void updateByEmailTest_WhenNotFoundContact_ThenReturnContactNotFoundException() throws Exception {
+        String email = "huyenmo@gmail.com";
+        String firstName = "Huyen";
+        String lastName = "Mo";
+        String title = "Developer";
+        String project = "Build Dashboard";
+        String message = "Email "+email+" does not exist.";
+
+        ContactRequestDto contactRequestDto = new ContactRequestDto(email, firstName, lastName, title, project);
+
+        Mockito.when(contactService.updateByEmail(contactRequestDto)).thenThrow(new ContactNotFoundException(message));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/contacts")
+                .content(convertObjectToJsonString(contactRequestDto))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.messages[0]").value(message));
     }
 }
