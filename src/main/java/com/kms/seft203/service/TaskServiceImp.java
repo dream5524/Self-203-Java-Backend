@@ -33,13 +33,6 @@ public class TaskServiceImp implements TaskService {
     @Autowired
     private ModelMapper modelMapper;
 
-    Boolean getIsCompletedFromStatusString(String status) {
-        if (status == null || status.isEmpty() || status.isBlank()) {
-            return null;
-        }
-        return !status.equalsIgnoreCase("active");
-    }
-
     /**
      * This function is implemented to create and save a new Task into database.
      * @param taskCreateDto
