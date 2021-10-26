@@ -7,6 +7,7 @@ import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Task;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.TaskRepository;
 import org.junit.Assert;
@@ -123,5 +124,21 @@ class TaskServiceTest {
         Assert.assertEquals(id, actualTaskResponseDto.getId());
         Assert.assertEquals(isCompleted, actualTaskResponseDto.getIsCompleted());
         Assert.assertEquals(dateCreated, actualTaskResponseDto.getDateCreated());
+    }
+
+    @Test
+    void testUpdateTaskById_whenFailed_thenReturnTaskNotFoundException() {
+        String description = "description from updated request";
+        Integer id = 10;
+        Boolean isCompleted = false;
+        TaskUpdateByIdDto taskUpdateByIdDto = new TaskUpdateByIdDto(description, isCompleted, id);
+
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.ofNullable(null));
+
+        Exception exception = Assert.assertThrows(TaskNotFoundException.class, () -> {
+            TaskResponseDto actualTaskResponseDto = taskService.updateById(taskUpdateByIdDto);
+        });
+        String message = "Error occurs! No task found for id " + id;
+        Assert.assertEquals(message, exception.getMessage());
     }
 }
