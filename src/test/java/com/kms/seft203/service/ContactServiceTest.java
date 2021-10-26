@@ -9,6 +9,7 @@ import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.UserRepository;
 import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -17,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -101,9 +101,26 @@ class ContactServiceTest {
 
         ContactResponseDto contactResponseDto = contactService.updateByEmail(contactRequestDto);
 
-        Assert.assertEquals(contactFromDb.getFirstName(), contactResponseDto.getFirstName());
-        Assert.assertEquals(contactFromDb.getLastName(), contactResponseDto.getLastName());
-        Assert.assertEquals(contactFromDb.getTitle(), contactResponseDto.getTitle());
-        Assert.assertEquals(contactFromDb.getProject(), contactResponseDto.getProject());
+        Assert.assertEquals(contactRequestDto.getFirstName(), contactResponseDto.getFirstName());
+        Assert.assertEquals(contactRequestDto.getLastName(), contactResponseDto.getLastName());
+        Assert.assertEquals(contactRequestDto.getTitle(), contactResponseDto.getTitle());
+        Assert.assertEquals(contactRequestDto.getProject(), contactResponseDto.getProject());
+    }
+
+    @Test
+    void updateByEmailTest_WhenNotFoundContact_ThenReturnContactNotFoundException() throws Exception {
+        String email = "huyenmo@gmail.com";
+        String firstName = "Huyen";
+        String lastName = "Mo";
+        String title = "Developer";
+        String project = "Build Dashboard";
+        String message = "Email " + email + " does not exist";
+
+        ContactRequestDto contactRequestDto = new ContactRequestDto(email, firstName, lastName, title, project);
+
+        Exception exception = assertThrows(ContactNotFoundException.class, () ->
+                Mockito.when(contactService.updateByEmail(contactRequestDto)));
+
+        Assert.assertEquals(message, exception.getMessage());
     }
 }
