@@ -4,6 +4,7 @@ import com.kms.seft203.dto.ContactRequestDto;
 import com.kms.seft203.dto.ContactResponseDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.User;
+import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.UserRepository;
@@ -38,6 +39,22 @@ public class ContactServiceImp implements ContactService {
         List<Contact> listContacts = contactRepository.findAll();
         return listContacts.stream().map(contact -> modelMapper.map(contact, ContactResponseDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ContactResponseDto updateByEmail(ContactRequestDto contactRequestDto) throws ContactNotFoundException {
+        Optional<Contact> contactOptional = contactRepository.findByEmail(contactRequestDto.getEmail());
+        if (contactOptional.isEmpty()) {
+            throw new ContactNotFoundException("Email " + contactRequestDto.getEmail() + " does not exist");
+        }
+        Contact contact = contactOptional.get();
+        contact.setFirstName(contactRequestDto.getFirstName());
+        contact.setLastName(contactRequestDto.getLastName());
+        contact.setTitle(contactRequestDto.getTitle());
+        contact.setProject(contactRequestDto.getProject());
+        Contact saveContact = contactRepository.save(contact);
+        return modelMapper.map(saveContact, ContactResponseDto.class);
+
     }
 
     @Override

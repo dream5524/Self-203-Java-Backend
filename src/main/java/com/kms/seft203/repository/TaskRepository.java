@@ -4,10 +4,10 @@ import com.kms.seft203.entity.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
-
-public interface TaskRepository extends JpaRepository<Task, Integer>, PagingAndSortingRepository<Task, Integer> {
+public interface TaskRepository extends JpaRepository<Task, Integer>, PagingAndSortingRepository<Task, Integer>, JpaSpecificationExecutor<Task> {
 
     @Query(value = "SELECT task FROM Task as task " +
             "WHERE (:id is null or task.id=:id) " +
