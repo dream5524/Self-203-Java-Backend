@@ -18,9 +18,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -101,10 +105,10 @@ class ContactServiceTest {
 
         ContactResponseDto contactResponseDto = contactService.updateByEmail(contactRequestDto);
 
-        Assert.assertEquals(contactRequestDto.getFirstName(), contactResponseDto.getFirstName());
-        Assert.assertEquals(contactRequestDto.getLastName(), contactResponseDto.getLastName());
-        Assert.assertEquals(contactRequestDto.getTitle(), contactResponseDto.getTitle());
-        Assert.assertEquals(contactRequestDto.getProject(), contactResponseDto.getProject());
+        Assert.assertEquals(contactFromDb.getFirstName(), contactResponseDto.getFirstName());
+        Assert.assertEquals(contactFromDb.getLastName(), contactResponseDto.getLastName());
+        Assert.assertEquals(contactFromDb.getTitle(), contactResponseDto.getTitle());
+        Assert.assertEquals(contactFromDb.getProject(), contactResponseDto.getProject());
     }
 
     @Test
@@ -114,7 +118,7 @@ class ContactServiceTest {
         String lastName = "Mo";
         String title = "Developer";
         String project = "Build Dashboard";
-        String message = "Email " + email + " does not exist";
+        String message = "Email "+email+" does not exist.";
 
         ContactRequestDto contactRequestDto = new ContactRequestDto(email, firstName, lastName, title, project);
 

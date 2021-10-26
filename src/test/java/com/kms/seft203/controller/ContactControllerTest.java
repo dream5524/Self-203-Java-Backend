@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 /*
 This class is defined for testing create new contact, get all contact methods
@@ -146,6 +148,6 @@ class ContactControllerTest extends ControllerTest {
                 .content(convertObjectToJsonString(contactRequestDto))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("The information were successful updated !"));
+                .andExpect(content().string("The information were successful updated !"));;
     }
 }
