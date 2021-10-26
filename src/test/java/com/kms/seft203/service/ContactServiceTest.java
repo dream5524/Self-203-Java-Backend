@@ -118,7 +118,7 @@ class ContactServiceTest {
         String lastName = "Mo";
         String title = "Developer";
         String project = "Build Dashboard";
-        String message = "Email "+email+" does not exist.";
+        String message = "Email " + email + " does not exist";
 
         ContactRequestDto contactRequestDto = new ContactRequestDto(email, firstName, lastName, title, project);
 
