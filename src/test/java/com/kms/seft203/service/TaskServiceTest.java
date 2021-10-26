@@ -2,6 +2,7 @@ package com.kms.seft203.service;
 
 import com.kms.seft203.dto.TaskCreateDto;
 import com.kms.seft203.dto.TaskResponseDto;
+import com.kms.seft203.dto.TaskUpdateByIdDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Task;
 import com.kms.seft203.entity.User;
@@ -100,5 +101,27 @@ class TaskServiceTest {
         Assert.assertEquals(description, actualTaskResponseDtoList.get(0).getDescription());
         Assert.assertEquals(dateCreated, actualTaskResponseDtoList.get(0).getDateCreated());
         Assert.assertEquals(isCompleted, actualTaskResponseDtoList.get(0).getIsCompleted());
+    }
+
+    @Test
+    void testUpdateTaskById_whenSuccess_thenReturnTaskResponseDto() throws Exception {
+        String description = "Writing unit testing for task-api";
+        Integer id = 10;
+        Boolean isCompleted = false;
+        LocalDate dateCreated = LocalDate.of(1999, 02, 17);
+        TaskUpdateByIdDto taskUpdateByIdDto = new TaskUpdateByIdDto(description, isCompleted, id);
+        Task mockTask = new Task(id, "hello world", true, null, dateCreated);
+        Task mockUpdatedTask = new Task(id, description, isCompleted, null, dateCreated);
+
+
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(mockTask));
+        Mockito.when(taskRepository.save(mockUpdatedTask)).thenReturn(mockUpdatedTask);
+
+        TaskResponseDto actualTaskResponseDto = taskService.updateById(taskUpdateByIdDto);
+
+        Assert.assertEquals(description, actualTaskResponseDto.getDescription());
+        Assert.assertEquals(id, actualTaskResponseDto.getId());
+        Assert.assertEquals(isCompleted, actualTaskResponseDto.getIsCompleted());
+        Assert.assertEquals(dateCreated, actualTaskResponseDto.getDateCreated());
     }
 }

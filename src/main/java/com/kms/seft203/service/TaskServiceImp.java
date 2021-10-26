@@ -2,9 +2,11 @@ package com.kms.seft203.service;
 
 import com.kms.seft203.dto.TaskCreateDto;
 import com.kms.seft203.dto.TaskResponseDto;
+import com.kms.seft203.dto.TaskUpdateByIdDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Task;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.TaskRepository;
 import org.modelmapper.ModelMapper;
@@ -83,5 +85,24 @@ public class TaskServiceImp implements TaskService {
         return tasksFromDb.stream()
                 .map(task -> modelMapper.map(task, TaskResponseDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public TaskResponseDto updateById(TaskUpdateByIdDto taskUpdateByIdDto) throws Exception {
+        Integer taskId = taskUpdateByIdDto.getId();
+        Optional<Task> taskFromDb = taskRepository.findById(taskId);
+        if (taskFromDb.isEmpty()) {
+            throw new TaskNotFoundException("Error occurs! No task found for id " + taskId);
+        }
+        Optional<Task> savedTask = taskFromDb.map(task -> {
+            Task updatedTask = modelMapper.map(taskUpdateByIdDto, Task.class);
+            updatedTask.setContact(task.getContact());
+            updatedTask.setDateCreated(task.getDateCreated());
+            return taskRepository.save(updatedTask);
+        });
+        if (savedTask.isEmpty()) {
+            throw new Exception("Server unknown error while updating task...");
+        }
+        return modelMapper.map(savedTask.get(), TaskResponseDto.class);
     }
 }
