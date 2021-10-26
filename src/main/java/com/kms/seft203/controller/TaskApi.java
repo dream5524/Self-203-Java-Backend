@@ -4,6 +4,7 @@ import com.kms.seft203.dto.TaskCreateDto;
 import com.kms.seft203.dto.TaskResponseDto;
 import com.kms.seft203.dto.TaskUpdateByIdDto;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.ServerUnknownException;
 import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
@@ -80,7 +81,7 @@ public class TaskApi {
     }
 
     @PutMapping
-    public ResponseEntity<TaskResponseDto> updateTaskById(@RequestBody @Valid TaskUpdateByIdDto taskUpdateByIdDto) throws TaskNotFoundException {
+    public ResponseEntity<TaskResponseDto> updateTaskById(@RequestBody @Valid TaskUpdateByIdDto taskUpdateByIdDto) throws TaskNotFoundException, ServerUnknownException {
 
         return ResponseEntity.status(HttpStatus.OK).body(taskService.updateById(taskUpdateByIdDto));
     }

@@ -6,6 +6,7 @@ import com.kms.seft203.dto.TaskUpdateByIdDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Task;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.ServerUnknownException;
 import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.TaskRepository;
@@ -84,7 +85,7 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public TaskResponseDto updateById(TaskUpdateByIdDto taskUpdateByIdDto) throws TaskNotFoundException {
+    public TaskResponseDto updateById(TaskUpdateByIdDto taskUpdateByIdDto) throws TaskNotFoundException, ServerUnknownException {
         Integer taskId = taskUpdateByIdDto.getId();
         Optional<Task> taskFromDb = taskRepository.findById(taskId);
         if (taskFromDb.isEmpty()) {
@@ -96,7 +97,9 @@ public class TaskServiceImp implements TaskService {
             updatedTask.setDateCreated(task.getDateCreated());
             return taskRepository.save(updatedTask);
         });
-
+        if (savedTask.isEmpty()) {
+            throw new ServerUnknownException("Error occurs! Failed to update task into database...");
+        }
         return modelMapper.map(savedTask.get(), TaskResponseDto.class);
     }
 }
