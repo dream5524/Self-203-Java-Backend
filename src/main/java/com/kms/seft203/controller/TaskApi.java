@@ -80,7 +80,7 @@ public class TaskApi {
     }
 
     @PutMapping
-    public ResponseEntity<TaskResponseDto> updateTaskById(@RequestBody @Valid TaskUpdateByIdDto taskUpdateByIdDto) throws TaskNotFoundException, Exception {
+    public ResponseEntity<TaskResponseDto> updateTaskById(@RequestBody @Valid TaskUpdateByIdDto taskUpdateByIdDto) throws TaskNotFoundException {
 
         return ResponseEntity.status(HttpStatus.OK).body(taskService.updateById(taskUpdateByIdDto));
     }

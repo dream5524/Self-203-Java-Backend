@@ -79,7 +79,10 @@ public class TaskServiceImp implements TaskService {
         if (size == null) {
             size = 10;
         }
-        Boolean isCompleted = getIsCompletedFromStatusString(status);
+        Boolean isCompleted = null;
+        if (status != null && !status.isEmpty() && !status.isBlank()) {
+             isCompleted = !status.equalsIgnoreCase("active");
+        }
         Pageable pageable = PageRequest.of(page, size);
         Page<Task> tasksFromDb = taskRepository.findAllByInputField(id, email, isCompleted, pageable);
         return tasksFromDb.stream()
@@ -88,7 +91,7 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public TaskResponseDto updateById(TaskUpdateByIdDto taskUpdateByIdDto) throws Exception {
+    public TaskResponseDto updateById(TaskUpdateByIdDto taskUpdateByIdDto) throws TaskNotFoundException {
         Integer taskId = taskUpdateByIdDto.getId();
         Optional<Task> taskFromDb = taskRepository.findById(taskId);
         if (taskFromDb.isEmpty()) {
@@ -100,9 +103,7 @@ public class TaskServiceImp implements TaskService {
             updatedTask.setDateCreated(task.getDateCreated());
             return taskRepository.save(updatedTask);
         });
-        if (savedTask.isEmpty()) {
-            throw new Exception("Server unknown error while updating task...");
-        }
+
         return modelMapper.map(savedTask.get(), TaskResponseDto.class);
     }
 }
