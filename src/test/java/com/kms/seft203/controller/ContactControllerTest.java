@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 /*
 This class is defined for testing create new contact, get all contact methods
@@ -128,5 +129,25 @@ class ContactControllerTest extends ControllerTest {
                         .content(convertObjectToJsonString(contactRequestDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
+    }
+    @Test
+    void updateByEmailTest_WhenSuccess_ThenReturnStatusOK() throws Exception {
+        String email = "huyenmo@gmail.com";
+        String firstName = "Huyen";
+        String lastName = "Mo";
+        String title = "Developer";
+        String project = "Build Dashboard";
+        User user = new User(1,"huyenmo@gmail.com","1QAZqaz@!","Huyen Mo");
+
+        ContactResponseDto contactResponseDto = new ContactResponseDto(firstName, lastName, user, title, project);
+        ContactRequestDto contactRequestDto = new ContactRequestDto(email, firstName, lastName, title, project);
+
+        Mockito.when(contactService.updateByEmail(contactRequestDto)).thenReturn(contactResponseDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/contacts")
+                .content(convertObjectToJsonString(contactRequestDto))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("The information were successful updated !"));;
     }
 }
