@@ -10,11 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.validation.Valid;
@@ -28,11 +30,17 @@ public class ContactApi {
     private ContactService contactService;
 
     @GetMapping
-    public ResponseEntity<List<ContactResponseDto>> getAllContact(){
-        logger.info("Get all contact method started...");
+    public ResponseEntity<List<ContactResponseDto>> getAllByFilter(
+            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) String fullName,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
+    ) {
+        logger.info("Getting all contact method has begun...");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(contactService.getAllContact());
+                .body(contactService.getAllByFilter(id, fullName, title, page, size));
     }
 
     @PostMapping
@@ -42,9 +50,10 @@ public class ContactApi {
                 .status(HttpStatus.CREATED)
                 .body(contactService.addContact(contactDtoReq));
     }
+
     @PutMapping
     public ResponseEntity<String> updateByEmail(@Valid @RequestBody ContactRequestDto contactRequestDto) throws ContactNotFoundException {
-        logger.info("Updating contact method has begun... {}",contactRequestDto);
+        logger.info("Updating contact method has begun... {}", contactRequestDto);
         contactService.updateByEmail(contactRequestDto);
         return ResponseEntity.ok("The information were successful updated !");
     }
