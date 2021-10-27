@@ -111,11 +111,11 @@ class TaskServiceTest {
         Boolean isCompleted = false;
         LocalDate dateCreated = LocalDate.of(1999, 02, 17);
         TaskUpdateByIdDto taskUpdateByIdDto = new TaskUpdateByIdDto(description, isCompleted, id);
-        Task mockTask = new Task(id, "hello world", true, null, dateCreated);
+        Task task = new Task(id, "hello world", true, null, dateCreated);
         Task mockUpdatedTask = new Task(id, description, isCompleted, null, dateCreated);
 
 
-        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(mockTask));
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(task));
         Mockito.when(taskRepository.save(mockUpdatedTask)).thenReturn(mockUpdatedTask);
 
         TaskResponseDto actualTaskResponseDto = taskService.updateById(taskUpdateByIdDto);
@@ -127,7 +127,7 @@ class TaskServiceTest {
     }
 
     @Test
-    void testUpdateTaskById_whenFailed_thenReturnTaskNotFoundException() {
+    void testUpdateTaskById_whenNotFoundFromDb_thenReturnTaskNotFoundException() {
         String description = "description from updated request";
         Integer id = 10;
         Boolean isCompleted = false;
@@ -136,7 +136,7 @@ class TaskServiceTest {
         Mockito.when(taskRepository.findById(id)).thenReturn(Optional.ofNullable(null));
 
         Exception exception = Assert.assertThrows(TaskNotFoundException.class, () -> {
-            TaskResponseDto actualTaskResponseDto = taskService.updateById(taskUpdateByIdDto);
+            taskService.updateById(taskUpdateByIdDto);
         });
         String message = "Error occurs! No task found for id " + id;
         Assert.assertEquals(message, exception.getMessage());

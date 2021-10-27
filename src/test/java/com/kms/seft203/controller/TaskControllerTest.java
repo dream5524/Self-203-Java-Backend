@@ -124,11 +124,10 @@ class TaskControllerTest extends ControllerTest {
     }
 
     @Test
-    void testUpdatetaskById_whenFailed_thenReturnTaskNotFoundException() throws Exception {
+    void testUpdatetaskById_whenTaskNotFound_thenReturnStatusNotFound() throws Exception {
         String description = "Update project to fix memory leaking";
         Boolean isCompleted = false;
         Integer id = 10;
-        LocalDate dateCreated = LocalDate.of(2021, 10, 1);
         TaskUpdateByIdDto taskUpdateByIdDto = new TaskUpdateByIdDto(description, isCompleted, id);
         String message = "task not found for id " + id;
 

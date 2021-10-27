@@ -73,6 +73,10 @@ public class TaskServiceImp implements TaskService {
         if (size == null) {
             size = 10;
         }
+        /*
+        * When status is null or is blank, the isCompleted should be null so that the filter function
+        * can capture all tasks which are completed and are not completed
+        * */
         Boolean isCompleted = null;
         if (status != null && !status.isEmpty() && !status.isBlank()) {
              isCompleted = !status.equalsIgnoreCase("active");

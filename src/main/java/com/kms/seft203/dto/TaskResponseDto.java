@@ -24,8 +24,7 @@ public class TaskResponseDto extends TaskDto {
     }
 
     public TaskResponseDto(String description, Boolean isCompleted, Integer id, LocalDate dateCreated) {
-        super(description, isCompleted);
-        this.id = id;
+        this(description, isCompleted, id);
         this.dateCreated = dateCreated;
     }
 }
