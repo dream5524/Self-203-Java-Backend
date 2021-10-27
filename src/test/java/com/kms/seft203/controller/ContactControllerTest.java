@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 /*
 This class is defined for testing create new contact, get all contact methods
@@ -64,7 +64,7 @@ class ContactControllerTest extends ControllerTest {
         //Mock contactService run cases can occur from 1 to 8 of CSVSource
         Mockito.when(contactService.getAllByFilter(id, fullName, title, null, null))
                 .thenReturn(listContactResponseDto);
-        //Mock contactService run remaining 9th case of CSVSource
+        //Mock contactService run remaining 9th of CSVSource
         Mockito.when(contactService.getAllByFilter(id, fullName, title, 1, 3))
                 .thenReturn(listContactResponseDto);
 
@@ -177,11 +177,13 @@ class ContactControllerTest extends ControllerTest {
 
         Mockito.when(contactService.updateByEmail(contactRequestDto)).thenReturn(contactResponseDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/contacts")
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/contacts")
                         .content(convertObjectToJsonString(contactRequestDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("The information were successful updated !"));
+                .andExpect(content().string("The information were successful updated !"))
+                .andReturn();
         ;
     }
 
