@@ -6,6 +6,7 @@ import com.kms.seft203.exception.DashboardDuplicatedException;
 import com.kms.seft203.exception.DashboardNotFoundException;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
+import com.kms.seft203.exception.ServerUnknownException;
 import com.kms.seft203.exception.TaskNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -72,6 +73,21 @@ public class CustomExceptionHandler {
         return new ErrorResponse(e.getMessage());
     }
 
+    /**
+     * This function is implemented to handle unknown exception that thrown by
+     * the developed project's code.
+     */
+    @ExceptionHandler(ServerUnknownException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleUnknownException(ServerUnknownException e) {
+        log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
+        return new ErrorResponse(e.getMessage());
+    }
+
+    /**
+     * This function is implemented to handle unknown exception that thrown by
+     * the library, i.e. exception when call a JPA library,...
+     */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleCommonException(Exception e) {

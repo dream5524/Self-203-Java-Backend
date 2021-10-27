@@ -8,16 +8,23 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class TaskResponseDto extends TaskDto {
+    private Integer id;
     private LocalDate dateCreated;
-
-    public TaskResponseDto(String description, Boolean isCompleted) {
-        super(description, isCompleted);
-    }
 
     public TaskResponseDto(String description, Boolean isCompleted, LocalDate dateCreated) {
         super(description, isCompleted);
+        this.dateCreated = dateCreated;
+    }
+
+    public TaskResponseDto(String description, Boolean isCompleted, Integer id) {
+        super(description, isCompleted);
+        this.id = id;
+    }
+
+    public TaskResponseDto(String description, Boolean isCompleted, Integer id, LocalDate dateCreated) {
+        this(description, isCompleted, id);
         this.dateCreated = dateCreated;
     }
 }

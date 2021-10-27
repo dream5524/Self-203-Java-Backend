@@ -2,7 +2,10 @@ package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.TaskCreateDto;
 import com.kms.seft203.dto.TaskResponseDto;
+import com.kms.seft203.dto.TaskUpdateByIdDto;
+import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.service.TaskService;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
@@ -99,5 +102,41 @@ class TaskControllerTest extends ControllerTest {
                 .content(convertObjectToJsonString(taskCreateDto))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testUpdateTaskById_whenSuccess_thenReturnTaskResponseDto() throws Exception {
+        String description = "Update project to fix memory leaking";
+        Boolean isCompleted = false;
+        Integer id = 10;
+        LocalDate dateCreated = LocalDate.of(2021, 10, 1);
+        TaskUpdateByIdDto taskUpdateByIdDto = new TaskUpdateByIdDto(description, isCompleted, id);
+        TaskResponseDto taskResponseDto = new TaskResponseDto(description, isCompleted, id, dateCreated);
+        Mockito.when(taskService.updateById(taskUpdateByIdDto)).thenReturn(taskResponseDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/tasks")
+                .content(convertObjectToJsonString(taskUpdateByIdDto))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description").value(description))
+                .andExpect(jsonPath("$.isCompleted").value(isCompleted))
+                .andExpect(jsonPath("$.id").value(id));
+    }
+
+    @Test
+    void testUpdatetaskById_whenTaskNotFound_thenReturnStatusNotFound() throws Exception {
+        String description = "Update project to fix memory leaking";
+        Boolean isCompleted = false;
+        Integer id = 10;
+        TaskUpdateByIdDto taskUpdateByIdDto = new TaskUpdateByIdDto(description, isCompleted, id);
+        String message = "task not found for id " + id;
+
+        Mockito.when(taskService.updateById(taskUpdateByIdDto)).thenThrow(new TaskNotFoundException(message));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/tasks")
+                .content(convertObjectToJsonString(taskUpdateByIdDto))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.messages[0]").value(message));
     }
 }
