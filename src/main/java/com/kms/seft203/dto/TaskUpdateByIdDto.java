@@ -3,20 +3,20 @@ package com.kms.seft203.dto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.NumberFormat;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class DashboardUpdateDto extends DashboardDto {
+public class TaskUpdateByIdDto extends TaskDto {
     @NotNull
-    @Min(1)
+    @NumberFormat
     private Integer id;
 
-    public DashboardUpdateDto(String title, String layoutType, Integer id) {
-        super(title, layoutType);
+    public TaskUpdateByIdDto(String description, Boolean isCompletd, Integer id) {
+        super(description, isCompletd);
         this.id = id;
     }
 }

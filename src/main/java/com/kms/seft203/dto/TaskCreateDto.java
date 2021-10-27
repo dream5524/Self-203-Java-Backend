@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class TaskCreateDto extends TaskDto {
     @NotNull(message = "Email cannot be null")
     @ValidEmail

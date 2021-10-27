@@ -2,10 +2,12 @@ package com.kms.seft203.service;
 
 import com.kms.seft203.dto.TaskCreateDto;
 import com.kms.seft203.dto.TaskResponseDto;
+import com.kms.seft203.dto.TaskUpdateByIdDto;
 import com.kms.seft203.entity.Contact;
 import com.kms.seft203.entity.Task;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.ContactNotFoundException;
+import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.TaskRepository;
 import org.junit.Assert;
@@ -100,5 +102,43 @@ class TaskServiceTest {
         Assert.assertEquals(description, actualTaskResponseDtoList.get(0).getDescription());
         Assert.assertEquals(dateCreated, actualTaskResponseDtoList.get(0).getDateCreated());
         Assert.assertEquals(isCompleted, actualTaskResponseDtoList.get(0).getIsCompleted());
+    }
+
+    @Test
+    void testUpdateTaskById_whenSuccess_thenReturnTaskResponseDto() throws Exception {
+        String description = "Writing unit testing for task-api";
+        Integer id = 10;
+        Boolean isCompleted = false;
+        LocalDate dateCreated = LocalDate.of(1999, 02, 17);
+        TaskUpdateByIdDto taskUpdateByIdDto = new TaskUpdateByIdDto(description, isCompleted, id);
+        Task task = new Task(id, "hello world", true, null, dateCreated);
+        Task mockUpdatedTask = new Task(id, description, isCompleted, null, dateCreated);
+
+
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(task));
+        Mockito.when(taskRepository.save(mockUpdatedTask)).thenReturn(mockUpdatedTask);
+
+        TaskResponseDto actualTaskResponseDto = taskService.updateById(taskUpdateByIdDto);
+
+        Assert.assertEquals(description, actualTaskResponseDto.getDescription());
+        Assert.assertEquals(id, actualTaskResponseDto.getId());
+        Assert.assertEquals(isCompleted, actualTaskResponseDto.getIsCompleted());
+        Assert.assertEquals(dateCreated, actualTaskResponseDto.getDateCreated());
+    }
+
+    @Test
+    void testUpdateTaskById_whenNotFoundFromDb_thenReturnTaskNotFoundException() {
+        String description = "description from updated request";
+        Integer id = 10;
+        Boolean isCompleted = false;
+        TaskUpdateByIdDto taskUpdateByIdDto = new TaskUpdateByIdDto(description, isCompleted, id);
+
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.ofNullable(null));
+
+        Exception exception = Assert.assertThrows(TaskNotFoundException.class, () -> {
+            taskService.updateById(taskUpdateByIdDto);
+        });
+        String message = "Error occurs! No task found for id " + id;
+        Assert.assertEquals(message, exception.getMessage());
     }
 }
