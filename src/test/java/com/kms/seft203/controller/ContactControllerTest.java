@@ -52,7 +52,7 @@ class ContactControllerTest extends ControllerTest {
             ",,,,,",
             ",,,1,3"
     }, delimiter = ',')
-    void getAllByFilterTest_WhenSuccess_thenReturnStatusOk(Integer id, String fullName, String title, Integer page, Integer size) throws Exception {
+    void getAllByFilterTest_WhenSuccess_thenReturnContactResponseDtoList(Integer id, String fullName, String title, Integer page, Integer size) throws Exception {
         List<ContactResponseDto> listContactResponseDto = Stream.of(
                         new ContactResponseDto("Nguyen Van",
                                 "Teo",
@@ -61,11 +61,7 @@ class ContactControllerTest extends ControllerTest {
                                 "Implement API"))
                 .collect(Collectors.toList());
 
-        //Mock contactService run cases can occur from 1 to 8 of CSVSource
-        Mockito.when(contactService.getAllByFilter(id, fullName, title, null, null))
-                .thenReturn(listContactResponseDto);
-        //Mock contactService run remaining 9th of CSVSource
-        Mockito.when(contactService.getAllByFilter(id, fullName, title, 1, 3))
+        Mockito.when(contactService.getAllByFilter(id, fullName, title, page, size))
                 .thenReturn(listContactResponseDto);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/contacts");
@@ -96,7 +92,7 @@ class ContactControllerTest extends ControllerTest {
     }
 
     @Test
-    void createContactTest() throws Exception {
+    void createContactTest_WhenSuccess_ThenReturnContactRequestDto() throws Exception {
         ContactRequestDto contactRequestDto = new ContactRequestDto("huyenmo@gmail.com", "Huyen", "Mo", "title demo", "project demo");
 
         Mockito.when(contactService.addContact(Mockito.any())).thenReturn(contactRequestDto);
@@ -164,7 +160,7 @@ class ContactControllerTest extends ControllerTest {
     }
 
     @Test
-    void updateByEmailTest_WhenSuccess_ThenReturnStatusOK() throws Exception {
+    void updateByEmailTest_WhenSuccess_ThenReturnContactResponseDto() throws Exception {
         String email = "huyenmo@gmail.com";
         String firstName = "Huyen";
         String lastName = "Mo";
@@ -188,7 +184,7 @@ class ContactControllerTest extends ControllerTest {
     }
 
     @Test
-    void updateByEmailTest_WhenNotFoundContact_ThenThrowContactNotFoundException() throws Exception {
+    void updateByEmailTest_WhenNotFoundContactFromDb_ThenReturnStatusNotFound() throws Exception {
         String email = "huyenmo@gmail.com";
         String firstName = "Huyen";
         String lastName = "Mo";
