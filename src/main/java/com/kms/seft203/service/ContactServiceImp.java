@@ -56,8 +56,10 @@ public class ContactServiceImp implements ContactService {
 
     @Override
     public List<ContactResponseDto> getAllByFilter(Integer id, String fullName, String title, Integer page, Integer size) {
-        if (page == null && size == null) {
+        if (page == null) {
             page = 0;
+        }
+        if (size == null) {
             size = 10;
         }
         Pageable pageable = PageRequest.of(page, size);
