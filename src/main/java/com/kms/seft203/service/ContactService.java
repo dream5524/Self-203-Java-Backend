@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface ContactService {
     ContactRequestDto addContact(ContactRequestDto contactRequestDTO) throws EmailNotFoundException;
-    List<ContactResponseDto> getAllContact();
+
     ContactResponseDto updateByEmail(ContactRequestDto contactRequestDto) throws ContactNotFoundException;
+
+    List<ContactResponseDto> getAllByFilter(Integer id, String fullName, String title, Integer page, Integer size);
 }
