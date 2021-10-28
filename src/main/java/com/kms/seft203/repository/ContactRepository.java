@@ -20,7 +20,7 @@ public interface ContactRepository extends JpaRepository<Contact, Integer>, Pagi
 
     @Query("select c from Contact c" +
             " where (c.id = :id or :id is null)" +
-            " and   (CONCAT(c.firstName, ' ' , c.lastName) like TRIM(:fullName) or :fullName is null)" +
-            " and   (c.title like TRIM(:title) or :title is null)")
+            " and   (CONCAT(c.firstName, ' ' , c.lastName) like :fullName or :fullName is null)" +
+            " and   (c.title = :title or :title is null)")
     Page<Contact> findAllByInputField(Integer id, String fullName, String title, Pageable pageable);
 }
