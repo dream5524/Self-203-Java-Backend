@@ -5,7 +5,6 @@ import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.service.EmailService;
 import com.kms.seft203.service.UserService;
-import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -43,7 +42,7 @@ class AuthControllerTest extends ControllerTest {
     private EmailService emailService;
 
     @Test
-    void testRegister_whenSuccess_thenReturnRegisterRequestFormat() throws Exception {
+    void testRegister_whenSuccess_thenReturnRegisterResponseFormat() throws Exception {
 
         String email = "nvdloc@apcs.vn";
         String password = "11Qwaz#()(4321A";
@@ -57,8 +56,8 @@ class AuthControllerTest extends ControllerTest {
                         .content(convertObjectToJsonString(mockUserDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.email").value("nvdloc@apcs.vn"))
-                .andExpect(jsonPath("$.fullName").value("Loc Nguyen"))
+                .andExpect(jsonPath("$.email").value(email))
+                .andExpect(jsonPath("$.fullName").value(fullName))
                 .andExpect(jsonPath("$.activation").value(activation));
     }
 

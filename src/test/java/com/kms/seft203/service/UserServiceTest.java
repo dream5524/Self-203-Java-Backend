@@ -29,7 +29,7 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @Test
-    void testSave_whenSuccess_thenReturnRegisterRequest() throws EmailDuplicatedException {
+    void testSave_whenSuccess_thenReturnRegisterResponse() throws EmailDuplicatedException {
         User user = new User(1,"nvdloc@apcs.vn", "11Qaz123@@", "Loc Nguyen", false);
         RegisterRequest userDto = new RegisterRequest();
         userDto.setEmail(user.getEmail());
@@ -39,8 +39,8 @@ class UserServiceTest {
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 
         RegisterResponse userResponse = userService.save(userDto);
-        assertEquals("nvdloc@apcs.vn", userResponse.getEmail());
-        assertEquals("Loc Nguyen", userResponse.getFullName());
-        assertEquals(false, userResponse.getActivation());
+        assertEquals(user.getEmail(), userResponse.getEmail());
+        assertEquals(user.getFullName(), userResponse.getFullName());
+        assertEquals(user.getActivation(), userResponse.getActivation());
     }
 }
