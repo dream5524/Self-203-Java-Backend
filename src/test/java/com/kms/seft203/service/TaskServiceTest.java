@@ -53,8 +53,9 @@ class TaskServiceTest {
         String password = "Abc123456789";
         String title = "Developer";
         String project = "Dashboard-seft203";
+        Boolean activation = false;
         LocalDate dateCreated = LocalDate.of(2021, 10, 10);
-        User user = new User(null, email, password, firstName + " " + lastName);
+        User user = new User(null, email, password, firstName + " " + lastName, activation);
         Contact contact = new Contact(firstName, lastName, user, title, project);
         Task mockTask = new Task(1, description, isCompleted, contact, dateCreated);
         TaskCreateDto taskCreateDto = new TaskCreateDto(description, isCompleted, email);

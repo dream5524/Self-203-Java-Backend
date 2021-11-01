@@ -1,6 +1,7 @@
 package com.kms.seft203.service;
 
 import com.kms.seft203.dto.RegisterRequest;
+import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.repository.UserRepository;
@@ -41,8 +42,7 @@ public class UserServiceImp implements UserService {
      * @throws EmailDuplicatedException
      */
     @Override
-    public RegisterRequest save(RegisterRequest userFromReq) throws EmailDuplicatedException {
-
+    public RegisterResponse save(RegisterRequest userFromReq) throws EmailDuplicatedException {
         log.info("Saving user {} to database...", userFromReq.getEmail());
         String email = userFromReq.getEmail();
 
@@ -53,6 +53,6 @@ public class UserServiceImp implements UserService {
         }
         User user = modelMapper.map(userFromReq, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return modelMapper.map(userRepository.save(user), RegisterRequest.class);
+        return modelMapper.map(userRepository.save(user), RegisterResponse.class);
     }
 }

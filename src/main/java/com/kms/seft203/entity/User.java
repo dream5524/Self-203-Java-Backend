@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
 @Data
 @AllArgsConstructor
@@ -30,4 +29,7 @@ public class User {
 
     @Column(name = "full_name")
     private String fullName;
+
+    @Column(name = "activation")
+    private Boolean activation;
 }

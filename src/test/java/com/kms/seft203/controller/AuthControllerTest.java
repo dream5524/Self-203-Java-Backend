@@ -1,7 +1,9 @@
 package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.RegisterRequest;
+import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.exception.EmailDuplicatedException;
+import com.kms.seft203.service.EmailService;
 import com.kms.seft203.service.UserService;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
@@ -37,18 +39,27 @@ class AuthControllerTest extends ControllerTest {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private EmailService emailService;
+
     @Test
     void testRegister_whenSuccess_thenReturnRegisterRequestFormat() throws Exception {
-        RegisterRequest mockUserDto =
-                new RegisterRequest("nvdloc@apcs.vn", "11Qwaz#()(423A", "Loc Nguyen");
-        Mockito.when(userService.save(mockUserDto)).thenReturn(mockUserDto);
+
+        String email = "nvdloc@apcs.vn";
+        String password = "11Qwaz#()(4321A";
+        String fullName = "Loc Nguyen";
+        Boolean activation = false;
+        RegisterRequest mockUserDto = new RegisterRequest(email, password, fullName);
+        RegisterResponse responseUserDto = new RegisterResponse(email, fullName, activation);
+
+        Mockito.when(userService.save(mockUserDto)).thenReturn(responseUserDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .content(convertObjectToJsonString(mockUserDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("nvdloc@apcs.vn"))
-                .andExpect(jsonPath("$.password").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.fullName").value("Loc Nguyen"));
+                .andExpect(jsonPath("$.fullName").value("Loc Nguyen"))
+                .andExpect(jsonPath("$.activation").value(activation));
     }
 
     @Test
@@ -78,12 +89,10 @@ class AuthControllerTest extends ControllerTest {
             "1Qaz@123Aqe,,Huyen Mo"
     }, delimiter = ',')
     void testRegister_whenFieldsInputAreInvalid_thenReturnStatusBadRequest(String password, String email, String fullName) throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setEmail(email);
-        registerRequest.setFullName(fullName);
-        registerRequest.setPassword(password);
-
-        Mockito.when(userService.save(registerRequest)).thenReturn(registerRequest);
+        RegisterRequest registerRequest = new RegisterRequest(email, password, fullName);
+        Boolean activation = false;
+        RegisterResponse registerResponse = new RegisterResponse(email, fullName, activation);
+        Mockito.when(userService.save(registerRequest)).thenReturn(registerResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .content(convertObjectToJsonString(registerRequest))
@@ -94,12 +103,15 @@ class AuthControllerTest extends ControllerTest {
 
     @Test
     void testRegister_whenAllFieldsInputAreValid_thenReturnStatusIsCreated() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qa123@@qe");
-        registerRequest.setEmail("mohuyen@gmail.com");
-        registerRequest.setFullName("Huyen Mo");
+        String email = "mohuyen@gmail.com";
+        String password = "1Qa123@@qe";
+        String fullName = "Huyen Mo";
+        Boolean activation = false;
 
-        Mockito.when(userService.save(registerRequest)).thenReturn(registerRequest);
+        RegisterRequest registerRequest = new RegisterRequest(email, password, fullName);
+        RegisterResponse registerResponse = new RegisterResponse(email, fullName, activation);
+
+        Mockito.when(userService.save(registerRequest)).thenReturn(registerResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .content(convertObjectToJsonString(registerRequest))
