@@ -77,3 +77,8 @@ CREATE TABLE IF NOT EXISTS public."Widget"
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
+ALTER TABLE "user"
+ADD COLUMN enabled BOOLEAN,
+ADD COLUMN verification_code VARCHAR(100),
+ADD COLUMN  date_created timestamp without time zone DEFAULT (now() + '07:00:00'::interval),
+ADD COLUMN reset_code_date timestamp without time zone DEFAULT (now() + '07:00:00'::interval)

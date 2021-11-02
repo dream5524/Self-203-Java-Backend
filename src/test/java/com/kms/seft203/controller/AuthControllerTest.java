@@ -1,6 +1,7 @@
 package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.RegisterRequest;
+import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.service.UserService;
 import org.hamcrest.core.IsNull;
@@ -18,12 +19,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * This class is implemented to test the controller layer - AuthApi class
- *
+ * <p>
  * Two unit testing is designed, including the successful case and the fail
  * situation when the email is duplicated
  */
@@ -39,9 +39,10 @@ class AuthControllerTest extends ControllerTest {
 
     @Test
     void testRegister_whenSuccess_thenReturnRegisterRequestFormat() throws Exception {
-        RegisterRequest mockUserDto =
-                new RegisterRequest("nvdloc@apcs.vn", "11Qwaz#()(423A", "Loc Nguyen");
-        Mockito.when(userService.save(mockUserDto)).thenReturn(mockUserDto);
+        RegisterResponse mockUserDto =
+                new RegisterResponse("nvdloc@apcs.vn", "11Qwaz#()(423A", "Loc Nguyen", "Please click the link below to verify your registration.\" +\n" +
+                        "                \" This code will expire in 15 minutes.");
+        Mockito.when(userService.save(Mockito.any())).thenReturn(mockUserDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .content(convertObjectToJsonString(mockUserDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
@@ -78,15 +79,15 @@ class AuthControllerTest extends ControllerTest {
             "1Qaz@123Aqe,,Huyen Mo"
     }, delimiter = ',')
     void testRegister_whenFieldsInputAreInvalid_thenReturnStatusBadRequest(String password, String email, String fullName) throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setEmail(email);
-        registerRequest.setFullName(fullName);
-        registerRequest.setPassword(password);
+        RegisterResponse registerResponse = new RegisterResponse();
+        registerResponse.setEmail(email);
+        registerResponse.setFullName(fullName);
+        registerResponse.setPassword(password);
 
-        Mockito.when(userService.save(registerRequest)).thenReturn(registerRequest);
+        Mockito.when(userService.save(Mockito.any())).thenReturn(registerResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerRequest))
+                        .content(convertObjectToJsonString(registerResponse))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -94,17 +95,39 @@ class AuthControllerTest extends ControllerTest {
 
     @Test
     void testRegister_whenAllFieldsInputAreValid_thenReturnStatusIsCreated() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setPassword("1Qa123@@qe");
-        registerRequest.setEmail("mohuyen@gmail.com");
-        registerRequest.setFullName("Huyen Mo");
+        RegisterResponse registerResponse = new RegisterResponse();
+        registerResponse.setPassword("1Qa123@@qe");
+        registerResponse.setEmail("mohuyen@gmail.com");
+        registerResponse.setFullName("Huyen Mo");
 
-        Mockito.when(userService.save(registerRequest)).thenReturn(registerRequest);
+        Mockito.when(userService.save(Mockito.any())).thenReturn(registerResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerRequest))
+                        .content(convertObjectToJsonString(registerResponse))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
+    }
+    @Test
+    void testVerificationAccount_WhenCodeIsVerified_ThenReturnSuccessfullyMessage() throws Exception {
+        String verificationCode = "12345@@SSdd";
+
+        Mockito.when(userService.verifyAccount(verificationCode)).thenReturn(true);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/auth/verify")
+                        .param("code", verificationCode))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Account was verified successfully !"));
+    }
+    @Test
+    void testVerificationAccount_WhenCodeIsNotVerified_ThenReturnSuccessfullyMessage() throws Exception {
+        String verificationCode = "12345@@SSdd";
+
+        Mockito.when(userService.verifyAccount(verificationCode)).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/auth/verify")
+                        .param("code", verificationCode))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Verification failed ! Code expired."));
     }
 }

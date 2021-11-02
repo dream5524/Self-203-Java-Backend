@@ -1,6 +1,7 @@
 package com.kms.seft203.service;
 
 import com.kms.seft203.dto.RegisterRequest;
+import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.repository.UserRepository;
@@ -37,7 +38,7 @@ class UserServiceTest {
 
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 
-        RegisterRequest userResponse = userService.save(userDto);
+        RegisterResponse userResponse = userService.save(userDto);
         assertEquals("nvdloc@apcs.vn", userResponse.getEmail());
         assertEquals("11Qaz123@@", userResponse.getPassword());
         assertEquals("Loc Nguyen", userResponse.getFullName());

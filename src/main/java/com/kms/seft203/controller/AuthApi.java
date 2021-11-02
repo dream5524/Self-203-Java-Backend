@@ -3,10 +3,7 @@ package com.kms.seft203.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.kms.seft203.dto.LoginRequest;
-import com.kms.seft203.dto.LoginResponse;
-import com.kms.seft203.dto.LogoutRequest;
-import com.kms.seft203.dto.RegisterRequest;
+import com.kms.seft203.dto.*;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.service.UserService;
@@ -14,12 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,8 +55,8 @@ public class AuthApi {
      */
     @PostMapping("/register")
 
-    public ResponseEntity<RegisterRequest> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
-        RegisterRequest responseUser = userService.save(request);
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
+        RegisterResponse responseUser = userService.save(request);
         responseUser.setPassword(null);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
@@ -95,5 +96,11 @@ public class AuthApi {
 
     @PostMapping("/logout")
     public void logout(@RequestBody LogoutRequest request) {
+    }
+
+    @GetMapping("/verify")
+    public String verifyEmail(@RequestParam("code") String verificationCode) {
+        Boolean verified = userService.verifyAccount(verificationCode);
+        return verified ? "Account was verified successfully !" : "Verification failed ! Code expired.";
     }
 }
