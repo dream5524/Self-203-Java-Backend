@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS public."user"
     email character varying(50) NOT NULL,
     password character varying(125) NOT NULL,
     full_name character varying(50),
-    activation boolean default(false),
+    enabled boolean default(false),
     CONSTRAINT id_pkey PRIMARY KEY (id),
     CONSTRAINT email_unique UNIQUE (email)
 );
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS public."widget"
 
 -- ADD DATA -------------------------------------------------------------
 
-insert into public."user" (id, email, password, full_name, activation) 
+insert into public."user" (id, email, password, full_name, enabled) 
 values
 	(1, 	'anhquan@gmail.com',	'123456',	'Nguyễn Hoàng Anh Quân',		true),
 	(2,		'sonct@gmail.com', 		'123456', 	'Cao Thái Sơn',				true),

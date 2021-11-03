@@ -41,6 +41,6 @@ class UserServiceTest {
         RegisterResponse userResponse = userService.save(userDto);
         assertEquals(user.getEmail(), userResponse.getEmail());
         assertEquals(user.getFullName(), userResponse.getFullName());
-        assertEquals(user.getActivation(), userResponse.getActivation());
+        assertEquals(user.getEnabled(), userResponse.getEnabled());
     }
 }

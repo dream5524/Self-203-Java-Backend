@@ -30,6 +30,6 @@ public class User {
     @Column(name = "full_name")
     private String fullName;
 
-    @Column(name = "activation")
-    private Boolean activation;
+    @Column(name = "enabled")
+    private Boolean enabled;
 }

@@ -47,9 +47,9 @@ class AuthControllerTest extends ControllerTest {
         String email = "nvdloc@apcs.vn";
         String password = "11Qwaz#()(4321A";
         String fullName = "Loc Nguyen";
-        Boolean activation = false;
+        Boolean enabled = false;
         RegisterRequest mockUserDto = new RegisterRequest(email, password, fullName);
-        RegisterResponse responseUserDto = new RegisterResponse(email, fullName, activation);
+        RegisterResponse responseUserDto = new RegisterResponse(email, fullName, enabled);
 
         Mockito.when(userService.save(mockUserDto)).thenReturn(responseUserDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
@@ -58,7 +58,7 @@ class AuthControllerTest extends ControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value(email))
                 .andExpect(jsonPath("$.fullName").value(fullName))
-                .andExpect(jsonPath("$.activation").value(activation));
+                .andExpect(jsonPath("$.enabled").value(enabled));
     }
 
     @Test

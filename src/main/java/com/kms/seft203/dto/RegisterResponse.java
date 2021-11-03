@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class RegisterResponse {
     private String email;
     private String fullName;
-    private Boolean activation;
+    private Boolean enabled;
 }
