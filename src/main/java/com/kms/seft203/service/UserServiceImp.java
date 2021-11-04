@@ -67,8 +67,8 @@ public class UserServiceImp implements UserService {
         user.setDateResetCode(user.getDateCreated());
 
         RegisterResponse registerResponse = modelMapper.map(userRepository.save(user), RegisterResponse.class);
-        registerResponse.setSubject("Please click the link below to verify your registration." +
-                " This code will expire in 15 minutes." + user.getVerificationCode());
+        registerResponse.setSubject("This is a verification code to activate your account." +
+                " It will valid in 15 minutes. ");
         return registerResponse;
     }
 

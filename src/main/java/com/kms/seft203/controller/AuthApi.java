@@ -103,7 +103,7 @@ public class AuthApi {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<String> verifyEmail(@RequestParam("code") String verificationCode) throws VerificationCodeInValidException {
+    public ResponseEntity<String> verifyAccount(@RequestParam("code") String verificationCode) throws VerificationCodeInValidException {
         boolean isVerifiedCode = userService.verifyAccount(verificationCode);
         if (isVerifiedCode) {
             return ResponseEntity.status(200).body("Account was verified successfully !");
