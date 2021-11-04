@@ -58,10 +58,8 @@ public class AuthApi {
      * @return: a DTO of user if the process succeeds
      */
     @PostMapping("/register")
-
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
         RegisterResponse responseUser = userService.save(request);
-        responseUser.setPassword(null);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
 
@@ -103,7 +101,7 @@ public class AuthApi {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<String> verifyAccount(@RequestParam("code") String verificationCode) throws VerificationCodeInValidException {
+    public ResponseEntity<String> verify(@RequestParam("code") String verificationCode) throws VerificationCodeInValidException {
         boolean isVerifiedCode = userService.verifyAccount(verificationCode);
         if (isVerifiedCode) {
             return ResponseEntity.status(200).body("Account was verified successfully !");
