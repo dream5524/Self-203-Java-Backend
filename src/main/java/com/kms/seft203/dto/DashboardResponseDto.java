@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class DashboardResponseDto extends DashboardDto {
 
     public DashboardResponseDto(String title, String layoutType) {

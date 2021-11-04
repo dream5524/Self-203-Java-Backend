@@ -10,6 +10,9 @@ import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,12 +37,6 @@ public class ContactServiceImp implements ContactService {
      * Input: Email and check if email does not exist, throw new EmailNotFoundException.
      * Output: Otherwise, create new contact and save this contact.
      * */
-    @Override
-    public List<ContactResponseDto> getAllContact() {
-        List<Contact> listContacts = contactRepository.findAll();
-        return listContacts.stream().map(contact -> modelMapper.map(contact, ContactResponseDto.class))
-                .collect(Collectors.toList());
-    }
 
     @Override
     public ContactResponseDto updateByEmail(ContactRequestDto contactRequestDto) throws ContactNotFoundException {
@@ -55,6 +52,21 @@ public class ContactServiceImp implements ContactService {
         Contact saveContact = contactRepository.save(contact);
         return modelMapper.map(saveContact, ContactResponseDto.class);
 
+    }
+
+    @Override
+    public List<ContactResponseDto> getAllByFilter(Integer id, String fullName, String title, Integer page, Integer size) {
+        if (page == null) {
+            page = 0;
+        }
+        if (size == null) {
+            size = 10;
+        }
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Contact> contactFromDb = contactRepository.findAllByInputField(id, fullName, title, pageable);
+        return contactFromDb.stream().map(contact -> modelMapper.map(contact, ContactResponseDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
