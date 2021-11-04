@@ -12,6 +12,4 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
 
     @Query("select contact from Contact contact where contact.user.email = ?1")
     Optional<Contact> findByEmail(String email);
-
-
 }

@@ -3,8 +3,9 @@ package com.kms.seft203.service;
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
-import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.EmailDuplicatedException;
+import com.kms.seft203.exception.EmailNotFoundException;
+import com.kms.seft203.exception.VerificationCodeInValidException;
 import com.kms.seft203.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Optional;
 
 /**
@@ -35,7 +35,7 @@ public class UserServiceImp implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static final long CODE_VALID_TIME = 5;
+    private static int CODE_EXPIRATION_TIME = 15 * 60;
 
     /**
      * This method is implemented to save a RegisterRequest received from Controller
@@ -64,6 +64,7 @@ public class UserServiceImp implements UserService {
         user.setEnabled(false);
         user.setVerificationCode(RandomString.make(50));
         user.setDateCreated(LocalDateTime.now());
+        user.setDateResetCode(user.getDateCreated());
 
         RegisterResponse registerResponse = modelMapper.map(userRepository.save(user), RegisterResponse.class);
         registerResponse.setSubject("Please click the link below to verify your registration." +
@@ -73,15 +74,20 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     @Override
-    public void verifyAccount(String verificationCode) {
-        User user = userRepository.findByVerificationCode(verificationCode).get();
-        checkValidationCode(user);
+    public Boolean verifyAccount(String verificationCode) throws VerificationCodeInValidException {
+        Optional<User> userOptional = userRepository.findByVerificationCode(verificationCode);
+        if (userOptional.isEmpty()) {
+            throw new VerificationCodeInValidException("Verification Code is invalid.");
+        }
+        User userFromDb = userOptional.get();
+        return checkValidationCode(userFromDb);
     }
 
     @Override
     public Boolean checkValidationCode(User user) {
-        Calendar calendar = Calendar.getInstance();
-        if (user == null || user.getDateCreated().getSecond() + CODE_VALID_TIME < calendar.get(Calendar.SECOND)) {
+        LocalDateTime expirationTime = user.getDateResetCode().plusSeconds(CODE_EXPIRATION_TIME);
+        LocalDateTime currentTime = LocalDateTime.now();
+        if (currentTime.isAfter(expirationTime)) {
             return false;
         } else {
             userRepository.enabledAccount(user.getId());
@@ -90,12 +96,15 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Boolean resetCode(String email) throws ContactNotFoundException {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isEmpty()) {
-            throw new ContactNotFoundException("Do not find the given email: " + email + ". Email has not yet been registered.");
+    public User resetCode(String email) throws EmailNotFoundException {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isEmpty()) {
+            throw new EmailNotFoundException("Email " + email + " does not exist.");
         }
-        User user = userOptional.get();
+        User user = optionalUser.get();
+        user.setDateResetCode(LocalDateTime.now());
+        user.setVerificationCode(RandomString.make(50));
+        userRepository.save(user);
+        return user;
     }
-
 }

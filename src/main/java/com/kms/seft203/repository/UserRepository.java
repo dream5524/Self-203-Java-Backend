@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
+    @Query("select u from User u where u.email = ?1")
     Optional<User> findByEmail(String email);
 
     @Query("update User u set u.enabled = true where u.id = ?1")

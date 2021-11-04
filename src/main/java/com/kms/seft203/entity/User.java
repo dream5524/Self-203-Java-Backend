@@ -35,7 +35,7 @@ public class User {
     @Column(name="enabled")
     private Boolean enabled;
 
-    @Column(name="verification_code", updatable = false)
+    @Column(name="verification_code")
     private String verificationCode;
 
     @Column(name = "date_created")

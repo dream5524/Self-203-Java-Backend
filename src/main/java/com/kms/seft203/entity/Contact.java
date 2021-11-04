@@ -1,8 +1,8 @@
 package com.kms.seft203.entity;
 
-import lombok.ToString;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

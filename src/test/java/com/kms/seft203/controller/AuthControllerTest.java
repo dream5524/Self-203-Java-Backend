@@ -2,7 +2,9 @@ package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.dto.RegisterResponse;
+import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
+import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.service.UserService;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
@@ -19,7 +21,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * This class is implemented to test the controller layer - AuthApi class
@@ -108,26 +112,55 @@ class AuthControllerTest extends ControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
+
     @Test
-    void testVerificationAccount_WhenCodeIsVerified_ThenReturnSuccessfullyMessage() throws Exception {
+    void testVerificationAccount_WhenCodeIsValid_ThenReturnSuccessMessage() throws Exception {
         String verificationCode = "12345@@SSdd";
+        String messageResponse = "Account was verified successfully !";
 
         Mockito.when(userService.verifyAccount(verificationCode)).thenReturn(true);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/auth/verify")
                         .param("code", verificationCode))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Account was verified successfully !"));
+                .andExpect(content().string(messageResponse));
     }
+
     @Test
-    void testVerificationAccount_WhenCodeIsNotVerified_ThenReturnSuccessfullyMessage() throws Exception {
+    void testVerificationAccount_WhenCodeIsExpired_ThenReturnFailMessage() throws Exception {
         String verificationCode = "12345@@SSdd";
+        String messageResponse = "Verification failed ! Code expired.";
 
         Mockito.when(userService.verifyAccount(verificationCode)).thenReturn(false);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/auth/verify")
                         .param("code", verificationCode))
+                .andExpect(status().isGone())
+                .andExpect(content().string(messageResponse));
+    }
+
+    @Test
+    void testResetCode_WhenEmailIsFound_ThenReturnCodeSuccessfullyResetMessage() throws Exception {
+        User user = new User(1, "mohuyen@gmail.com", "11Qaz123@@", "Mo Huyen");
+
+        Mockito.when(userService.resetCode(user.getEmail())).thenReturn(user);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/auth")
+                        .param("email", user.getEmail()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Code successfully reset ! Check your email again to confirm your account."));
+    }
+
+    @Test
+    void testResetCode_WhenEmailIsNotFound_ThenReturnStatusNotFound() throws Exception {
+        User user = new User(1, "mohuyen@gmail.com", "11Qaz123@@", "Mo Huyen");
+        String messageResponse = "Email" + user.getEmail() + " does not exist.";
+
+        Mockito.when(userService.resetCode(user.getEmail())).thenThrow(new EmailNotFoundException(messageResponse));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/auth")
+                        .param("email", user.getEmail()))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Verification failed ! Code expired."));
+                .andExpect(jsonPath("$.messages[0]").value(messageResponse));
     }
 }
