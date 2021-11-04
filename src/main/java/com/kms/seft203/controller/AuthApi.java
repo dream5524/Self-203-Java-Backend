@@ -104,8 +104,8 @@ public class AuthApi {
 
     @GetMapping("/verify")
     public ResponseEntity<String> verifyEmail(@RequestParam("code") String verificationCode) throws VerificationCodeInValidException {
-        Boolean isVerifiedCode = userService.verifyAccount(verificationCode);
-        if (isVerifiedCode == true) {
+        boolean isVerifiedCode = userService.verifyAccount(verificationCode);
+        if (isVerifiedCode) {
             return ResponseEntity.status(200).body("Account was verified successfully !");
         } else {
             return ResponseEntity.status(410).body("Verification failed ! Code expired.");

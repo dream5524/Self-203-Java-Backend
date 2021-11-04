@@ -35,7 +35,7 @@ public class UserServiceImp implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static int CODE_EXPIRATION_TIME = 15 * 60;
+    private static final int CODE_EXPIRATION_TIME = 15 * 60;
 
     /**
      * This method is implemented to save a RegisterRequest received from Controller
