@@ -69,8 +69,7 @@ public class UserServiceImp implements UserService {
         User savedUser = userRepository.save(user);
         String subject = "This is a verification code to activate your account." +
                 " It will valid in 15 minutes: " + savedUser.getVerificationCode();
-        RegisterResponse registerResponse = new RegisterResponse(subject);
-        return registerResponse;
+        return new RegisterResponse(subject);
     }
 
     @Transactional
