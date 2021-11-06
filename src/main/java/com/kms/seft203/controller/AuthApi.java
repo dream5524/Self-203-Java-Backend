@@ -10,15 +10,19 @@ import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
+import com.kms.seft203.exception.EmailNotFoundException;
+import com.kms.seft203.exception.VerificationCodeInValidException;
 import com.kms.seft203.service.EmailService;
 import com.kms.seft203.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -52,8 +56,6 @@ public class AuthApi {
 
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
         RegisterResponse responseUser = userService.save(request);
-        emailService.sendEmailToVerify(
-                request.getEmail(), "Account activation", "hello " + request.getFullName());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
 
@@ -92,5 +94,21 @@ public class AuthApi {
 
     @PostMapping("/logout")
     public void logout(@RequestBody LogoutRequest request) {
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<String> verify(@RequestParam("code") String verificationCode) throws VerificationCodeInValidException {
+        boolean isVerifiedCode = userService.verifyAccount(verificationCode);
+        if (isVerifiedCode) {
+            return ResponseEntity.status(200).body("Account was verified successfully !");
+        } else {
+            return ResponseEntity.status(410).body("Verification failed ! Code expired.");
+        }
+    }
+
+    @GetMapping("/reset-code")
+    public ResponseEntity<String> resetCode(@RequestParam("email") String email) throws EmailNotFoundException {
+        userService.resetCode(email);
+        return ResponseEntity.ok("Code successfully reset ! Check your email again to confirm your account.");
     }
 }

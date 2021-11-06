@@ -49,7 +49,7 @@ class DashboardServiceTest {
         String project = "Healthcare";
         String password = "11Qaz123@@";
         DashboardCreateDto mockDashboardDto = new DashboardCreateDto(title, layoutType, email);
-        User mockUser = new User(null, email, password, firstName + " " + lastName, null);
+        User mockUser = new User(null, email, password, firstName + " " + lastName);
         Contact mockContact = new Contact(firstName, lastName, mockUser, title, project);
         Dashboard mockDashboard = new Dashboard(null, title, layoutType, mockContact);
 
@@ -67,7 +67,7 @@ class DashboardServiceTest {
     void getAllDashboardsTest_WhenSuccess_ThenReturnListDashboardDto() {
         List<Dashboard> expectedDashboardList = Stream.of(new Dashboard(1, "Home Page", "Desktop",
                 new Contact("Huyen", "Mo", new User(1, "huyenmo@gmail.com",
-                        "1qaz@@123QA", "Huyen Mo", true), "Tester", "Build Dashboard"))
+                        "1qaz@@123QA", "Huyen Mo"), "Tester", "Build Dashboard"))
         ).collect(Collectors.toList());
 
         Mockito.when(dashboardRepository.findAll()).thenReturn(expectedDashboardList);
@@ -81,7 +81,7 @@ class DashboardServiceTest {
 
     @Test
     void updateByIdTest_WhenSuccess_ThenReturnDashboardUpdateDto() throws DashboardNotFoundException {
-        User user = new User(1, "mohuyen@gmail.com", "1QAZa@@123", "Huyen Mo", true);
+        User user = new User(1, "mohuyen@gmail.com", "1QAZa@@123", "Huyen Mo");
         Contact contact = new Contact("Huyen", "Mo", user, "Tester", "Build Dashboard");
         Dashboard dashboardFromDb = new Dashboard(1, "IT Operation", "Desktop", contact);
 

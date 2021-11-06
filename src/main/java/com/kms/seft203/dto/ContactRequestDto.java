@@ -31,6 +31,6 @@ public class ContactRequestDto {
     private String title;
 
     @NotNull
-    @Size(min = 2, max = 30, message = "Please project lengthen must be least 2 to 50 characters")
+    @Size(min = 2, max = 80, message = "Please project lengthen must be least 2 to 80 characters")
     private String project;
 }

@@ -56,6 +56,9 @@ CREATE TABLE IF NOT EXISTS public."user"
     password character varying(125) NOT NULL,
     full_name character varying(50),
     enabled boolean default(false),
+    verification_code varchar(100),
+    date_created timestamp without time zone DEFAULT (now() + '07:00:00'::interval),
+    reset_code_date timestamp without time zone DEFAULT (now() + '07:00:00'::interval),
     CONSTRAINT id_pkey PRIMARY KEY (id),
     CONSTRAINT email_unique UNIQUE (email)
 );
@@ -133,12 +136,21 @@ CREATE TABLE IF NOT EXISTS public."widget"
 -- ADD DATA -------------------------------------------------------------
 
 insert into public."user" (id, email, password, full_name, enabled) 
+<<<<<<< HEAD
 values
 	(1, 	'anhquan@gmail.com',	'123456',	'Nguyễn Hoàng Anh Quân',		true),
 	(2,		'sonct@gmail.com', 		'123456', 	'Cao Thái Sơn',				true),
 	(3, 	'vietnq@gmail.com',		'123456',	'Nguyễn Quốc Việt',			true),
 	(4, 	'tramdlt@gmail.com',	'123456',	'Đặng Lê Thùy Trâm',		true),
 	(5, 	'huylg@gmail.com', 		'123456', 	'Lương Gia Huy', 			true),
+=======
+values 
+	(1, 	'anhquan@gmail.com',	'123456',	'Nguyễn Hoàng Anh Quân', 	true),
+	(2,		'sonct@gmail.com', 		'123456', 	'Cao Thái Sơn',				true),
+	(3, 	'vietnq@gmail.com',		'123456',	'Nguyễn Quốc Việt',			true),
+	(4, 	'tramdlt@gmail.com',	'123456',	'Đặng Lê Thùy Trâm',		true),
+	(5, 	'huylg@gmail.com', 		'123456', 	'Lương Gia Huy',			true),
+>>>>>>> develop
 	(6, 	'tinhlv@gmail.com',		'123456', 	'Lê Văn Tính',				true),
 	(7, 	'ngocmtb@gmail.com', 	'123456', 	'Mai Thị Bích Ngọc',		true),
 	(8, 	'thidtd@gmail.com',		'123456',	'Đinh Thị Duyên Thi',		true),

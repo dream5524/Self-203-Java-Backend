@@ -53,7 +53,7 @@ class ContactServiceTest {
             ",,,1,3"
     }, delimiter = ',')
     void getAllByFilterTest_WhenSuccess_thenReturnContactResponseDtoList(Integer id, String fullName, String title, Integer page, Integer size) {
-        User user = new User(1, "pheonc@gmail.com", "11Qaz123@@", "Nguyen Chi Pheo", true);
+        User user = new User(1, "pheonc@gmail.com", "11Qaz123@@", "Nguyen Chi Pheo");
 
         Page<Contact> contactPage = new PageImpl<>(Arrays.asList(
                 new Contact("Nguyen Chi", "Pheo", user, "Tester", "Build dashboard")));
@@ -74,7 +74,7 @@ class ContactServiceTest {
 
     @Test
     void createContactServiceTest_WhenSuccess_ThenReturnContactRequestDto() throws EmailNotFoundException {
-        User user = new User(1, "huyenmo@gmail.com", "21Qaz123@@", "Huyen Mo", true);
+        User user = new User(1, "huyenmo@gmail.com", "21Qaz123@@", "Huyen Mo");
         Contact contact = new Contact("Huyen", "Mo", user, "demo", "demo");
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(java.util.Optional.of(user));
 
@@ -94,7 +94,7 @@ class ContactServiceTest {
         String lastName = "Mo";
         String title = "Developer";
         String project = "Build Dashboard";
-        User user = new User(1, "huyenmo@gmail.com", "1QAZqaz@!", "Huyen Mo", true);
+        User user = new User(1, "huyenmo@gmail.com", "1QAZqaz@!", "Huyen Mo");
 
         ContactRequestDto contactRequestDto = new ContactRequestDto("huyenmo@gmail.com",
                 "Elisabeth", "II", "Queen", "Manager");

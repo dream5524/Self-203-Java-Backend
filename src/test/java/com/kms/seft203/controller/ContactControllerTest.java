@@ -56,7 +56,7 @@ class ContactControllerTest extends ControllerTest {
         List<ContactResponseDto> listContactResponseDto = Stream.of(
                         new ContactResponseDto("Nguyen Van",
                                 "Teo",
-                                new User(1, "teonv@gmail.com", "1Qaz123@@", "Nguyen Van Teo", true),
+                                new User(1, "teonv@gmail.com", "1Qaz123@@", "Nguyen Van Teo"),
                                 "Tester",
                                 "Implement API"))
                 .collect(Collectors.toList());
@@ -166,7 +166,7 @@ class ContactControllerTest extends ControllerTest {
         String lastName = "Mo";
         String title = "Developer";
         String project = "Build Dashboard";
-        User user = new User(1, "huyenmo@gmail.com", "1QAZqaz@!", "Huyen Mo", true);
+        User user = new User(1, "huyenmo@gmail.com", "1QAZqaz@!", "Huyen Mo");
 
         ContactResponseDto contactResponseDto = new ContactResponseDto(firstName, lastName, user, title, project);
         ContactRequestDto contactRequestDto = new ContactRequestDto(email, firstName, lastName, title, project);
