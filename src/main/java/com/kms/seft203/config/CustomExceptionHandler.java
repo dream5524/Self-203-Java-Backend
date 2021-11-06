@@ -8,6 +8,7 @@ import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.exception.ServerUnknownException;
 import com.kms.seft203.exception.TaskNotFoundException;
+import com.kms.seft203.exception.VerificationCodeInValidException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -69,6 +70,12 @@ public class CustomExceptionHandler {
     @ExceptionHandler(DashboardNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleDashboardNotFoundException(DashboardNotFoundException e){
+        log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
+        return new ErrorResponse(e.getMessage());
+    }
+    @ExceptionHandler(VerificationCodeInValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse verificationCodeInValidException(VerificationCodeInValidException e){
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
         return new ErrorResponse(e.getMessage());
     }

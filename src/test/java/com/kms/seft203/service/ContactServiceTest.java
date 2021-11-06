@@ -9,7 +9,6 @@ import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.repository.ContactRepository;
 import com.kms.seft203.repository.UserRepository;
 import org.junit.Assert;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -26,6 +25,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
