@@ -42,18 +42,22 @@ class AuthControllerTest extends ControllerTest {
     private UserService userService;
 
     @Test
-    void testRegister_whenSuccess_thenReturnRegisterRequestFormat() throws Exception {
-        RegisterResponse mockUserDto =
-                new RegisterResponse("nvdloc@apcs.vn", "11Qwaz#()(423A", "Loc Nguyen", "Please click the link below to verify your registration.\" +\n" +
-                        "                \" This code will expire in 15 minutes.");
-        Mockito.when(userService.save(Mockito.any())).thenReturn(mockUserDto);
+    void testRegister_whenSuccess_thenReturnStatusIsCreated () throws Exception {
+        String subject = "Please click the link below to verify your registration.\" +\n" +
+                "                \" This code will expire in 15 minutes.";
+        String email = "nvdloc@apcs.vn";
+        String password = "123Abcd!#ab";
+        String fullName = "Loc Nguyen";
+        RegisterRequest registerRequest = new RegisterRequest(email, password, fullName);
+        RegisterResponse registerResponse = new RegisterResponse(subject);
+
+        Mockito.when(userService.save(Mockito.any())).thenReturn(registerResponse);
+
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(mockUserDto))
+                        .content(convertObjectToJsonString(registerRequest))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.email").value("nvdloc@apcs.vn"))
-                .andExpect(jsonPath("$.password").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.fullName").value("Loc Nguyen"));
+                .andExpect(jsonPath("$.subject").value(subject));
     }
 
     @Test
@@ -83,34 +87,13 @@ class AuthControllerTest extends ControllerTest {
             "1Qaz@123Aqe,,Huyen Mo"
     }, delimiter = ',')
     void testRegister_whenFieldsInputAreInvalid_thenReturnStatusBadRequest(String password, String email, String fullName) throws Exception {
-        RegisterResponse registerResponse = new RegisterResponse();
-        registerResponse.setEmail(email);
-        registerResponse.setFullName(fullName);
-        registerResponse.setPassword(password);
-
-        Mockito.when(userService.save(Mockito.any())).thenReturn(registerResponse);
+        RegisterRequest registerRequest = new RegisterRequest(email, password, fullName);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerResponse))
+                        .content(convertObjectToJsonString(registerRequest))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void testRegister_whenAllFieldsInputAreValid_thenReturnStatusIsCreated() throws Exception {
-        RegisterResponse registerResponse = new RegisterResponse();
-        registerResponse.setPassword("1Qa123@@qe");
-        registerResponse.setEmail("mohuyen@gmail.com");
-        registerResponse.setFullName("Huyen Mo");
-
-        Mockito.when(userService.save(Mockito.any())).thenReturn(registerResponse);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .content(convertObjectToJsonString(registerResponse))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
     }
 
     @Test
@@ -145,7 +128,7 @@ class AuthControllerTest extends ControllerTest {
 
         Mockito.when(userService.resetCode(user.getEmail())).thenReturn(user);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/auth")
+        mockMvc.perform(MockMvcRequestBuilders.get("/auth/reset-code")
                         .param("email", user.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Code successfully reset ! Check your email again to confirm your account."));
@@ -158,7 +141,7 @@ class AuthControllerTest extends ControllerTest {
 
         Mockito.when(userService.resetCode(user.getEmail())).thenThrow(new EmailNotFoundException(messageResponse));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/auth")
+        mockMvc.perform(MockMvcRequestBuilders.get("/auth/reset-code")
                         .param("email", user.getEmail()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.messages[0]").value(messageResponse));

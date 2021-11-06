@@ -110,7 +110,7 @@ public class AuthApi {
         }
     }
 
-    @GetMapping
+    @GetMapping("/reset-code")
     public ResponseEntity<String> resetCode(@RequestParam("email") String email) throws EmailNotFoundException {
         userService.resetCode(email);
         return ResponseEntity.ok("Code successfully reset ! Check your email again to confirm your account.");

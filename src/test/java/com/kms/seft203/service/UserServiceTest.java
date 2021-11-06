@@ -21,8 +21,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 /*
  * This class is defined for validating all fields of RegisterRequest class.
  * */
@@ -37,19 +35,24 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @Test
-    void testSave_whenSuccess_thenReturnRegisterRequest() throws EmailDuplicatedException {
-        User user = new User(1, "nvdloc@apcs.vn", "11Qaz123@@", "Loc Nguyen");
-        RegisterRequest userDto = new RegisterRequest();
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-        userDto.setFullName(user.getFullName());
+    void testSave_whenSuccess_thenReturnRegisterResponse() throws EmailDuplicatedException {
+        String email = "nvdloc@apcs.vn";
+        String password = "11Qaz123$%";
+        String fullName = "Loc Nguyen";
+        Boolean enabled = false;
+        String verificationCode = "123456789";
+        LocalDateTime dateCreated = LocalDateTime.now();
+        LocalDateTime dateResetCode = dateCreated;
+        RegisterRequest registerRequest = new RegisterRequest(email, password, fullName);
+        User user = new User(null, email, password, fullName, enabled, verificationCode, dateCreated, dateResetCode);
 
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 
-        RegisterResponse userResponse = userService.save(userDto);
-        assertEquals("nvdloc@apcs.vn", userResponse.getEmail());
-        assertEquals("11Qaz123@@", userResponse.getPassword());
-        assertEquals("Loc Nguyen", userResponse.getFullName());
+        RegisterResponse registerResponse = userService.save(registerRequest);
+        String expectedSubject = "This is a verification code to activate your account." +
+                " It will valid in 15 minutes: " + user.getVerificationCode();
+
+        Assert.assertEquals(expectedSubject, registerResponse.getSubject());
     }
 
     @Test

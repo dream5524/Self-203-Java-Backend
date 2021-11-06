@@ -66,9 +66,10 @@ public class UserServiceImp implements UserService {
         user.setDateCreated(LocalDateTime.now());
         user.setDateResetCode(user.getDateCreated());
 
-        RegisterResponse registerResponse = modelMapper.map(userRepository.save(user), RegisterResponse.class);
-        registerResponse.setSubject("This is a verification code to activate your account." +
-                " It will valid in 15 minutes: " + user.getVerificationCode());
+        User savedUser = userRepository.save(user);
+        String subject = "This is a verification code to activate your account." +
+                " It will valid in 15 minutes: " + savedUser.getVerificationCode();
+        RegisterResponse registerResponse = new RegisterResponse(subject);
         return registerResponse;
     }
 
@@ -104,7 +105,6 @@ public class UserServiceImp implements UserService {
         User user = optionalUser.get();
         user.setDateResetCode(LocalDateTime.now());
         user.setVerificationCode(RandomString.make(50));
-        userRepository.save(user);
-        return user;
+        return userRepository.save(user);
     }
 }
