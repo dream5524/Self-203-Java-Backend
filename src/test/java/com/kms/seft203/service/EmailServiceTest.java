@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class EmailServiceTest {
+class EmailServiceTest {
 
     @Autowired
     private EmailService emailService;
