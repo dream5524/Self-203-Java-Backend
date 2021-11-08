@@ -2,12 +2,10 @@ package com.kms.seft203.controller;
 
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.dto.RegisterResponse;
-import com.kms.seft203.exception.EmailDuplicatedException;
-import com.kms.seft203.service.EmailService;
-
 import com.kms.seft203.entity.User;
+import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
-
+import com.kms.seft203.service.EmailService;
 import com.kms.seft203.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

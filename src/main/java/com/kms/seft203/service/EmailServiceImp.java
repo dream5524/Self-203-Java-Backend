@@ -13,13 +13,16 @@ public class EmailServiceImp implements EmailService {
     private JavaMailSender javaMailSender;
 
     @Override
-    public void sendEmailToVerify(String receiverEmail, String subject, String text) {
-        log.info("sending activation email to {}, subject: '{}', message: '{}'", receiverEmail, subject, text);
+    public void sendEmailToVerify(String email, String activationLink) {
+        String subject = "Activate account";
+        String text = "Pls click the link below to activate your account:\n";
+        log.info("Sending activation email to {}, subject: '{}', message: '{}'", email, subject, activationLink);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(receiverEmail);
+        message.setTo(email);
         message.setSubject(subject);
-        message.setText(text);
+        message.setText(text + activationLink);
+
         javaMailSender.send(message);
     }
 }
