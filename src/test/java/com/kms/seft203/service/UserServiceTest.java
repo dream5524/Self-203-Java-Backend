@@ -1,5 +1,6 @@
 package com.kms.seft203.service;
 
+import com.kms.seft203.config.ApplicationPropertyConfig;
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
@@ -31,6 +32,9 @@ class UserServiceTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ApplicationPropertyConfig propertyConfig;
+
     @MockBean
     private UserRepository userRepository;
 
@@ -49,10 +53,11 @@ class UserServiceTest {
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 
         RegisterResponse registerResponse = userService.save(registerRequest);
-        String expectedSubject = "This is a verification code to activate your account." +
-                " It will valid in 15 minutes: " + user.getVerificationCode();
+        String expectedMessage = String.format("This verification code will valid in %d minutes", propertyConfig.getCodeExpirationMinute());
+        String expectedActivationLink = propertyConfig.getActivationBaseUrl() + verificationCode;
 
-        Assert.assertEquals(expectedSubject, registerResponse.getSubject());
+        Assert.assertEquals(expectedMessage, registerResponse.getMessage());
+        Assert.assertEquals(expectedActivationLink, registerResponse.getActivationLink());
     }
 
     @Test

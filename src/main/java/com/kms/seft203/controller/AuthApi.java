@@ -55,8 +55,9 @@ public class AuthApi {
     @PostMapping("/register")
 
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
-        RegisterResponse responseUser = userService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
+        RegisterResponse response = userService.save(request);
+        emailService.sendEmailToVerify(request.getEmail(), response.getActivationLink());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")

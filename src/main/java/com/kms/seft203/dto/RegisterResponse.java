@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterResponse {
-    private String subject;
+    private String message;
+    private String activationLink;
 }
