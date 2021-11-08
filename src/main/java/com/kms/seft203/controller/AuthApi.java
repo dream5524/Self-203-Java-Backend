@@ -12,6 +12,7 @@ import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.exception.VerificationCodeInValidException;
+import com.kms.seft203.service.EmailService;
 import com.kms.seft203.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,25 +40,20 @@ public class AuthApi {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EmailService emailService;
+
     /**
      * @throws EmailDuplicatedException Request format:
-     *                                  {
-     *                                  "email": "email@gmail.com",
-     *                                  "password": "my password",
-     *                                  "fullName": "Your Name"
-     *                                  }
-     *                                  Successful response format:
-     *                                  {
-     *                                  "email": "email@gmail.com",
-     *                                  "password": null,
-     *                                  "fullName": "Your Name"
-     *                                  }
-     *                                  <p>
-     *                                  This method is used to receive and handle the user register request.
+     * This method is used to receive and handle the user register request. When the new
+     * user is saved successfully, a verfication message will be sent to the registered
+     * receiver
+     *
      * @param: a request
      * @return: a DTO of user if the process succeeds
      */
     @PostMapping("/register")
+
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
         RegisterResponse responseUser = userService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);

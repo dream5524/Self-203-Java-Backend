@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS public."widget"
 -- ADD DATA -------------------------------------------------------------
 
 insert into public."user" (id, email, password, full_name, enabled) 
-values 
+values
 	(1, 	'anhquan@gmail.com',	'123456',	'Nguyễn Hoàng Anh Quân', 	true),
 	(2,		'sonct@gmail.com', 		'123456', 	'Cao Thái Sơn',				true),
 	(3, 	'vietnq@gmail.com',		'123456',	'Nguyễn Quốc Việt',			true),

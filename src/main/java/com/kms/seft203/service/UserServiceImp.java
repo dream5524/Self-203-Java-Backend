@@ -61,6 +61,7 @@ public class UserServiceImp implements UserService {
         }
         User user = modelMapper.map(userFromReq, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         user.setEnabled(false);
         user.setVerificationCode(RandomString.make(50));
         user.setDateCreated(LocalDateTime.now());

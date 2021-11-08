@@ -73,6 +73,7 @@ public class CustomExceptionHandler {
         log.error(MODULE_NAME + ": " + Arrays.toString(e.getStackTrace()));
         return new ErrorResponse(e.getMessage());
     }
+
     @ExceptionHandler(VerificationCodeInValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse verificationCodeInValidException(VerificationCodeInValidException e){

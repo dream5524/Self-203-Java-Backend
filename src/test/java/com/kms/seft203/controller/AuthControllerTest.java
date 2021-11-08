@@ -5,6 +5,7 @@ import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
+import com.kms.seft203.service.EmailService;
 import com.kms.seft203.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,7 +41,11 @@ class AuthControllerTest extends ControllerTest {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private EmailService emailService;
+
     @Test
+
     void testRegister_whenSuccess_thenReturnStatusIsCreated () throws Exception {
         String subject = "Please click the link below to verify your registration.\" +\n" +
                 "                \" This code will expire in 15 minutes.";
@@ -101,6 +106,7 @@ class AuthControllerTest extends ControllerTest {
         String messageResponse = "Account was verified successfully !";
 
         Mockito.when(userService.verifyAccount(verificationCode)).thenReturn(true);
+
 
         mockMvc.perform(MockMvcRequestBuilders.get("/auth/verify")
                         .param("code", verificationCode))
