@@ -1,5 +1,6 @@
 package com.kms.seft203.service;
 
+import com.kms.seft203.config.ApplicationPropertyConfig;
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
@@ -11,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +39,8 @@ public class UserServiceImp implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static final long CODE_EXPIRATION_MINUTE = 15;
-    private static final String ACTIVATION_BASE_URL = "http://localhost:8000/auth/verify?code=";
+    @Autowired
+    private ApplicationPropertyConfig propertyConfig;
 
     /**
      * This method is implemented to save a RegisterRequest received from Controller
@@ -69,8 +73,8 @@ public class UserServiceImp implements UserService {
         user.setDateResetCode(user.getDateCreated());
 
         User savedUser = userRepository.save(user);
-        String message = String.format("This verification code will valid in %d minutes", CODE_EXPIRATION_MINUTE);
-        String activationLink = ACTIVATION_BASE_URL + savedUser.getVerificationCode();
+        String message = String.format("This verification code will valid in %d minutes", propertyConfig.getCodeExpirationMinute());
+        String activationLink = propertyConfig.getActivationBaseUrl() + savedUser.getVerificationCode();
         return new RegisterResponse(message, activationLink);
     }
 
@@ -87,7 +91,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public Boolean checkValidationCode(User user) {
-        LocalDateTime expirationTime = user.getDateResetCode().plusSeconds(CODE_EXPIRATION_MINUTE * 60);
+        LocalDateTime expirationTime = user.getDateResetCode().plusSeconds(propertyConfig.getCodeExpirationMinute() * 60);
         LocalDateTime currentTime = LocalDateTime.now();
         if (currentTime.isAfter(expirationTime)) {
             return false;
