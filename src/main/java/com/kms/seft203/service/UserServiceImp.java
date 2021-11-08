@@ -35,7 +35,7 @@ public class UserServiceImp implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static final Integer CODE_EXPIRATION_MINUTE = 15;
+    private static final long CODE_EXPIRATION_MINUTE = 15;
     private static final String ACTIVATION_BASE_URL = "http://localhost:8000/auth/verify?code=";
 
     /**
