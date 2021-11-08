@@ -49,10 +49,11 @@ class UserServiceTest {
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 
         RegisterResponse registerResponse = userService.save(registerRequest);
-        String expectedSubject = "This is a verification code to activate your account." +
-                " It will valid in 15 minutes: " + user.getVerificationCode();
+        String expectedMessage = String.format("This verification code will valid in 15 minutes");
+        String expectedActivationLink = "http://localhost:8000/auth/verify?code=" + verificationCode;
 
-        Assert.assertEquals(expectedSubject, registerResponse.getSubject());
+        Assert.assertEquals(expectedMessage, registerResponse.getMessage());
+        Assert.assertEquals(expectedActivationLink, registerResponse.getActivationLink());
     }
 
     @Test

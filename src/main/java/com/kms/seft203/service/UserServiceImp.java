@@ -35,7 +35,8 @@ public class UserServiceImp implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static final int CODE_EXPIRATION_TIME = 15 * 60;
+    private static final Integer CODE_EXPIRATION_MINUTE = 15;
+    private static final String ACTIVATION_BASE_URL = "http://localhost:8000/auth/verify?code=";
 
     /**
      * This method is implemented to save a RegisterRequest received from Controller
@@ -68,9 +69,9 @@ public class UserServiceImp implements UserService {
         user.setDateResetCode(user.getDateCreated());
 
         User savedUser = userRepository.save(user);
-        String subject = "This is a verification code to activate your account." +
-                " It will valid in 15 minutes: " + savedUser.getVerificationCode();
-        return new RegisterResponse(subject);
+        String message = String.format("This verification code will valid in %d minutes", CODE_EXPIRATION_MINUTE);
+        String activationLink = ACTIVATION_BASE_URL + savedUser.getVerificationCode();
+        return new RegisterResponse(message, activationLink);
     }
 
     @Transactional
@@ -86,7 +87,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public Boolean checkValidationCode(User user) {
-        LocalDateTime expirationTime = user.getDateResetCode().plusSeconds(CODE_EXPIRATION_TIME);
+        LocalDateTime expirationTime = user.getDateResetCode().plusSeconds(CODE_EXPIRATION_MINUTE * 60);
         LocalDateTime currentTime = LocalDateTime.now();
         if (currentTime.isAfter(expirationTime)) {
             return false;

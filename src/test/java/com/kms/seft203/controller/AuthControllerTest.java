@@ -47,13 +47,14 @@ class AuthControllerTest extends ControllerTest {
     @Test
 
     void testRegister_whenSuccess_thenReturnStatusIsCreated () throws Exception {
-        String subject = "Please click the link below to verify your registration.\" +\n" +
-                "                \" This code will expire in 15 minutes.";
+        String message = "Please click the link below to verify your registration." +
+                "This code will expire in 15 minutes.";
         String email = "nvdloc@apcs.vn";
         String password = "123Abcd!#ab";
         String fullName = "Loc Nguyen";
+        String activationLink = "http://localhost:8000/verify?code=12345";
         RegisterRequest registerRequest = new RegisterRequest(email, password, fullName);
-        RegisterResponse registerResponse = new RegisterResponse(subject);
+        RegisterResponse registerResponse = new RegisterResponse(message, activationLink);
 
         Mockito.when(userService.save(Mockito.any())).thenReturn(registerResponse);
 
@@ -61,7 +62,8 @@ class AuthControllerTest extends ControllerTest {
                         .content(convertObjectToJsonString(registerRequest))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.subject").value(subject));
+                .andExpect(jsonPath("$.message").value(message))
+                .andExpect(jsonPath("$.activationLink").value(activationLink));
     }
 
     @Test
