@@ -13,4 +13,10 @@ public class ApplicationPropertyConfig {
 
     @Value("${spring.variable.code-expiration-minute}")
     private long codeExpirationMinute;
+
+    @Value("${spring.mail.username}")
+    private String email;
+
+    @Value("${spring.mail.password}")
+    private String password;
 }
