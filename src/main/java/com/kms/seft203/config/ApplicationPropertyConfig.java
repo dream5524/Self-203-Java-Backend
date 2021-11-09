@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter @Setter
 public class ApplicationPropertyConfig {
-    @Value("${spring.variable.activation_base_url}")
+    @Value("${spring.variable.activation-base-url}")
     private String activationBaseUrl;
 
-    @Value("${spring.variable.code_expiration_minute}")
+    @Value("${spring.variable.code-expiration-minute}")
     private long codeExpirationMinute;
 }
