@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -124,7 +125,7 @@ class TaskControllerTest extends ControllerTest {
     }
 
     @Test
-    void testUpdatetaskById_whenTaskNotFound_thenReturnStatusNotFound() throws Exception {
+    void testUpdateTaskById_whenTaskNotFound_thenReturnStatusNotFound() throws Exception {
         String description = "Update project to fix memory leaking";
         Boolean isCompleted = false;
         Integer id = 10;
@@ -138,5 +139,23 @@ class TaskControllerTest extends ControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.messages[0]").value(message));
+    }
+
+    @Test
+    void countByFieldTest_WhenSuccess_ThenReturnStatusOk() throws Exception {
+        String field = "isCompleted";
+
+        List<String> countByFieldList = Arrays.asList(
+                "true: 5",
+                "false: 4"
+        );
+
+        Mockito.when(taskService.countByField(field)).thenReturn(countByFieldList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/tasks/_countBy/{field}", "isCompleted"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(".size()").value(2))
+                .andExpect(jsonPath(".[0]").value("true: 5"))
+                .andExpect(jsonPath(".[1]").value("false: 4"));
     }
 }

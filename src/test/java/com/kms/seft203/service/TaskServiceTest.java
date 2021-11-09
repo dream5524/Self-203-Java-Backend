@@ -141,4 +141,21 @@ class TaskServiceTest {
         String message = "Error occurs! No task found for id " + id;
         Assert.assertEquals(message, exception.getMessage());
     }
+
+    @Test
+    void countByFieldTest_WhenSuccess_ThenReturnStatusOk(){
+        String field = "isCompleted";
+
+        List<String> countByIsCompletedExpectedList = Arrays.asList(
+                "true: 5",
+                "false: 4"
+        );
+
+        Mockito.when(taskRepository.countByField(field)).thenReturn(countByIsCompletedExpectedList);
+
+        List<String> countByIsCompletedActualList = taskService.countByField(field);
+
+        Assert.assertEquals(2, countByIsCompletedActualList.size());
+        Assert.assertEquals(countByIsCompletedExpectedList, countByIsCompletedActualList);
+    }
 }

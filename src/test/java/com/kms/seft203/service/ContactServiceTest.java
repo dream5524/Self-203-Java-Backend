@@ -132,4 +132,23 @@ class ContactServiceTest {
 
         Assert.assertEquals(message, exception.getMessage());
     }
+    @Test
+    void countByFieldTest_WhenSuccess_ThenReturnCountByTitleList(){
+        String field = "title";
+        List<String> countByTitleExpectedList = Arrays.asList(
+                "Developer: 5",
+                "Business Analyst: 4",
+                "Project Manager: 1",
+                "Product Owner: 1",
+                "Scrum Master: 1",
+                "Tester: 2"
+        );
+
+        Mockito.when(contactRepository.countByField(field)).thenReturn(countByTitleExpectedList);
+
+        List<String> countByTitleActualList = contactService.countByField(field);
+
+        Assert.assertEquals(6, countByTitleActualList.size());
+        Assert.assertEquals(countByTitleExpectedList, countByTitleActualList);
+    }
 }

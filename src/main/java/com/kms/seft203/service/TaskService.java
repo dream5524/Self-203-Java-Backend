@@ -13,4 +13,5 @@ public interface TaskService {
     TaskResponseDto save(TaskCreateDto taskCreateDto) throws ContactNotFoundException;
     List<TaskResponseDto> getAllByFilter(Integer id, String email, String status, Integer page, Integer size);
     TaskResponseDto updateById(TaskUpdateByIdDto taskUpdateByIdDto) throws TaskNotFoundException, ServerUnknownException;
+    List<String> countByField(String field);
 }

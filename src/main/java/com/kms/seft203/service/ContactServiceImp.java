@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 /*
@@ -67,6 +68,15 @@ public class ContactServiceImp implements ContactService {
         Page<Contact> contactFromDb = contactRepository.findAllByInputField(id, fullName, title, pageable);
         return contactFromDb.stream().map(contact -> modelMapper.map(contact, ContactResponseDto.class))
                 .collect(Collectors.toList());
+    }
+
+    /*
+  Count by field in a collection:
+      - Number of each title (EM, TE, SE, BA) in Contact collection
+   */
+    @Override
+    public List<String> countByField(String field) {
+        return contactRepository.countByField(field);
     }
 
     @Override

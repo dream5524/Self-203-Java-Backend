@@ -106,4 +106,12 @@ public class TaskServiceImp implements TaskService {
         }
         return modelMapper.map(savedTask.get(), TaskResponseDto.class);
     }
+
+    /* Count by field in a collection:
+      - Number of completed, not completed tasks in Task collection
+   */
+    @Override
+    public List<String> countByField(String field) {
+        return taskRepository.countByField(field);
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +24,7 @@ public interface ContactRepository extends JpaRepository<Contact, Integer>, Pagi
             " and   (CONCAT(c.firstName, ' ' , c.lastName) like :fullName or :fullName is null)" +
             " and   (c.title = :title or :title is null)")
     Page<Contact> findAllByInputField(Integer id, String fullName, String title, Pageable pageable);
+
+    @Query("select CONCAT(c.title, ': ' ,count(c.title)) from Contact c group by c.title ")
+    List<String> countByField(String field);
 }
