@@ -6,7 +6,6 @@ import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
-import com.kms.seft203.exception.TaskNotFoundException;
 import com.kms.seft203.exception.VerificationCodeInValidException;
 import com.kms.seft203.repository.UserRepository;
 import net.bytebuddy.utility.RandomString;
