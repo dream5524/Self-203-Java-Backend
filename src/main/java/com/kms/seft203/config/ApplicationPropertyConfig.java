@@ -16,7 +16,4 @@ public class ApplicationPropertyConfig {
 
     @Value("${spring.mail.username}")
     private String email;
-
-    @Value("${spring.mail.password}")
-    private String password;
 }
