@@ -25,6 +25,6 @@ public interface ContactRepository extends JpaRepository<Contact, Integer>, Pagi
             " and   (c.title = :title or :title is null)")
     Page<Contact> findAllByInputField(Integer id, String fullName, String title, Pageable pageable);
 
-    @Query("select CONCAT(c.title, ': ' ,count(c.title)) from Contact c group by c.title ")
-    List<String> countByField(String field);
+    @Query("select new map(c.title, count(c)) from Contact c group by c.title")
+    List<Object> countByTitle();
 }

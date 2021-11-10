@@ -6,7 +6,6 @@ import com.kms.seft203.exception.ContactNotFoundException;
 import com.kms.seft203.exception.EmailNotFoundException;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ContactService {
     ContactRequestDto addContact(ContactRequestDto contactRequestDTO) throws EmailNotFoundException;
@@ -15,5 +14,5 @@ public interface ContactService {
 
     List<ContactResponseDto> getAllByFilter(Integer id, String fullName, String title, Integer page, Integer size);
 
-    List<String> countByField(String field);
+    List<Object> countByTitle();
 }

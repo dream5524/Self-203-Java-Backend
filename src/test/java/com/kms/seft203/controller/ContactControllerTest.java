@@ -206,29 +206,29 @@ class ContactControllerTest extends ControllerTest {
                 .andExpect(jsonPath("$.messages[0]").value(message));
     }
 
-    @Test
-    void countByFieldTest_WhenSuccess_ThenReturnStatusOk() throws Exception {
-        String field = "title";
-
-        List<String> countByFieldList = Arrays.asList(
-                "Developer: 5",
-                "Business Analyst: 4",
-                "Project Manager: 1",
-                "Product Owner: 1",
-                "Scrum Master: 1",
-                "Tester: 2"
-        );
-
-        Mockito.when(contactService.countByField(field)).thenReturn(countByFieldList);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/contacts/_countBy/{field}", "title"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath(".size()").value(6))
-                .andExpect(jsonPath(".[0]").value("Developer: 5"))
-                .andExpect(jsonPath(".[1]").value("Business Analyst: 4"))
-                .andExpect(jsonPath(".[2]").value("Project Manager: 1"))
-                .andExpect(jsonPath(".[3]").value("Product Owner: 1"))
-                .andExpect(jsonPath(".[4]").value("Scrum Master: 1"))
-                .andExpect(jsonPath(".[5]").value("Tester: 2"));
-    }
+//    @Test
+//    void countByFieldTest_WhenSuccess_ThenReturnStatusOk() throws Exception {
+//        String field = "title";
+//
+//        List<String> countByFieldList = Arrays.asList(
+//                "Developer: 5",
+//                "Business Analyst: 4",
+//                "Project Manager: 1",
+//                "Product Owner: 1",
+//                "Scrum Master: 1",
+//                "Tester: 2"
+//        );
+//
+//        Mockito.when(contactService.countByField(field)).thenReturn(countByFieldList);
+//
+//        mockMvc.perform(MockMvcRequestBuilders.get("/contacts/_countBy/{field}", "title"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath(".size()").value(6))
+//                .andExpect(jsonPath(".[0]").value("Developer: 5"))
+//                .andExpect(jsonPath(".[1]").value("Business Analyst: 4"))
+//                .andExpect(jsonPath(".[2]").value("Project Manager: 1"))
+//                .andExpect(jsonPath(".[3]").value("Product Owner: 1"))
+//                .andExpect(jsonPath(".[4]").value("Scrum Master: 1"))
+//                .andExpect(jsonPath(".[5]").value("Tester: 2"));
+//    }
 }
