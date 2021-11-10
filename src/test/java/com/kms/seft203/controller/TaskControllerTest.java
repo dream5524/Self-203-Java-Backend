@@ -124,7 +124,7 @@ class TaskControllerTest extends ControllerTest {
     }
 
     @Test
-    void testUpdatetaskById_whenTaskNotFound_thenReturnStatusNotFound() throws Exception {
+    void testUpdateTaskById_whenTaskNotFound_thenReturnStatusNotFound() throws Exception {
         String description = "Update project to fix memory leaking";
         Boolean isCompleted = false;
         Integer id = 10;
