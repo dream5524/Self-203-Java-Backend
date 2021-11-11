@@ -120,10 +120,12 @@ class TaskControllerTest extends ControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.put("/tasks")
                         .content(convertObjectToJsonString(taskUpdateByIdDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value(description))
                 .andExpect(jsonPath("$.isCompleted").value(isCompleted))
-                .andExpect(jsonPath("$.id").value(id));
+                .andExpect(jsonPath("$.id").value(id))
+                .andReturn();
     }
 
     @Test
@@ -139,7 +141,9 @@ class TaskControllerTest extends ControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.put("/tasks")
                         .content(convertObjectToJsonString(taskUpdateByIdDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.messages[0]").value(message));
+                .andExpect(jsonPath("$.messages[0]").value(message))
+                .andReturn();
     }
 }
