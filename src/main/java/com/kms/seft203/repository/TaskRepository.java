@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TaskRepository extends JpaRepository<Task, Integer>, PagingAndSortingRepository<Task, Integer>, JpaSpecificationExecutor<Task> {
 
@@ -18,6 +19,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, PagingAndS
             "and (:isCompleted is null or task.isCompleted is :isCompleted )")
     Page<Task> findAllByInputField(Integer id, String email, Boolean isCompleted, Pageable pageable);
 
-    @Query("select CONCAT(t.isCompleted,': ' ,count(t.isCompleted)) from Task t group by t.isCompleted")
-    List<String> countByField(String field);
+    @Query("select t.isCompleted as completed, count(t) as count from Task t group by t.isCompleted")
+    List<Map<Object, Object>> countByIsCompleted();
 }

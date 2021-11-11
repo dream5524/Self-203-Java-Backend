@@ -10,12 +10,12 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
 @EnableSpringDataWebSupport
 public interface ContactRepository extends JpaRepository<Contact, Integer>, PagingAndSortingRepository<Contact, Integer> {
-
     @Query("select contact from Contact contact where contact.user.email = ?1")
     Optional<Contact> findByEmail(String email);
 
@@ -25,6 +25,6 @@ public interface ContactRepository extends JpaRepository<Contact, Integer>, Pagi
             " and   (c.title = :title or :title is null)")
     Page<Contact> findAllByInputField(Integer id, String fullName, String title, Pageable pageable);
 
-    @Query("select new map(c.title, count(c)) from Contact c group by c.title")
-    List<Object> countByTitle();
+    @Query("select new map(c.title as title, count(c) as count) from Contact c group by c.title")
+    List<Map<String, Object>> countByTitle();
 }

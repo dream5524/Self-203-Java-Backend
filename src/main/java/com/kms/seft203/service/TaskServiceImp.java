@@ -16,9 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -111,7 +112,12 @@ public class TaskServiceImp implements TaskService {
       - Number of completed, not completed tasks in Task collection
    */
     @Override
-    public List<String> countByField(String field) {
-        return taskRepository.countByField(field);
+    public Map<Object, Object> countByIsCompleted() {
+        List<Map<Object, Object>> objectMapList = taskRepository.countByIsCompleted();
+        Map<Object, Object> objectMap = new HashMap<>();
+        for (Map map : objectMapList){
+            objectMap.put(map.get("completed"), map.get("count"));
+        }
+        return objectMap;
     }
 }

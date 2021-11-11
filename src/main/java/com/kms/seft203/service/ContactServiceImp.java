@@ -16,7 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 /*
@@ -74,8 +76,13 @@ public class ContactServiceImp implements ContactService {
       - Number of each title (EM, TE, SE, BA) in Contact collection
    */
     @Override
-    public List<Object> countByTitle() {
-        return contactRepository.countByTitle();
+    public Map<String, Object> countByTitle() {
+        List<Map<String, Object>> objectMapList = contactRepository.countByTitle();
+        Map<String, Object> objectMap = new HashMap<>();
+        for (Map map : objectMapList) {
+            objectMap.put((String) map.get("title"), map.get("count"));
+        }
+        return objectMap;
     }
 
     @Override

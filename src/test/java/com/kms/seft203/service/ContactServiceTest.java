@@ -24,7 +24,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -132,23 +134,25 @@ class ContactServiceTest {
 
         Assert.assertEquals(message, exception.getMessage());
     }
-//    @Test
-//    void countByFieldTest_WhenSuccess_ThenReturnCountByTitleList(){
-//        String field = "title";
-//        List<String> countByTitleExpectedList = Arrays.asList(
-//                "Developer: 5",
-//                "Business Analyst: 4",
-//                "Project Manager: 1",
-//                "Product Owner: 1",
-//                "Scrum Master: 1",
-//                "Tester: 2"
-//        );
-//
-//        Mockito.when(contactRepository.countByField(field)).thenReturn(countByTitleExpectedList);
-//
-//        List<String> countByTitleActualList = contactService.countByField(field);
-//
-//        Assert.assertEquals(6, countByTitleActualList.size());
-//        Assert.assertEquals(countByTitleExpectedList, countByTitleActualList);
-//    }
+
+    @Test
+    void countByTitleTest_WhenSuccess_ThenReturnCountByTitleList() {
+        Map<String, Object> objectMap1 = new HashMap<>();
+        objectMap1.put("title", "Developer");
+        objectMap1.put("count", 1);
+
+        Map<String, Object> objectMap2 = new HashMap<>();
+        objectMap2.put("title", "BA");
+        objectMap2.put("count", 3);
+
+        List<Map<String, Object>> objectList = Arrays.asList(objectMap1, objectMap2);
+
+        Mockito.when(contactRepository.countByTitle()).thenReturn(objectList);
+
+        Map<String, Object> actualObjectMap = contactService.countByTitle();
+
+        Assert.assertNotNull(actualObjectMap);
+        Assert.assertEquals(1, actualObjectMap.get("Developer"));
+        Assert.assertEquals(3, actualObjectMap.get("BA"));
+    }
 }

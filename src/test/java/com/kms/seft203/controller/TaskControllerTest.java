@@ -19,13 +19,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -100,8 +103,8 @@ class TaskControllerTest extends ControllerTest {
         TaskCreateDto taskCreateDto = new TaskCreateDto(description, isCompleted, email);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/tasks")
-                .content(convertObjectToJsonString(taskCreateDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(taskCreateDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
@@ -116,8 +119,8 @@ class TaskControllerTest extends ControllerTest {
         Mockito.when(taskService.updateById(taskUpdateByIdDto)).thenReturn(taskResponseDto);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/tasks")
-                .content(convertObjectToJsonString(taskUpdateByIdDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(taskUpdateByIdDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value(description))
                 .andExpect(jsonPath("$.isCompleted").value(isCompleted))
@@ -135,27 +138,25 @@ class TaskControllerTest extends ControllerTest {
         Mockito.when(taskService.updateById(taskUpdateByIdDto)).thenThrow(new TaskNotFoundException(message));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/tasks")
-                .content(convertObjectToJsonString(taskUpdateByIdDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(taskUpdateByIdDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.messages[0]").value(message));
     }
 
     @Test
-    void countByFieldTest_WhenSuccess_ThenReturnStatusOk() throws Exception {
-        String field = "isCompleted";
+    void countByIsCompletedTest_WhenSuccess_ThenReturnStatusOk() throws Exception {
+        Map<Object, Object> objectMap = new HashMap<>();
+        objectMap.put(true, 5);
 
-        List<String> countByFieldList = Arrays.asList(
-                "true: 5",
-                "false: 4"
-        );
+        Mockito.when(taskService.countByIsCompleted()).thenReturn(objectMap);
 
-        Mockito.when(taskService.countByField(field)).thenReturn(countByFieldList);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/tasks/_countBy/{field}", "isCompleted"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/tasks/_countBy")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(".size()").value(2))
-                .andExpect(jsonPath(".[0]").value("true: 5"))
-                .andExpect(jsonPath(".[1]").value("false: 4"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.true").value(5))
+                .andReturn();
     }
 }

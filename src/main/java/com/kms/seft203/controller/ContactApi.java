@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/contacts")
@@ -58,8 +58,8 @@ public class ContactApi {
     }
 
     @GetMapping("_countBy")
-    public List<Object> countByTitle(){
-        return contactService.countByTitle();
+    public ResponseEntity<Map<String, Object>> countByTitle(){
+        return ResponseEntity.ok().body(contactService.countByTitle());
     }
 }
 
