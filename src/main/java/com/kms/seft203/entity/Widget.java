@@ -37,7 +37,7 @@ public class Widget {
     private Integer minHeight;
 
     @ManyToOne
-    @JoinColumn(name = "dashboard_id", referencedColumnName = "id")
+    @JoinColumn(name = "dashboard_id")
     private Dashboard dashboard;
 
     @Type(type = "jsonb")

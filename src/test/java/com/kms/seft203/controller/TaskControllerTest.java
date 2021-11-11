@@ -25,6 +25,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -99,9 +100,11 @@ class TaskControllerTest extends ControllerTest {
         TaskCreateDto taskCreateDto = new TaskCreateDto(description, isCompleted, email);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/tasks")
-                        .content(convertObjectToJsonString(taskCreateDto))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .content(convertObjectToJsonString(taskCreateDto))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 
     @Test
