@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -99,8 +98,8 @@ class TaskControllerTest extends ControllerTest {
         TaskCreateDto taskCreateDto = new TaskCreateDto(description, isCompleted, email);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/tasks")
-                .content(convertObjectToJsonString(taskCreateDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(taskCreateDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
@@ -115,8 +114,8 @@ class TaskControllerTest extends ControllerTest {
         Mockito.when(taskService.updateById(taskUpdateByIdDto)).thenReturn(taskResponseDto);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/tasks")
-                .content(convertObjectToJsonString(taskUpdateByIdDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(taskUpdateByIdDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value(description))
                 .andExpect(jsonPath("$.isCompleted").value(isCompleted))
@@ -134,8 +133,8 @@ class TaskControllerTest extends ControllerTest {
         Mockito.when(taskService.updateById(taskUpdateByIdDto)).thenThrow(new TaskNotFoundException(message));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/tasks")
-                .content(convertObjectToJsonString(taskUpdateByIdDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(taskUpdateByIdDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.messages[0]").value(message));
     }
