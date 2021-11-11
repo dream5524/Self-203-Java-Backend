@@ -105,7 +105,9 @@ class TaskControllerTest extends ControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/tasks")
                         .content(convertObjectToJsonString(taskCreateDto))
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 
     @Test
