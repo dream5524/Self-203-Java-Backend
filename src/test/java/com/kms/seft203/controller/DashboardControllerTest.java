@@ -140,7 +140,7 @@ class DashboardControllerTest extends ControllerTest {
     }
 
     @Test
-    void updateDashboardByIdTest_whenDashboardNotFound_thenReturnDashboardNotFoundException() throws Exception {
+    void updateDashboardByIdTest_whenDashboardNotFound_thenReturnStatusNotFound() throws Exception {
         Integer id = 1;
         String title = "IT Operation";
         String layoutType = "Desktop";

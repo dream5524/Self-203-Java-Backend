@@ -25,6 +25,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -101,7 +102,9 @@ class TaskControllerTest extends ControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/tasks")
                 .content(convertObjectToJsonString(taskCreateDto))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 
     @Test
@@ -115,12 +118,14 @@ class TaskControllerTest extends ControllerTest {
         Mockito.when(taskService.updateById(taskUpdateByIdDto)).thenReturn(taskResponseDto);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/tasks")
-                .content(convertObjectToJsonString(taskUpdateByIdDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(taskUpdateByIdDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value(description))
                 .andExpect(jsonPath("$.isCompleted").value(isCompleted))
-                .andExpect(jsonPath("$.id").value(id));
+                .andExpect(jsonPath("$.id").value(id))
+                .andReturn();
     }
 
     @Test
@@ -134,9 +139,11 @@ class TaskControllerTest extends ControllerTest {
         Mockito.when(taskService.updateById(taskUpdateByIdDto)).thenThrow(new TaskNotFoundException(message));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/tasks")
-                .content(convertObjectToJsonString(taskUpdateByIdDto))
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                        .content(convertObjectToJsonString(taskUpdateByIdDto))
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.messages[0]").value(message));
+                .andExpect(jsonPath("$.messages[0]").value(message))
+                .andReturn();
     }
 }
