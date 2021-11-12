@@ -19,12 +19,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -129,7 +130,7 @@ class TaskControllerTest extends ControllerTest {
     }
 
     @Test
-    void testUpdatetaskById_whenTaskNotFound_thenReturnStatusNotFound() throws Exception {
+    void testUpdateTaskById_whenTaskNotFound_thenReturnStatusNotFound() throws Exception {
         String description = "Update project to fix memory leaking";
         Boolean isCompleted = false;
         Integer id = 10;
@@ -144,6 +145,22 @@ class TaskControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.messages[0]").value(message))
+                .andReturn();
+    }
+
+    @Test
+    void countByStatusTest_WhenSuccess_ThenReturnStatusOk() throws Exception {
+        Map<Object, Object> objectMap = new HashMap<>();
+        objectMap.put(true, 5);
+
+        Mockito.when(taskService.countByStatus()).thenReturn(objectMap);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/tasks/countBy")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.true").value(5))
                 .andReturn();
     }
 }

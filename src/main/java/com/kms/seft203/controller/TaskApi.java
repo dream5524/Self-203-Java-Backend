@@ -10,6 +10,7 @@ import com.kms.seft203.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tasks")
@@ -84,5 +86,10 @@ public class TaskApi {
     public ResponseEntity<TaskResponseDto> updateTaskById(@RequestBody @Valid TaskUpdateByIdDto taskUpdateByIdDto) throws TaskNotFoundException, ServerUnknownException {
 
         return ResponseEntity.status(HttpStatus.OK).body(taskService.updateById(taskUpdateByIdDto));
+    }
+
+    @GetMapping("countBy")
+    public ResponseEntity<Map<Object, Object>> countByStatus(){
+        return ResponseEntity.ok().body(taskService.countByStatus());
     }
 }

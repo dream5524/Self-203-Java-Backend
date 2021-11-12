@@ -24,7 +24,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -131,5 +133,26 @@ class ContactServiceTest {
                 Mockito.when(contactService.updateByEmail(contactRequestDto)));
 
         Assert.assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    void countByTitleTest_WhenSuccess_ThenReturnCountByTitleList() {
+        Map<String, Object> objectMap1 = new HashMap<>();
+        objectMap1.put("title", "Developer");
+        objectMap1.put("count", 1);
+
+        Map<String, Object> objectMap2 = new HashMap<>();
+        objectMap2.put("title", "BA");
+        objectMap2.put("count", 3);
+
+        List<Map<String, Object>> objectList = Arrays.asList(objectMap1, objectMap2);
+
+        Mockito.when(contactRepository.countByTitle()).thenReturn(objectList);
+
+        Map<String, Object> actualObjectMap = contactService.countByTitle();
+
+        Assert.assertNotNull(actualObjectMap);
+        Assert.assertEquals(1, actualObjectMap.get("Developer"));
+        Assert.assertEquals(3, actualObjectMap.get("BA"));
     }
 }

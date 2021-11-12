@@ -24,10 +24,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @AutoConfigureMockMvc(addFilters = false)
@@ -140,5 +141,20 @@ class TaskServiceTest {
         });
         String message = "Error occurs! No task found for id " + id;
         Assert.assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    void countByStatusTest_WhenSuccess_ThenReturnStatusOk(){
+        Map<Object, Object> objectMap = new HashMap<>();
+        objectMap.put("completed", false);
+        objectMap.put("count", 5);
+
+        List<Map<Object, Object>> objectList = Arrays.asList(objectMap);
+        Mockito.when(taskRepository.countByStatus()).thenReturn(objectList);
+
+        Map<Object, Object> actualObjectMap = taskService.countByStatus();
+
+        Assert.assertNotNull(actualObjectMap);
+        Assert.assertEquals(5, actualObjectMap.get(false));
     }
 }

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,7 +21,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -201,5 +204,20 @@ class ContactControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.messages[0]").value(message));
+    }
+
+    @Test
+    void countByTitleTest_WhenSuccess_ThenReturnStatusOk() throws Exception {
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("Developer", 5);
+        objectMap.put("Project Manager", 1);
+
+        Mockito.when(contactService.countByTitle()).thenReturn(objectMap);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/contacts/countBy"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.Developer").value(5))
+                .andExpect(jsonPath("$.['Project Manager']").value(1))
+                .andReturn();
     }
 }
