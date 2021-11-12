@@ -20,5 +20,5 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, PagingAndS
     Page<Task> findAllByInputField(Integer id, String email, Boolean isCompleted, Pageable pageable);
 
     @Query("select t.isCompleted as completed, count(t) as count from Task t group by t.isCompleted")
-    List<Map<Object, Object>> countByIsCompleted();
+    List<Map<Object, Object>> countByStatus();
 }

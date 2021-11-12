@@ -57,7 +57,7 @@ public class ContactApi {
         return ResponseEntity.ok("The information were successful updated !");
     }
 
-    @GetMapping("_countBy")
+    @GetMapping("countBy")
     public ResponseEntity<Map<String, Object>> countByTitle(){
         return ResponseEntity.ok().body(contactService.countByTitle());
     }

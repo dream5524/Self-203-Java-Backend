@@ -214,7 +214,7 @@ class ContactControllerTest extends ControllerTest {
 
         Mockito.when(contactService.countByTitle()).thenReturn(objectMap);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/contacts/_countBy"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/contacts/countBy"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.Developer").value(5))
                 .andExpect(jsonPath("$.['Project Manager']").value(1))

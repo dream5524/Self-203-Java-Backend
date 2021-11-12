@@ -88,8 +88,8 @@ public class TaskApi {
         return ResponseEntity.status(HttpStatus.OK).body(taskService.updateById(taskUpdateByIdDto));
     }
 
-    @GetMapping("_countBy")
-    public ResponseEntity<Map<Object, Object>> countByIsCompleted(){
-        return ResponseEntity.ok().body(taskService.countByIsCompleted());
+    @GetMapping("countBy")
+    public ResponseEntity<Map<Object, Object>> countByStatus(){
+        return ResponseEntity.ok().body(taskService.countByStatus());
     }
 }

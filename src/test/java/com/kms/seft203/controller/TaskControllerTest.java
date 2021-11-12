@@ -151,13 +151,13 @@ class TaskControllerTest extends ControllerTest {
     }
 
     @Test
-    void countByIsCompletedTest_WhenSuccess_ThenReturnStatusOk() throws Exception {
+    void countByStatusTest_WhenSuccess_ThenReturnStatusOk() throws Exception {
         Map<Object, Object> objectMap = new HashMap<>();
         objectMap.put(true, 5);
 
-        Mockito.when(taskService.countByIsCompleted()).thenReturn(objectMap);
+        Mockito.when(taskService.countByStatus()).thenReturn(objectMap);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/tasks/_countBy")
+        mockMvc.perform(MockMvcRequestBuilders.get("/tasks/countBy")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

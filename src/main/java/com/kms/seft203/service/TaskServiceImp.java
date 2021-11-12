@@ -112,7 +112,7 @@ public class TaskServiceImp implements TaskService {
       - Number of completed, not completed tasks in Task collection
    */
     @Override
-    public Map<Object, Object> countByIsCompleted() {
+    public Map<Object, Object> countByStatus() {
         List<Map<Object, Object>> objectMapList = taskRepository.countByIsCompleted();
         Map<Object, Object> objectMap = new HashMap<>();
         for (Map map : objectMapList){

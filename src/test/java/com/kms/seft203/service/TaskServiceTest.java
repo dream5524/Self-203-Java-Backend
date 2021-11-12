@@ -144,15 +144,15 @@ class TaskServiceTest {
     }
 
     @Test
-    void countByFieldTest_WhenSuccess_ThenReturnStatusOk(){
+    void countByStatusTest_WhenSuccess_ThenReturnStatusOk(){
         Map<Object, Object> objectMap = new HashMap<>();
         objectMap.put("completed", false);
         objectMap.put("count", 5);
 
         List<Map<Object, Object>> objectList = Arrays.asList(objectMap);
-        Mockito.when(taskRepository.countByIsCompleted()).thenReturn(objectList);
+        Mockito.when(taskRepository.countByStatus()).thenReturn(objectList);
 
-        Map<Object, Object> actualObjectMap = taskService.countByIsCompleted();
+        Map<Object, Object> actualObjectMap = taskService.countByStatus();
 
         Assert.assertNotNull(actualObjectMap);
         Assert.assertEquals(5, actualObjectMap.get(false));
