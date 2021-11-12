@@ -103,8 +103,8 @@ class TaskControllerTest extends ControllerTest {
         TaskCreateDto taskCreateDto = new TaskCreateDto(description, isCompleted, email);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/tasks")
-                        .content(convertObjectToJsonString(taskCreateDto))
-                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .content(convertObjectToJsonString(taskCreateDto))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andReturn();

@@ -1,24 +1,27 @@
 package com.kms.seft203.entity;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Map;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "widget")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@Table(name = "widget", schema = "public")
 public class Widget {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,7 +36,11 @@ public class Widget {
     @Column(name = "min_height")
     private Integer minHeight;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "dashboard_id")
     private Dashboard dashboard;
+
+    @Type(type = "jsonb")
+    @Column(name = "configs", columnDefinition = "jsonb")
+    private Map<String, Object> configs;
 }

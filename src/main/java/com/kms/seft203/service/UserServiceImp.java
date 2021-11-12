@@ -1,5 +1,6 @@
 package com.kms.seft203.service;
 
+import com.kms.seft203.config.ApplicationPropertyConfig;
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
@@ -35,7 +36,8 @@ public class UserServiceImp implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static final int CODE_EXPIRATION_TIME = 15 * 60;
+    @Autowired
+    private ApplicationPropertyConfig propertyConfig;
 
     /**
      * This method is implemented to save a RegisterRequest received from Controller
@@ -68,9 +70,9 @@ public class UserServiceImp implements UserService {
         user.setDateResetCode(user.getDateCreated());
 
         User savedUser = userRepository.save(user);
-        String subject = "This is a verification code to activate your account." +
-                " It will valid in 15 minutes: " + savedUser.getVerificationCode();
-        return new RegisterResponse(subject);
+        String message = String.format("This verification code will valid in %d minutes", propertyConfig.getCodeExpirationMinute());
+        String activationLink = propertyConfig.getActivationBaseUrl() + savedUser.getVerificationCode();
+        return new RegisterResponse(message, activationLink);
     }
 
     @Transactional
@@ -86,7 +88,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public Boolean checkValidationCode(User user) {
-        LocalDateTime expirationTime = user.getDateResetCode().plusSeconds(CODE_EXPIRATION_TIME);
+        LocalDateTime expirationTime = user.getDateResetCode().plusSeconds(propertyConfig.getCodeExpirationMinute() * 60);
         LocalDateTime currentTime = LocalDateTime.now();
         if (currentTime.isAfter(expirationTime)) {
             return false;

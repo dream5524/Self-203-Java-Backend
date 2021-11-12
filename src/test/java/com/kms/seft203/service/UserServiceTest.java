@@ -1,5 +1,6 @@
 package com.kms.seft203.service;
 
+import com.kms.seft203.config.ApplicationPropertyConfig;
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
@@ -31,6 +32,9 @@ class UserServiceTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ApplicationPropertyConfig propertyConfig;
+
     @MockBean
     private UserRepository userRepository;
 
@@ -49,14 +53,30 @@ class UserServiceTest {
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 
         RegisterResponse registerResponse = userService.save(registerRequest);
-        String expectedSubject = "This is a verification code to activate your account." +
-                " It will valid in 15 minutes: " + user.getVerificationCode();
+        String expectedMessage = String.format("This verification code will valid in %d minutes", propertyConfig.getCodeExpirationMinute());
+        String expectedActivationLink = propertyConfig.getActivationBaseUrl() + verificationCode;
 
-        Assert.assertEquals(expectedSubject, registerResponse.getSubject());
+        Assert.assertEquals(expectedMessage, registerResponse.getMessage());
+        Assert.assertEquals(expectedActivationLink, registerResponse.getActivationLink());
     }
 
     @Test
-    void checkVerificationAccount_WhenCodeValidationTimeIsValid_ThenReturnTrue() throws VerificationCodeInValidException {
+    void testSave_whenEmailDuplicated_thenThrowEmailDuplicatedException() {
+        String email = "nvdloc@apcs.vn";
+        String password = "11Qaz123$%";
+        String fullName = "Loc Nguyen";
+        RegisterRequest registerRequest = new RegisterRequest(email, password, fullName);
+        User user = new User(1, email, password, fullName);
+
+        Mockito.when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        Assert.assertThrows(EmailDuplicatedException.class, () -> {
+            userService.save(registerRequest);
+        });
+    }
+
+    @Test
+    void testVerifyAccount_WhenCodeValidationTimeIsValid_ThenReturnTrue() throws VerificationCodeInValidException {
         String verificationCode = "12345@@SSdd";
         User user = new User(1, "mohuyen@gmail.com", "11Qaz123@@", "Mo Huyen");
         user.setDateResetCode(LocalDateTime.now());
@@ -67,6 +87,18 @@ class UserServiceTest {
 
         Assert.assertEquals(true, actualVerificationCode);
     }
+
+    @Test
+    void testVerifyAccount_whenCodeValidationIsInvalid_thenThrowVerificationCodeInvalidException() {
+        String verificationCode = "12345$%^Sdd";
+
+        Mockito.when(userRepository.findByVerificationCode(verificationCode)).thenReturn(Optional.ofNullable(null));
+
+        Assert.assertThrows(VerificationCodeInValidException.class, () -> {
+            userService.verifyAccount(verificationCode);
+        });
+    }
+
     @Test
     void testResetCode_WhenEmailIsFound_ThenReturnUser() throws EmailNotFoundException {
         User expectUser = new User(1, "mohuyen@gmail.com", "11Qaz123@@", "Mo Huyen");
