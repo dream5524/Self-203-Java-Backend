@@ -3,18 +3,22 @@ package com.kms.seft203.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.kms.seft203.config.RabbitmqConfig;
 import com.kms.seft203.dto.LoginRequest;
 import com.kms.seft203.dto.LoginResponse;
 import com.kms.seft203.dto.LogoutRequest;
 import com.kms.seft203.dto.RegisterRequest;
-import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.exception.VerificationCodeInValidException;
 import com.kms.seft203.service.EmailService;
+import com.kms.seft203.service.MessageSender;
 import com.kms.seft203.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,21 +47,31 @@ public class AuthApi {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private MessageSender messageSender;
+
+    @Autowired
+    private RabbitmqConfig rabbitMQConfig;
+
+    private static final Logger logger = LoggerFactory.getLogger(ContactApi.class);
+
     /**
      * @throws EmailDuplicatedException Request format:
-     * This method is used to receive and handle the user register request. When the new
-     * user is saved successfully, a verfication message will be sent to the registered
-     * receiver
-     *
+     *                                  This method is used to receive and handle the user register request. When the new
+     *                                  user is saved successfully, a verfication message will be sent to the registered
+     *                                  receiver
      * @param: a request
      * @return: a DTO of user if the process succeeds
      */
-    @PostMapping("/register")
 
-    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
-        RegisterResponse response = userService.save(request);
-        emailService.sendEmailToVerify(request.getEmail(), response.getActivationLink());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
+        logger.info("Sent message to queue...{}", request);
+        messageSender.sendMessageToQueue(rabbitTemplate, rabbitMQConfig.getExchange(), rabbitMQConfig.getRoutingKey(), request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Successfully !");
     }
 
     @PostMapping("/login")
