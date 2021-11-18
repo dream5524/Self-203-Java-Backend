@@ -3,6 +3,8 @@ package com.kms.seft203.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.kms.seft203.config.RabbitmqConfig;
+import com.kms.seft203.dto.EmailActivationDto;
 import com.kms.seft203.dto.LoginRequest;
 import com.kms.seft203.dto.LoginResponse;
 import com.kms.seft203.dto.LogoutRequest;
@@ -13,8 +15,10 @@ import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.exception.VerificationCodeInValidException;
 import com.kms.seft203.service.EmailService;
+import com.kms.seft203.service.MessageSender;
 import com.kms.seft203.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +47,15 @@ public class AuthApi {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private MessageSender messageSender;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private RabbitmqConfig rabbitmqConfig;
+
     /**
      * @throws EmailDuplicatedException Request format:
      * This method is used to receive and handle the user register request. When the new
@@ -53,11 +66,14 @@ public class AuthApi {
      * @return: a DTO of user if the process succeeds
      */
     @PostMapping("/register")
-
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
-        RegisterResponse response = userService.save(request);
-        emailService.sendEmailToVerify(request.getEmail(), response.getActivationLink());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        //logger.info("Sent message to queue...{}", request);
+        RegisterResponse registerResponse = userService.save(request);
+        EmailActivationDto emailActivationDto = new EmailActivationDto();
+        emailActivationDto.setEmail(request.getEmail());
+        emailActivationDto.setActivationLink(registerResponse.getActivationLink());
+        messageSender.sendMessageToQueue(rabbitTemplate, rabbitmqConfig.getExchange(), rabbitmqConfig.getRoutingKey(), emailActivationDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(registerResponse);
     }
 
     @PostMapping("/login")
