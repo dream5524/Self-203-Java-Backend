@@ -4,10 +4,12 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.kms.seft203.config.RabbitmqConfig;
+import com.kms.seft203.dto.EmailActivationDto;
 import com.kms.seft203.dto.LoginRequest;
 import com.kms.seft203.dto.LoginResponse;
 import com.kms.seft203.dto.LogoutRequest;
 import com.kms.seft203.dto.RegisterRequest;
+import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
@@ -54,7 +56,7 @@ public class AuthApi {
     private MessageSender messageSender;
 
     @Autowired
-    private RabbitmqConfig rabbitMQConfig;
+    private RabbitmqConfig rabbitmqConfig;
 
     private static final Logger logger = LoggerFactory.getLogger(ContactApi.class);
 
@@ -68,10 +70,14 @@ public class AuthApi {
      */
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) throws EmailDuplicatedException {
         logger.info("Sent message to queue...{}", request);
-        messageSender.sendMessageToQueue(rabbitTemplate, rabbitMQConfig.getExchange(), rabbitMQConfig.getRoutingKey(), request);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Successfully !");
+        RegisterResponse registerResponse = userService.save(request);
+        EmailActivationDto emailActivationDto = new EmailActivationDto();
+        emailActivationDto.setEmail(request.getEmail());
+        emailActivationDto.setActivationLink(registerResponse.getActivationLink());
+        messageSender.sendMessageToQueue(rabbitTemplate, rabbitmqConfig.getExchange(), rabbitmqConfig.getRoutingKey(), emailActivationDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(registerResponse);
     }
 
     @PostMapping("/login")

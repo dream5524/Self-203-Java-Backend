@@ -24,6 +24,6 @@ services:
     image: rabbitmq:3-management
     environment:
       RABBITMQ_ERLANG_COOKIE: 'secret cookie'
-    ports:q
+    ports:
       - 15672:15672
       - 5672:5672

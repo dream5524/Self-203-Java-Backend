@@ -1,17 +1,21 @@
 package com.kms.seft203.controller;
 
+import com.kms.seft203.config.RabbitmqConfig;
+import com.kms.seft203.dto.EmailActivationDto;
 import com.kms.seft203.dto.RegisterRequest;
 import com.kms.seft203.dto.RegisterResponse;
 import com.kms.seft203.entity.User;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.exception.EmailNotFoundException;
 import com.kms.seft203.service.EmailService;
+import com.kms.seft203.service.MessageSender;
 import com.kms.seft203.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,6 +25,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,6 +53,15 @@ class AuthControllerTest extends ControllerTest {
     @MockBean
     private EmailService emailService;
 
+    @MockBean
+    private MessageSender messageSender;
+
+    @MockBean
+    private RabbitTemplate rabbitTemplate;
+
+    @MockBean
+    private RabbitmqConfig rabbitmqConfig;
+
     @Test
 
     void testRegister_whenSuccess_thenReturnStatusIsCreated () throws Exception {
@@ -55,8 +73,13 @@ class AuthControllerTest extends ControllerTest {
         String activationLink = "http://localhost:8000/verify?code=12345";
         RegisterRequest registerRequest = new RegisterRequest(email, password, fullName);
         RegisterResponse registerResponse = new RegisterResponse(message, activationLink);
+        EmailActivationDto emailActivationDto = new EmailActivationDto();
+        emailActivationDto.setEmail(registerRequest.getEmail());
+        emailActivationDto.setActivationLink(registerResponse.getActivationLink());
 
-        Mockito.when(userService.save(Mockito.any())).thenReturn(registerResponse);
+        Mockito.when(userService.save(any())).thenReturn(registerResponse);
+        Mockito.doNothing().when(messageSender).sendMessageToQueue(any(RabbitTemplate.class)
+                , eq("exchangeName"), eq("routingKeyName"), eq(emailActivationDto));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .content(convertObjectToJsonString(registerRequest))
@@ -64,6 +87,9 @@ class AuthControllerTest extends ControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value(message))
                 .andExpect(jsonPath("$.activationLink").value(activationLink));
+
+        verify(messageSender, times(1)).sendMessageToQueue(any(RabbitTemplate.class)
+                , Mockito.any(), Mockito.any(), eq(emailActivationDto));
     }
 
     @Test

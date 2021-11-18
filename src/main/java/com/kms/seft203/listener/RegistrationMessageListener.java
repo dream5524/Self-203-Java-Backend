@@ -1,8 +1,7 @@
 package com.kms.seft203.listener;
 
 import com.kms.seft203.controller.ContactApi;
-import com.kms.seft203.dto.RegisterRequest;
-import com.kms.seft203.dto.RegisterResponse;
+import com.kms.seft203.dto.EmailActivationDto;
 import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.service.EmailService;
 import com.kms.seft203.service.UserService;
@@ -22,9 +21,8 @@ public class RegistrationMessageListener {
 
     private static final Logger logger = LoggerFactory.getLogger(ContactApi.class);
     @RabbitListener(queues = "${rabbitmq.queue}")
-    public void receiveRegistrationMessageFromQueue(RegisterRequest registerRequest) throws EmailDuplicatedException {
-        RegisterResponse registerResponse = userService.save(registerRequest);
-        emailService.sendEmailToVerify(registerRequest.getEmail(), registerResponse.getActivationLink());
+    public void receiveRegistrationMessageFromQueue(EmailActivationDto emailActivationDto) throws EmailDuplicatedException {
+        emailService.sendEmailToVerify(emailActivationDto.getEmail(), emailActivationDto.getActivationLink());
         logger.info("Message processed from queue...");
     }
 }

@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Queue;
-
 @Component
 public class CustomConfig {
 
@@ -58,6 +56,7 @@ public class CustomConfig {
         modelMapper.typeMap(Dashboard.class, DashboardCreateDto.class).addMappings(mapper -> {
             mapper.map(src -> src.getContact().getUser().getEmail(), DashboardCreateDto::setEmail);
         });
+
         return modelMapper;
     }
 }
