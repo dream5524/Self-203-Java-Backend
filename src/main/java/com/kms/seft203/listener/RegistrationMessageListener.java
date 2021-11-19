@@ -1,8 +1,6 @@
 package com.kms.seft203.listener;
 
-import com.kms.seft203.controller.ContactApi;
 import com.kms.seft203.dto.EmailActivationDto;
-import com.kms.seft203.exception.EmailDuplicatedException;
 import com.kms.seft203.service.EmailService;
 import com.kms.seft203.service.UserService;
 import org.slf4j.Logger;
