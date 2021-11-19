@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 @EnableConfigurationProperties
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class EmailServiceTest {
+class EmailServiceTest {
 
     @Autowired
     private EmailService emailService;

@@ -25,9 +25,9 @@ public class WidgetServiceImp implements WidgetService {
 
     @Override
     public WidgetDto save(WidgetDto widgetDto) throws DashboardNotFoundException {
-        Optional<Dashboard> optionalDashboard = dashboardRepository.findById(widgetDto.getDashboard_id());
+        Optional<Dashboard> optionalDashboard = dashboardRepository.findById(widgetDto.getDashboardId());
         if (optionalDashboard.isEmpty()) {
-            throw new DashboardNotFoundException("Dashboard with id: " + widgetDto.getDashboard_id() +
+            throw new DashboardNotFoundException("Dashboard with id: " + widgetDto.getDashboardId() +
                     " does not exist.");
         }
         Dashboard dashboardFromDb = optionalDashboard.get();

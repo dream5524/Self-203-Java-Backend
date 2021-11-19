@@ -19,9 +19,9 @@ public class RegistrationMessageListener {
     @Autowired
     private UserService userService;
 
-    private static final Logger logger = LoggerFactory.getLogger(ContactApi.class);
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationMessageListener.class);
     @RabbitListener(queues = "${rabbitmq.queue}")
-    public void receiveRegistrationMessageFromQueue(EmailActivationDto emailActivationDto) throws EmailDuplicatedException {
+    public void receiveRegistrationMessageFromQueue(EmailActivationDto emailActivationDto){
         emailService.sendEmailToVerify(emailActivationDto.getEmail(), emailActivationDto.getActivationLink());
         logger.info("Message processed from queue...");
     }

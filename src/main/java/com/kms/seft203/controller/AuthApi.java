@@ -58,7 +58,7 @@ public class AuthApi {
     @Autowired
     private RabbitmqConfig rabbitmqConfig;
 
-    private static final Logger logger = LoggerFactory.getLogger(ContactApi.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthApi.class);
 
     /**
      * @throws EmailDuplicatedException Request format:
