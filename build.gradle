@@ -44,6 +44,7 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.5.6'
 	testImplementation 'com.google.truth:truth:0.43'
 	implementation 'com.vladmihalcea:hibernate-types-52:2.14.0'
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
 }
 test {
@@ -55,3 +56,6 @@ jacocoTestReport {
 	}
 }
 test.finalizedBy jacocoTestReport
+springBoot{
+	buildInfo()
+}
