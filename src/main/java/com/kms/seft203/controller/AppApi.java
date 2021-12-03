@@ -16,10 +16,8 @@ import java.io.Serializable;
 @RestController
 @RequestMapping("/app")
 @RequiredArgsConstructor
-public class AppApi implements Serializable {
-    private static final Logger logger = LoggerFactory.getLogger(AuthApi.class);
-    @Autowired
-    private AppVersionRepository appVersionRepo;
+public class AppApi{
+    private static final Logger logger = LoggerFactory.getLogger(AppApi.class);
 
     @Autowired
     private BuildProperties buildProperties;

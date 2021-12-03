@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class WidgetServiceTest {
+class WidgetServiceTest {
     @Autowired
     private WidgetService widgetService;
 
@@ -72,7 +72,7 @@ public class WidgetServiceTest {
         configs.put("chart", 70);
         WidgetDto widgetDto = new WidgetDto(1, "chart", 70, 70, configs);
 
-        String message = "Dashboard with id: " + widgetDto.getDashboard_id()  +
+        String message = "Dashboard with id: " + widgetDto.getDashboardId()  +
                 " does not exist.";
 
         Exception exception = assertThrows(DashboardNotFoundException.class, () ->{

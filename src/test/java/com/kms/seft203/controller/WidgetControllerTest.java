@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(WidgetApi.class)
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
-public class WidgetControllerTest extends ControllerTest {
+class WidgetControllerTest extends ControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -54,7 +54,7 @@ public class WidgetControllerTest extends ControllerTest {
         configs.put("text", 70);
         configs.put("chart", 70);
         WidgetDto widgetDto = new WidgetDto(1, "chart", 70, 70, configs);
-        String message = "Dashboard with id: " + widgetDto.getDashboard_id() +
+        String message = "Dashboard with id: " + widgetDto.getDashboardId() +
                 " does not exist.";
 
         Mockito.when(widgetService.save(widgetDto)).thenThrow(new DashboardNotFoundException(message));
