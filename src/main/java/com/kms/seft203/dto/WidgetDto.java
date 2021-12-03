@@ -10,7 +10,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WidgetDto {
-    private Integer dashboard_id;
+    private Integer dashboardId;
     private String type;
     private Integer minWidth;
     private Integer minHeight;

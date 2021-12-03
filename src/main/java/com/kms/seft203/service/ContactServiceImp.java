@@ -79,7 +79,7 @@ public class ContactServiceImp implements ContactService {
     public Map<String, Object> countByTitle() {
         List<Map<String, Object>> objectMapList = contactRepository.countByTitle();
         Map<String, Object> objectMap = new HashMap<>();
-        for (Map map : objectMapList) {
+        for (Map<String, Object> map : objectMapList) {
             objectMap.put((String) map.get("title"), map.get("count"));
         }
         return objectMap;

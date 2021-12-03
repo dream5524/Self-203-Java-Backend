@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -115,7 +116,7 @@ public class TaskServiceImp implements TaskService {
     public Map<Object, Object> countByStatus() {
         List<Map<Object, Object>> objectMapList = taskRepository.countByStatus();
         Map<Object, Object> objectMap = new HashMap<>();
-        for (Map map : objectMapList){
+        for (Map<Object, Object> map : objectMapList){
             objectMap.put(map.get("completed"), map.get("count"));
         }
         return objectMap;

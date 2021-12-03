@@ -13,9 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
@@ -27,7 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @AutoConfigureMockMvc(addFilters = false)
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class WidgetServiceTest {
+@EnableConfigurationProperties
+@TestPropertySource(locations = "classpath:application-test.properties")
+class WidgetServiceTest {
     @Autowired
     private WidgetService widgetService;
 
@@ -72,7 +76,7 @@ public class WidgetServiceTest {
         configs.put("chart", 70);
         WidgetDto widgetDto = new WidgetDto(1, "chart", 70, 70, configs);
 
-        String message = "Dashboard with id: " + widgetDto.getDashboard_id()  +
+        String message = "Dashboard with id: " + widgetDto.getDashboardId()  +
                 " does not exist.";
 
         Exception exception = assertThrows(DashboardNotFoundException.class, () ->{
